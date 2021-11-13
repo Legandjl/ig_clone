@@ -1,0 +1,22 @@
+.homeWrap {
+  background-color: #fafafa;
+  grid-column: 2;
+  width: 40em;
+  height: 20em;
+  justify-self: center;
+  align-self: center;
+  display: grid;
+}
+
+.homeForm {
+  background-color: white;
+  border: solid 2px;
+  display: grid;
+  justify-content: center;
+  align-content: center;
+}
+
+.homeForm button {
+  width: 60px;
+  height: 30px;
+}
