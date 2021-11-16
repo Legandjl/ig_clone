@@ -1,0 +1,31 @@
+.header {
+  height: 4em;
+  background-color: #ffffff;
+  border-bottom: solid #dbdbdb 1px;
+  display: grid;
+  width: 100%;
+  grid-column: 1/-1;
+  grid-template-columns: 1fr auto 1fr;
+}
+
+.headerLogoWrap {
+  align-self: center;
+}
+
+.headerLogoWrap img {
+  height: 3em;
+  width: auto;
+}
+
+.headerIcons {
+  justify-self: center;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 10px;
+}
+
+.headerIcons i {
+  align-self: center;
+  font-size: 1.5em;
+}

@@ -5,7 +5,19 @@ import {
   GoogleAuthProvider,
   signOut,
 } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  query,
+  where,
+  addDoc,
+  Timestamp,
+  setDoc,
+  doc,
+} from "firebase/firestore";
+
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCRLLO5Ux_40PvV0-8LkX8S1RK2HIygY0Q",
@@ -28,6 +40,7 @@ const firebaseConfig = {
 const Firebase = () => {
   initializeApp(firebaseConfig);
   const db = getFirestore();
+  const storage = getStorage();
   const auth = getAuth();
 
   const publicMethods = {};
@@ -37,49 +50,74 @@ const Firebase = () => {
 
   publicMethods.signIn = async () => {
     const provider = new GoogleAuthProvider();
-    const result = await signInWithPopup(auth, provider);
-    return result;
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      const q = query(collection(db, "users"), where("uid", "==", user.uid));
+      const docSnap = await getDocs(q);
+      const data = [];
+      docSnap.forEach((doc) => {
+        data.push(doc.data());
+      });
+      if (data.length === 0) {
+        await addDoc(collection(db, "users"), {
+          uid: user.uid,
+          name: user.displayName,
+          authprovider: "google",
+          email: user.email,
+        });
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   publicMethods.signOut = () => {
     signOut(auth);
   };
 
-  // This gives you a Google Access Token. You can use it to access the Google API.
+  publicMethods.uploadFile = async (user, file) => {
+    const storageRef = ref(storage, `images/${user.uid}"/"${file.name}`);
+    await uploadBytes(storageRef, file);
+    const url = await getDownloadURL(storageRef);
+    const added = await addDoc(collection(db, "images"), {
+      downloadUrl: url,
+      likes: {},
+      uploadedBy: user.uid,
+      name: file.name,
+      timestamp: Timestamp.now(),
+    });
+  };
 
-  /*
-
-  //const db = getFirestore();
-
-  publicMethods.getCharacterLocations = async () => {
-    const querySnapshot = await getDocs(collection(db, "characterLocations"));
+  publicMethods.getImages = async () => {
+    const collectionRef = collection(db, "images");
+    const docSnap = await getDocs(collectionRef);
     const data = [];
-    querySnapshot.forEach((doc) => {
-      const current = doc.data().data;
-      data.push(...current);
+    docSnap.forEach((doc) => {
+      const id = doc.id;
+      data.push({ ...doc.data(), id: id }); //add img ids here
     });
     return data;
-  };  
+  };
 
-  publicMethods.getLeaderboard = async () => {
-    const collectionRef = collection(db, "leaderboard");
-    const docSnap = await getDocs(collectionRef);
+  publicMethods.addComment = async (text, imgId, user) => {
+    const comment = await addDoc(collection(db, "comments"), {
+      imageId: imgId,
+      comment: text,
+      author: user.name,
+      timestamp: Timestamp.now(),
+    });
+  };
+
+  publicMethods.getImageComments = async (imgId) => {
+    const q = query(collection(db, "comments"), where("imageId", "==", imgId));
+    const docSnap = await getDocs(q);
     const data = [];
     docSnap.forEach((doc) => {
       data.push(doc.data());
     });
-
     return data;
-  }; 
-  
-  publicMethods.pushToLeaderboard = async (username, time) => {
-    console.log("called");
-    const docRef = await addDoc(collection(db, "leaderboard"), {
-      name: username,
-      timetaken: time,
-    });
-    return docRef;
-  }; */
+  };
 
   return publicMethods;
 };

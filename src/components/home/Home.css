@@ -10,7 +10,7 @@
 
 .homeForm {
   background-color: white;
-  border: solid 2px;
+
   display: grid;
   justify-content: center;
   align-content: center;
@@ -19,4 +19,26 @@
 .homeForm button {
   width: 60px;
   height: 30px;
+}
+
+.imageContainerHome {
+  border: solid #dbdbdb 1px;
+
+  display: grid;
+  justify-items: center;
+  grid-template-rows: auto 3em 2em;
+  grid-template-columns: 1fr;
+}
+.imageContainerHome img {
+  height: auto;
+  width: 30em;
+}
+
+.commentBox {
+  width: 100%;
+  border: solid #dbdbdb 1px;
+}
+
+.addCommentBox {
+  width: 100%;
 }
