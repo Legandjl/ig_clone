@@ -1,44 +1,107 @@
 .homeWrap {
   background-color: #fafafa;
-  grid-column: 2;
-  width: 40em;
-  height: 20em;
+
   justify-self: center;
   align-self: center;
   display: grid;
+  grid-row: 2;
 }
 
-.homeForm {
-  background-color: white;
-
+.homeImages {
   display: grid;
   justify-content: center;
   align-content: center;
+  grid-gap: 2em;
+  margin-top: 2em;
+  margin-bottom: 2em;
+  grid-row: 2;
+  background-color: #fafafa;
 }
 
-.homeForm button {
+.homeImages button {
   width: 60px;
   height: 30px;
 }
 
 .imageContainerHome {
-  border: solid #dbdbdb 1px;
-
   display: grid;
   justify-items: center;
-  grid-template-rows: auto 3em 2em;
+  grid-template-rows: 4em auto auto;
   grid-template-columns: 1fr;
-}
-.imageContainerHome img {
-  height: auto;
-  width: 30em;
+  background-color: black;
 }
 
-.commentBox {
+.imageHeader {
+  border: solid #dbdbdb 1px;
+  width: 100%;
+  border-bottom: none;
+  display: grid;
+  align-content: center;
+  align-items: center;
+  background-color: white;
+  font-weight: bold;
+}
+
+.imageHeader p {
+  margin-left: 10px;
+}
+
+.imageContainerHome img {
+  height: auto;
+  width: 40em;
+}
+
+.commentArea {
   width: 100%;
   border: solid #dbdbdb 1px;
+}
+
+.commentWrap {
+  display: grid;
+  background-color: white;
+  border-bottom: solid #dbdbdb 1px;
+  padding: 0.6em;
 }
 
 .addCommentBox {
   width: 100%;
+}
+.commentInner {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-gap: 1em;
+  padding: 5px;
+  padding-left: 1em;
+  padding-right: 1em;
+  background-color: white;
+  font-size: 1.1em;
+}
+
+.submitWrap {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  width: 100%;
+}
+
+.submitWrap button {
+  border: none;
+  color: blue;
+  background-color: white;
+  justify-self: end;
+}
+
+.submitWrap input[type="text"] {
+  border: none;
+  outline: none;
+  width: 100%;
+  padding-left: 10px;
+}
+
+.submitWrap input[type="text"]:active {
+  border: none;
+  outline: none;
+}
+
+.commentAuthor {
+  font-weight: bold;
 }

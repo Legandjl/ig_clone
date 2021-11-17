@@ -1,17 +1,25 @@
 import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
-import FilePicker from "../filepicker/FilePicker";
+
 import { FirebaseContext } from "../firebase/FirebaseContext";
 import "./Home.css";
 import ImageContainer from "./imageContainer/ImageContainer";
 const Home = () => {
   const nav = useNavigate();
-  const { user, signOut, allImageData, isLoading } =
-    useContext(FirebaseContext);
+
+  const { user, allImageData, isLoading } = useContext(FirebaseContext);
+  if (user) {
+    console.log(user.displayName);
+  }
   const images = allImageData.map((dataItem, i) => {
-    return (
-      <ImageContainer key={i} id={dataItem.id} src={dataItem.downloadUrl} />
-    );
+    return user ? (
+      <ImageContainer
+        key={i}
+        id={dataItem.id}
+        src={dataItem.downloadUrl}
+        username={user.displayName}
+      />
+    ) : null;
   });
 
   useEffect(() => {
@@ -21,12 +29,8 @@ const Home = () => {
   }, [user, nav]);
 
   return (
-    <div className="homewrap">
-      {user && !isLoading ? (
-        <div className="homeForm">
-          {images} <FilePicker />
-        </div>
-      ) : null}
+    <div className="homeWrap">
+      {user && !isLoading ? <div className="homeImages">{images}</div> : null}
     </div>
   );
 };

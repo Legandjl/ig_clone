@@ -1,0 +1,9 @@
+.footer {
+  grid-row: -1;
+  height: 2em;
+  display: grid;
+  justify-content: center;
+  background-color: black;
+  color: white;
+  align-content: center;
+}

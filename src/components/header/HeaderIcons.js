@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
+import { useContext } from "react/cjs/react.development";
+import { FirebaseContext } from "../firebase/FirebaseContext";
 
-const HeaderIcons = () => {
-  const [currentLocation, setCurrent] = useState(null);
+const HeaderIcons = (props) => {
+  const { signOut } = useContext(FirebaseContext);
+
   const location = useLocation().pathname;
-  console.log(location);
 
   return (
     <div className="headerIcons">
@@ -16,6 +17,7 @@ const HeaderIcons = () => {
 
       <i className="ri-add-box-line"></i>
       <i className="ri-heart-line"></i>
+      <i className="ri-logout-box-r-line" onClick={signOut}></i>
     </div>
   );
 };

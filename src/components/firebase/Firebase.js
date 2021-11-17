@@ -13,8 +13,7 @@ import {
   where,
   addDoc,
   Timestamp,
-  setDoc,
-  doc,
+  orderBy,
 } from "firebase/firestore";
 
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -80,7 +79,7 @@ const Firebase = () => {
     const storageRef = ref(storage, `images/${user.uid}"/"${file.name}`);
     await uploadBytes(storageRef, file);
     const url = await getDownloadURL(storageRef);
-    const added = await addDoc(collection(db, "images"), {
+    return await addDoc(collection(db, "images"), {
       downloadUrl: url,
       likes: {},
       uploadedBy: user.uid,
@@ -100,17 +99,23 @@ const Firebase = () => {
     return data;
   };
 
-  publicMethods.addComment = async (text, imgId, user) => {
-    const comment = await addDoc(collection(db, "comments"), {
+  publicMethods.addComment = async (text, imgId, username) => {
+    return await addDoc(collection(db, "comments"), {
       imageId: imgId,
       comment: text,
-      author: user.name,
+      author: username,
       timestamp: Timestamp.now(),
-    });
-  };
+    }); // needs uid
+  }; //del like if (uid === uid, timestamp === timestamp)
+
+  //likes can be their own documents - bool ?
 
   publicMethods.getImageComments = async (imgId) => {
-    const q = query(collection(db, "comments"), where("imageId", "==", imgId));
+    const q = query(
+      collection(db, "comments"),
+      where("imageId", "==", imgId),
+      orderBy("timestamp", "asc")
+    );
     const docSnap = await getDocs(q);
     const data = [];
     docSnap.forEach((doc) => {

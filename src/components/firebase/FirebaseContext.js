@@ -42,6 +42,7 @@ const FirebaseContextProvider = (props) => {
         isLoading,
         allImageData,
         getComments: fb.getImageComments,
+        submitComment: fb.addComment,
       }}
     >
       {props.children}

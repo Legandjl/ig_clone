@@ -1,13 +1,13 @@
-import FilePicker from "../../filepicker/FilePicker";
 import "../Home.css";
-import Comments from "./Comments";
+import Comments from "./comments/Comments";
+
+import ImageHeader from "./ImageHeader";
 const ImageContainer = (props) => {
   return (
     <div className="imageContainerHome">
+      <ImageHeader username={props.username} />
       <img alt={props.name} id={props.id} src={props.src} />
-      <FilePicker />
-      <Comments id={props.id} />
-      <div className="addCommentBox"></div>
+      <Comments id={props.id} username={props.username} />
     </div>
   );
 };

@@ -6,6 +6,7 @@
   justify-self: center;
   align-self: center;
   display: grid;
+  grid-row: 2;
 }
 
 .loginForm {
