@@ -1,26 +1,13 @@
 import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
-
 import { FirebaseContext } from "../firebase/FirebaseContext";
+import { ImageContext } from "../firebase/ImageContext";
 import "./Home.css";
 import ImageContainer from "./imageContainer/ImageContainer";
 const Home = () => {
   const nav = useNavigate();
-
-  const { user, allImageData, isLoading } = useContext(FirebaseContext);
-  if (user) {
-    console.log(user.displayName);
-  }
-  const images = allImageData.map((dataItem, i) => {
-    return user ? (
-      <ImageContainer
-        key={i}
-        id={dataItem.id}
-        src={dataItem.downloadUrl}
-        username={user.displayName}
-      />
-    ) : null;
-  });
+  const { user } = useContext(FirebaseContext);
+  const { allImageData, imagesLoading } = useContext(ImageContext);
 
   useEffect(() => {
     if (!user) {
@@ -28,9 +15,26 @@ const Home = () => {
     }
   }, [user, nav]);
 
+  const images = allImageData.map((dataItem, i) => {
+    return (
+      <ImageContainer
+        key={i}
+        imageID={dataItem.id}
+        src={dataItem.downloadUrl}
+        author={dataItem.uploadedBy}
+        type={"HomePage"}
+        headerImg={dataItem.info.photoURL}
+        headerName={dataItem.info.username}
+        info={dataItem.info}
+      />
+    );
+  });
+
   return (
     <div className="homeWrap">
-      {user && !isLoading ? <div className="homeImages">{images}</div> : null}
+      {user && !imagesLoading ? (
+        <div className="homeImages">{images}</div>
+      ) : null}
     </div>
   );
 };

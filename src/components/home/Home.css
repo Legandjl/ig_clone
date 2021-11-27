@@ -1,6 +1,21 @@
-.homeWrap {
-  background-color: #fafafa;
+a,
+a:hover,
+a:focus,
+a:active {
+  text-decoration: none;
+  color: inherit;
+}
 
+a:hover,
+i:hover {
+  cursor: pointer;
+}
+
+.userLink:hover {
+  text-decoration: underline;
+}
+
+.homeWrap {
   justify-self: center;
   align-self: center;
   display: grid;
@@ -14,7 +29,6 @@
   grid-gap: 2em;
   margin-top: 2em;
   margin-bottom: 2em;
-  grid-row: 2;
   background-color: #fafafa;
 }
 
@@ -26,24 +40,9 @@
 .imageContainerHome {
   display: grid;
   justify-items: center;
-  grid-template-rows: 4em auto auto;
+  grid-template-rows: 4em auto auto auto;
   grid-template-columns: 1fr;
   background-color: black;
-}
-
-.imageHeader {
-  border: solid #dbdbdb 1px;
-  width: 100%;
-  border-bottom: none;
-  display: grid;
-  align-content: center;
-  align-items: center;
-  background-color: white;
-  font-weight: bold;
-}
-
-.imageHeader p {
-  margin-left: 10px;
 }
 
 .imageContainerHome img {
@@ -51,43 +50,24 @@
   width: 40em;
 }
 
-.commentArea {
-  width: 100%;
-  border: solid #dbdbdb 1px;
-}
-
-.commentWrap {
-  display: grid;
-  background-color: white;
-  border-bottom: solid #dbdbdb 1px;
-  padding: 0.6em;
-}
-
-.addCommentBox {
-  width: 100%;
-}
-.commentInner {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  grid-gap: 1em;
-  padding: 5px;
-  padding-left: 1em;
-  padding-right: 1em;
-  background-color: white;
-  font-size: 1.1em;
-}
-
 .submitWrap {
   display: grid;
   grid-template-columns: 1fr auto;
   width: 100%;
+  grid-row: 2;
+  border-top: solid #dbdbdb 1px;
 }
 
 .submitWrap button {
   border: none;
-  color: blue;
+  color: #0095f6;
   background-color: white;
   justify-self: end;
+  padding-right: 15px;
+  font-weight: bold;
+}
+.submitWrap button:hover {
+  cursor: pointer;
 }
 
 .submitWrap input[type="text"] {
@@ -104,4 +84,49 @@
 
 .commentAuthor {
   font-weight: bold;
+}
+
+.imageFullDisplay {
+  display: grid;
+  justify-self: center;
+  grid-row: 2;
+  align-self: center;
+  grid-template-columns: auto 25em;
+}
+
+.imageContainer {
+  display: grid;
+  align-content: center;
+  background-color: black;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.imageContainer img {
+  height: auto;
+  width: 35em;
+  max-height: 40em;
+}
+
+.socialArea {
+  grid-column: 2;
+  display: grid;
+  grid-template-rows: 3em auto 1fr;
+}
+
+.commentsOuter::-webkit-scrollbar {
+  display: none; /* Safari and Chrome browsers */
+}
+
+.commentsOuter {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* mozilla */
+}
+
+.displayImage {
+  border-radius: 50%;
+  height: 1.6em;
+  width: 1.6em;
+  grid-row: 1/3;
+  align-self: end;
+  margin-right: 10px;
 }

@@ -1,9 +1,12 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { FirebaseContext } from "../firebase/FirebaseContext";
 
 const FilePicker = () => {
   const [selectedFile, setSelectedFile] = useState(null);
+  const [icon, setIcon] = useState("ri-add-box-line");
   const { uploadImage, user } = useContext(FirebaseContext);
+
+  const hiddenFileSelect = useRef(null);
 
   const handleFile = (e) => {
     setSelectedFile(() => {
@@ -12,19 +15,36 @@ const FilePicker = () => {
   };
 
   useEffect(() => {
-    if (selectedFile != null) {
+    const startUpload = async () => {
+      await uploadImage(user, selectedFile);
+    };
+    if (selectedFile != null && user != null) {
       try {
-        uploadImage(user, selectedFile);
+        startUpload();
       } catch (err) {
         //redirect to err page
       }
       setSelectedFile(null);
     }
-  }, [selectedFile, uploadImage, user.uid]);
+  }, [selectedFile, uploadImage, user]);
 
   return (
     <div>
-      <input type="file" accept=".png, .jpg, .jpeg" onChange={handleFile} />
+      <i
+        className={icon}
+        onClick={() => hiddenFileSelect.current.click()}
+        onMouseOver={() => setIcon("ri-add-box-fill")}
+        onMouseLeave={() => setIcon("ri-add-box-line")}
+      >
+        {" "}
+        <input
+          ref={hiddenFileSelect}
+          type="file"
+          accept=".png, .jpg, .jpeg"
+          onChange={handleFile}
+          style={{ display: "none" }}
+        />
+      </i>
     </div>
   );
 };

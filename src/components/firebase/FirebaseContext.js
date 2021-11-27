@@ -4,32 +4,33 @@ const FirebaseContext = React.createContext();
 
 const FirebaseContextProvider = (props) => {
   const fb = Firebase();
-  const [user, setUser] = useState(null);
+  const { getAuth } = fb;
+  const [user, setUser] = useState(() => {
+    const user = fb.getAuth().currentUser;
+    return user;
+  });
   const [loadingUser, setLoadingUser] = useState(true);
-  const [allImageData, setAllImages] = useState([]);
-  const [isLoading, setLoading] = useState(true);
+  const [notificationsLoading, setNotificationsLoading] = useState(true);
+  const [notificationData, setNotificationsData] = useState([]);
 
   useEffect(() => {
-    const loadData = async () => {
-      if (isLoading) {
-        const imageData = await fb.getImages();
-        setAllImages(() => {
-          return imageData;
-        });
-        setLoading(false);
-      }
+    const loadNotifications = async (uid) => {
+      const notificationData = await fb.getNotifications(uid);
+      setNotificationsData(notificationData);
+      setNotificationsLoading(false);
     };
-    loadData();
-  }, [fb, isLoading]);
 
-  // might need one of these for new images
-  // ie set loading true so we get the new images
+    if (notificationsLoading && user != null) {
+      loadNotifications(user.uid);
+    }
+  }, [fb, notificationsLoading, user]);
+
   useEffect(() => {
-    fb.getAuth().onAuthStateChanged((user) => {
-      setUser(user);
+    getAuth().onAuthStateChanged((firebaseUser) => {
+      setUser(firebaseUser);
       setLoadingUser(false);
     });
-  }, [fb]);
+  }, [getAuth]);
 
   return (
     <FirebaseContext.Provider
@@ -38,11 +39,10 @@ const FirebaseContextProvider = (props) => {
         signIn: fb.signIn,
         signOut: fb.signOut,
         loadingUser,
-        uploadImage: fb.uploadFile,
-        isLoading,
-        allImageData,
         getComments: fb.getImageComments,
         submitComment: fb.addComment,
+        notificationsLoading,
+        notificationData,
       }}
     >
       {props.children}

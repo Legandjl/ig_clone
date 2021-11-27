@@ -14,6 +14,8 @@ import {
   addDoc,
   Timestamp,
   orderBy,
+  deleteDoc,
+  doc,
 } from "firebase/firestore";
 
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -34,8 +36,6 @@ const firebaseConfig = {
   measurementId: "G-XS03CEBNFD",
 };
 
-// Initialize Firebase
-
 const Firebase = () => {
   initializeApp(firebaseConfig);
   const db = getFirestore();
@@ -45,6 +45,54 @@ const Firebase = () => {
   const publicMethods = {};
   publicMethods.getAuth = () => {
     return auth;
+  };
+
+  publicMethods.getNotifications = async (uid) => {
+    const q = query(
+      collection(db, "notifications"),
+      where("sentTo", "==", uid)
+    );
+    const docSnap = await getDocs(q);
+    const data = [];
+    docSnap.forEach((doc) => {
+      data.push(doc.data());
+    });
+
+    return data;
+  };
+
+  publicMethods.likePost = async (user, pid, author) => {
+    const ref = await addDoc(collection(db, "likes"), {
+      uid: user.uid,
+      pid: pid,
+    });
+
+    await addDoc(collection(db, "notifications"), {
+      sentBy: user.uid,
+      sentTo: author,
+      pid: pid,
+      id: ref.id,
+    });
+  };
+
+  publicMethods.unlikePost = async (id) => {
+    await deleteDoc(doc(db, "likes", id));
+    const q = query(collection(db, "notifications"), where("id", "==", id));
+    const docSnap = await getDocs(q);
+    docSnap.forEach((item) => {
+      deleteDoc(doc(db, "notifications", item.id));
+    });
+  };
+
+  publicMethods.getLikes = async (pid) => {
+    const q = query(collection(db, "likes"), where("pid", "==", pid));
+    const docSnap = await getDocs(q);
+    const data = [];
+    docSnap.forEach((doc) => {
+      const likeId = doc.id;
+      data.push({ ...doc.data(), likeIdentifier: likeId });
+    });
+    return data;
   };
 
   publicMethods.signIn = async () => {
@@ -67,7 +115,7 @@ const Firebase = () => {
         });
       }
     } catch (e) {
-      console.log(e);
+      throw new Error(e);
     }
   };
 
@@ -79,16 +127,18 @@ const Firebase = () => {
     const storageRef = ref(storage, `images/${user.uid}"/"${file.name}`);
     await uploadBytes(storageRef, file);
     const url = await getDownloadURL(storageRef);
-    return await addDoc(collection(db, "images"), {
+    await addDoc(collection(db, "images"), {
       downloadUrl: url,
       likes: {},
       uploadedBy: user.uid,
       name: file.name,
       timestamp: Timestamp.now(),
+      info: { username: user.displayName, photoURL: user.photoURL },
     });
   };
 
   publicMethods.getImages = async () => {
+    console.log("getting");
     const collectionRef = collection(db, "images");
     const docSnap = await getDocs(collectionRef);
     const data = [];
@@ -99,16 +149,19 @@ const Firebase = () => {
     return data;
   };
 
-  publicMethods.addComment = async (text, imgId, username) => {
-    return await addDoc(collection(db, "comments"), {
+  publicMethods.addComment = async (text, imgId, user) => {
+    await addDoc(collection(db, "comments"), {
       imageId: imgId,
       comment: text,
-      author: username,
+      author: user.displayName,
       timestamp: Timestamp.now(),
-    }); // needs uid
-  }; //del like if (uid === uid, timestamp === timestamp)
-
-  //likes can be their own documents - bool ?
+      uid: user.uid,
+      posterInfo: {
+        poster: user.displayName,
+        photoURL: user.photoURL,
+      },
+    });
+  };
 
   publicMethods.getImageComments = async (imgId) => {
     const q = query(
@@ -119,7 +172,8 @@ const Firebase = () => {
     const docSnap = await getDocs(q);
     const data = [];
     docSnap.forEach((doc) => {
-      data.push(doc.data());
+      const id = doc.id;
+      data.push({ ...doc.data(), id: id });
     });
     return data;
   };
