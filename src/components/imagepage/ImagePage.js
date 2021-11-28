@@ -1,8 +1,10 @@
+import Loader from "react-loader-spinner";
 import { useNavigate, useParams } from "react-router";
 import { useContext, useEffect } from "react/cjs/react.development";
 import { FirebaseContext } from "../firebase/FirebaseContext";
 import { ImageContext } from "../firebase/ImageContext";
 import ImageContainer from "../home/imageContainer/ImageContainer";
+import DefaultLoader from "../loaders/DefaultLoader";
 
 const ImagePage = () => {
   const nav = useNavigate();
@@ -20,8 +22,9 @@ const ImagePage = () => {
     return item.id === id;
   });
 
-  return (
-    !imagesLoading &&
+  return imagesLoading ? (
+    <DefaultLoader />
+  ) : (
     img[0] !== undefined && (
       <ImageContainer
         imageID={img[0].id}

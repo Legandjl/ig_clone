@@ -7,20 +7,24 @@ const ImageContextProvider = (props) => {
 
   const [allImageData, setAllImages] = useState([]);
   const [imagesLoading, setImagesLoading] = useState(true);
+  const [loadingInProcess, setLoadingInProcess] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
+      setLoadingInProcess(true);
       const imageData = await getImages();
-
       setAllImages(() => {
         return imageData;
       });
-      setImagesLoading(false);
+      setTimeout(() => {
+        setImagesLoading(false);
+        setLoadingInProcess(false);
+      }, 500);
     };
-    if (imagesLoading) {
+    if (imagesLoading && !loadingInProcess) {
       loadData();
     }
-  }, [getImages, imagesLoading]);
+  }, [getImages, imagesLoading, loadingInProcess]);
 
   const refreshImages = () => {
     setImagesLoading(true);

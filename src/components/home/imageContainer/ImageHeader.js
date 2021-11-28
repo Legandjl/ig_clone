@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 
-import Styles from "./Styles";
+import ImageContainerStyles from "./styles/ImageContainerStyles";
 
 const ImageHeader = (props) => {
   return (
-    <div style={Styles[props.type].Header}>
+    <div style={ImageContainerStyles[props.type].Header}>
       <img
         src={props.src}
         style={{
@@ -12,7 +12,7 @@ const ImageHeader = (props) => {
           height: "1.6em",
           width: "1.6em",
           alignSelf: "center",
-          marginLeft: 10,
+          marginLeft: "0.8em",
         }}
         alt="userDisplayPhoto"
       />

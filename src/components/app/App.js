@@ -7,21 +7,27 @@ import Header from "../header/Header";
 import Footer from "../footer/Footer";
 import ImagePage from "../imagepage/ImagePage";
 import { ImageContextProvider } from "../firebase/ImageContext";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import Page from "../user/Page";
+import { FileContextProvider } from "../filepicker/FileContext";
+// https://www.npmjs.com/package/react-loader-spinner
 
 const App = () => {
   return (
     <FirebaseContextProvider>
       <ImageContextProvider>
-        <div className="App">
-          <Header />
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/p/:id" element={<ImagePage />} />
-            <Route path="/user/:id" element={<p>hello </p>} />
-          </Routes>
-          <Footer />
-        </div>
+        <FileContextProvider>
+          <div className="App">
+            <Header />
+            <Routes>
+              <Route path="/" element={<Login />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/p/:id" element={<ImagePage />} />
+              <Route path="/user/:id" element={<Page />} />
+            </Routes>
+            <Footer />
+          </div>
+        </FileContextProvider>
       </ImageContextProvider>
     </FirebaseContextProvider>
   );

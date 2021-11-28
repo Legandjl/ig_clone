@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useContext, useEffect, useState } from "react/cjs/react.development";
 import { Firebase } from "../../firebase/Firebase";
 import { FirebaseContext } from "../../firebase/FirebaseContext";
-import Styles from "./Styles";
+import ImageContainerStyles from "./styles/ImageContainerStyles";
 
 const ImageFunctions = (props) => {
   const { user } = useContext(FirebaseContext);
@@ -11,7 +11,6 @@ const ImageFunctions = (props) => {
   const [likes, setLikesData] = useState([]);
   const [likesDataLoading, setLikesDataLoading] = useState(true);
   const [likeCount, setLikeCount] = useState(0);
-  console.log(likeCount);
 
   const isLiked = likes.find((element) => {
     return element.uid === user.uid && element.pid === props.id;
@@ -64,8 +63,8 @@ const ImageFunctions = (props) => {
   };
 
   return (
-    <div style={Styles[props.type].FunctionsWrapper}>
-      <div style={Styles[props.type].FunctionsWrapperInner}>
+    <div style={ImageContainerStyles[props.type].FunctionsWrapper}>
+      <div style={ImageContainerStyles[props.type].FunctionsWrapperInner}>
         <div>
           {postLiked ? (
             <i
@@ -100,7 +99,7 @@ const ImageFunctions = (props) => {
             }}
           >
             {props.type === "ImagePage" && likeCount === 0
-              ? "Be the first to like"
+              ? "Be the first to like this"
               : likeCount === 1
               ? likeCount + " like"
               : likeCount + " likes"}

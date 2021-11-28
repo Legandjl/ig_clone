@@ -2,9 +2,25 @@ import "../Home.css";
 import Comments from "./Comments";
 import ImageHeader from "./ImageHeader";
 import ImageFunctions from "./Functions";
+import { useEffect, useState } from "react/cjs/react.development";
+import DefaultLoader from "../../loaders/DefaultLoader";
 
 const ImageContainer = (props) => {
   const { type, author, src, imageID, name, info } = props;
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  useEffect(() => {
+    if (!imageLoaded) {
+      const image = new Image();
+      image.src = props.src;
+      image.id = imageID;
+      image.onload = () => {
+        setTimeout(() => {
+          setImageLoaded(true);
+        }, 300);
+      };
+    }
+  }, [imageID, imageLoaded, props.src]);
 
   const getHomeContainer = () => {
     return (
@@ -15,7 +31,13 @@ const ImageContainer = (props) => {
           username={info.username}
           author={author}
         />
-        <img alt={name} id={imageID} src={src} />
+
+        {imageLoaded ? (
+          <img alt={name} id={imageID} src={src} />
+        ) : (
+          <DefaultLoader loaded={imageLoaded} />
+        )}
+
         <ImageFunctions id={imageID} type={type} author={author} />
         <Comments imageID={imageID} type={type} />
       </div>

@@ -1,0 +1,24 @@
+.pageWrap {
+  display: grid;
+  grid-template-columns: 1fr 80vw 1fr;
+  align-items: center;
+  align-content: center;
+}
+
+.userpageImages {
+  grid-column: 2;
+  background-color: white;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-auto-rows: 20em;
+  grid-gap: 10px;
+}
+
+.imageFrame {
+  height: auto;
+  width: 100%;
+  min-width: 10em;
+  background-size: cover;
+  background-color: white;
+  background-position: center center;
+}

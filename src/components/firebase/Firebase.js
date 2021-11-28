@@ -18,7 +18,13 @@ import {
   doc,
 } from "firebase/firestore";
 
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  uploadString,
+} from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCRLLO5Ux_40PvV0-8LkX8S1RK2HIygY0Q",
@@ -72,6 +78,7 @@ const Firebase = () => {
       sentTo: author,
       pid: pid,
       id: ref.id,
+      photoURL: user.photoURL,
     });
   };
 
@@ -123,7 +130,23 @@ const Firebase = () => {
     signOut(auth);
   };
 
+  publicMethods.uploadFile2 = async (user, file) => {
+    const storageRef = ref(storage, `images/${user.uid}"/"${"tester"}`);
+    await uploadString(storageRef, file, "data_url");
+
+    const url = await getDownloadURL(storageRef);
+    await addDoc(collection(db, "images"), {
+      downloadUrl: url,
+      likes: {},
+      uploadedBy: user.uid,
+      name: "test",
+      timestamp: Timestamp.now(),
+      info: { username: user.displayName, photoURL: user.photoURL },
+    });
+  };
+
   publicMethods.uploadFile = async (user, file) => {
+    return;
     const storageRef = ref(storage, `images/${user.uid}"/"${file.name}`);
     await uploadBytes(storageRef, file);
     const url = await getDownloadURL(storageRef);
@@ -145,6 +168,20 @@ const Firebase = () => {
     docSnap.forEach((doc) => {
       const id = doc.id;
       data.push({ ...doc.data(), id: id }); //add img ids here
+    });
+    return data;
+  };
+
+  publicMethods.getUserImages = async (uid) => {
+    const q = query(
+      collection(db, "images"),
+      where("uploadedBy", "==", uid),
+      orderBy("timestamp", "asc")
+    );
+    const docSnap = await getDocs(q);
+    const data = [];
+    docSnap.forEach((doc) => {
+      data.push(doc.data());
     });
     return data;
   };

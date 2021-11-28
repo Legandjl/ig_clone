@@ -46,19 +46,30 @@ const ListItems = {
   wordWrap: "break-word",
 };
 
-const Styles = {
+const CommmentUserImage = {
+  borderRadius: "50%",
+  height: "1.6em",
+  width: "1.6em",
+  gridRow: "1/3",
+  alignSelf: "start",
+  marginRight: 10,
+};
+
+const ImageContainerStyles = {
   HomePage: {
     Header: { ...Header },
     FunctionsWrapper: { ...FunctionsWrapper },
     FunctionsWrapperInner: {
       ...FunctionsWrapperInner,
       padding: 0,
-      paddingLeft: 5,
-      paddingTop: 10,
+      paddingLeft: "0.4em",
+      paddingTop: 5,
+      paddingBottom: 5,
     },
-    CommentsWrapper: { ...CommentsWrapper, padding: 0, paddingLeft: "5px" },
+    CommentsWrapper: { ...CommentsWrapper, padding: 0 },
     CommentArea: { ...CommentArea, borderTop: "none" },
-    ListItems: { ...ListItems },
+    ListItems: { ...ListItems, width: "38em" },
+    CommentUserImage: { ...CommmentUserImage, display: "none" },
   },
 
   ImagePage: {
@@ -79,7 +90,8 @@ const Styles = {
       display: "grid",
       gridTemplateRows: "1fr 3em",
     },
-    ListItems: { ...ListItems, width: "21em" },
+    ListItems: { ...ListItems, width: "18em" },
+    CommentUserImage: { ...CommmentUserImage },
   },
 };
-export default Styles;
+export default ImageContainerStyles;

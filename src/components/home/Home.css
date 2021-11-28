@@ -43,10 +43,12 @@ i:hover {
   grid-template-rows: 4em auto auto auto;
   grid-template-columns: 1fr;
   background-color: black;
+  min-width: 40em;
+  transition: all ease-in-out 10s;
 }
 
 .imageContainerHome img {
-  height: auto;
+  height: 40em;
   width: 40em;
 }
 
@@ -102,9 +104,8 @@ i:hover {
 }
 
 .imageContainer img {
-  height: auto;
-  width: 35em;
-  max-height: 40em;
+  width: 40em;
+  height: 40em;
 }
 
 .socialArea {

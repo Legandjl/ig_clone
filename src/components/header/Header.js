@@ -1,7 +1,9 @@
 import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { useContext, useEffect, useState } from "react/cjs/react.development";
+import { FileContext } from "../filepicker/FileContext";
 import { FirebaseContext } from "../firebase/FirebaseContext";
+import CropTool from "../imageCropUtils/Cropper";
 import "./Header.css";
 import HeaderIcons from "./HeaderIcons";
 import logo from "./logo.png";
@@ -12,11 +14,14 @@ const Header = () => {
 
   const { notificationData, notificationsLoading, user } =
     useContext(FirebaseContext);
+  const { isCropping, imageSrc } = useContext(FileContext);
 
   useEffect(() => {}, [notificationData]);
 
   const showNotifications = () => {
-    setMenuToggle(true);
+    setMenuToggle((prev) => {
+      return !prev;
+    });
   };
 
   const hideNotifications = () => {
@@ -35,7 +40,7 @@ const Header = () => {
           <Link to={`user/${item.sentBy}`}> {item.senderName}</Link> likes your{" "}
           <Link to={`/p/${item.pid}`}>post</Link>
         </p>
-        <i class="ri-close-circle-line"></i>
+        <i className="ri-close-circle-line"></i>
       </div>
     );
   });
@@ -52,6 +57,7 @@ const Header = () => {
         hideNotifications={hideNotifications}
       />
       <Notifications menuToggle={menuToggle} allNotifications={notifications} />
+      {isCropping && <CropTool image={imageSrc} />}{" "}
     </div>
   );
 };

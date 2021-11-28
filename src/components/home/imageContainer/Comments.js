@@ -1,25 +1,37 @@
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import CommentsError from "../../errors/CommentsError";
 import { FirebaseContext } from "../../firebase/FirebaseContext";
-import Styles from "./Styles";
+import CommentsLoader from "../../loaders/CommentsLoader";
+import ImageContainerStyles from "./styles/ImageContainerStyles";
 import getDifference from "./utilities";
 
 const Comments = (props) => {
   const [isLoading, setLoading] = useState(true);
   const [commentData, setComments] = useState([]);
   const [commentText, setCommentText] = useState("");
+  const [errored, setErrored] = useState(false);
   const { getComments, user, submitComment } = useContext(FirebaseContext);
 
   useEffect(() => {
     const updateComments = async () => {
       const comments = await getComments(props.imageID);
+
       setComments(() => {
         return comments;
       });
     };
     if (isLoading === true) {
-      updateComments();
-      setLoading(false);
+      updateComments()
+        .then(() => {
+          setTimeout(() => {
+            setLoading(false);
+          }, 1000);
+        })
+        .catch((e) => {
+          setLoading(false);
+          setErrored(true);
+        });
     }
     return () => {
       setLoading(false);
@@ -41,8 +53,6 @@ const Comments = (props) => {
     console.log(id);
   };
 
-  console.log(props.type);
-
   const comments = commentData.map((comment, i) => {
     return (
       <li
@@ -57,27 +67,24 @@ const Comments = (props) => {
       >
         <img
           src={comment.posterInfo.photoURL}
-          style={{
-            borderRadius: "50%",
-            height: "1.6em",
-            width: "1.6em",
-            gridRow: "1/3",
-            alignSelf: "end",
-            marginRight: 10,
-            display: props.type === "HomePage" ? "none" : "block",
-          }}
+          style={ImageContainerStyles[props.type].CommentUserImage}
           alt="userDisplayPhoto"
         />
-        <Link className={"userLink"} to={`/user/${comment.uid}`}>
-          <p className="commentAuthor">{comment.posterInfo.poster}</p>
-        </Link>
+
         <p
-          style={Styles[props.type].ListItems}
+          style={ImageContainerStyles[props.type].ListItems}
           onClick={() => {
             removeComment(comment.id);
           }}
         >
-          {comment.comment}
+          <Link
+            style={{ display: "inline-block", fontWeight: "bold" }}
+            className={"userLink"}
+            to={`/user/${comment.uid}`}
+          >
+            {comment.posterInfo.poster}
+          </Link>
+          {" " + comment.comment}
         </p>
         <p
           style={{
@@ -94,27 +101,35 @@ const Comments = (props) => {
   });
 
   return (
-    <div style={Styles[props.type].CommentArea}>
+    <div style={ImageContainerStyles[props.type].CommentArea}>
       <div
         className={"commentsOuter"}
         style={
-          comments.length === 0 && props.type === "HomePage"
+          comments.length === 0
             ? {
-                ...Styles[props.type].CommentsWrapper,
-                paddingTop: 5,
+                ...ImageContainerStyles[props.type].CommentsWrapper,
               }
-            : { ...Styles[props.type].CommentsWrapper }
+            : { ...ImageContainerStyles[props.type].CommentsWrapper }
         }
       >
-        <ul>
-          {isLoading
-            ? null
-            : comments.length <= 2 && props.type === "HomePage" // or type ? show all on display page
-            ? comments
-            : props.type === "HomePage"
-            ? comments.slice(-2)
-            : comments}
-        </ul>
+        {errored ? (
+          <CommentsError
+            handleError={() => {
+              setErrored(false);
+              setLoading(true);
+            }}
+          />
+        ) : isLoading && props.type === "ImagePage" && comments.length > 0 ? (
+          <CommentsLoader />
+        ) : (
+          <ul style={{ paddingLeft: "0.8em" }}>
+            {comments.length <= 2 && props.type === "HomePage" // or type ? show all on display page
+              ? comments
+              : props.type === "HomePage"
+              ? comments.slice(-2)
+              : comments}
+          </ul>
+        )}
       </div>
       <div className="submitWrap">
         <input
