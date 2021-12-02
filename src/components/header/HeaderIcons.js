@@ -8,6 +8,7 @@ import { useRef } from "react";
 const HeaderIcons = (props) => {
   const [heartIcon, setHeartIcon] = useState("ri-heart-line");
   const [logoutIcon, setLogoutIcon] = useState("ri-logout-box-r-line");
+  const [homeIcon, setHomeIcon] = useState("ri-home-8-line");
   const { signOut } = useContext(FirebaseContext);
   const location = useLocation().pathname;
 
@@ -15,7 +16,6 @@ const HeaderIcons = (props) => {
 
   useEffect(() => {
     const handleClick = (e) => {
-      console.log("clicking");
       if (node.current.contains(e.target)) {
         props.showNotifications();
         return;
@@ -28,15 +28,25 @@ const HeaderIcons = (props) => {
     };
   }, [props]);
 
+  useEffect(() => {
+    if (location !== "/home") {
+      setHomeIcon("ri-home-8-line");
+    }
+  }, [location]);
+
   return (
     <div className="headerIcons">
       {location !== "/home" ? (
         <Link to={"/home"}>
           {" "}
-          <i className="ri-home-8-line"></i>
+          <i
+            className={homeIcon}
+            onMouseOver={() => setHomeIcon("ri-home-8-fill")}
+            onMouseLeave={() => setHomeIcon("ri-home-8-line")}
+          ></i>
         </Link>
       ) : (
-        <i className="ri-home-8-fill"></i>
+        <i className={"ri-home-8-fill"}></i>
       )}
 
       <i

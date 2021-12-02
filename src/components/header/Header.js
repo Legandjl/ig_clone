@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { useContext, useEffect, useState } from "react/cjs/react.development";
 import { FileContext } from "../filepicker/FileContext";
@@ -8,14 +7,17 @@ import "./Header.css";
 import HeaderIcons from "./HeaderIcons";
 import logo from "./logo.png";
 import Notifications from "./Notifications";
+import { useLocation, useNavigate } from "react-router";
 
-const Header = () => {
+const Header = (props) => {
   const [menuToggle, setMenuToggle] = useState(false);
-
-  const { notificationData, notificationsLoading, user } =
-    useContext(FirebaseContext);
+  const { notificationData, user } = useContext(FirebaseContext);
   const { isCropping, imageSrc } = useContext(FileContext);
 
+  const nav = useNavigate();
+
+  const location = useLocation();
+  console.log(location);
   useEffect(() => {}, [notificationData]);
 
   const showNotifications = () => {
@@ -26,6 +28,14 @@ const Header = () => {
 
   const hideNotifications = () => {
     setMenuToggle(false);
+  };
+
+  const navigate = () => {
+    if (location.pathname === "/home") {
+      window.scrollTo(0, 0);
+    } else {
+      nav("/home", { replace: true });
+    }
   };
 
   const notifications = notificationData.map((item) => {
@@ -48,16 +58,25 @@ const Header = () => {
   return (
     <div className="header">
       <div className="headerLogoWrap">
-        <Link to="/home">
-          <img alt="camera logo" src={logo} />
-        </Link>
+        <img
+          alt="camera logo"
+          src={logo}
+          onClick={navigate}
+          style={{ cursor: "pointer" }}
+        />
       </div>
-      <HeaderIcons
-        showNotifications={showNotifications}
-        hideNotifications={hideNotifications}
-      />
+      {user && (
+        <HeaderIcons
+          showNotifications={showNotifications}
+          hideNotifications={hideNotifications}
+        />
+      )}
       <Notifications menuToggle={menuToggle} allNotifications={notifications} />
-      {isCropping && <CropTool image={imageSrc} />}{" "}
+      {isCropping && (
+        <div>
+          <CropTool image={imageSrc} />
+        </div>
+      )}{" "}
     </div>
   );
 };

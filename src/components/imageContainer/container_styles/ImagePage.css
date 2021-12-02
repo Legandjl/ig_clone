@@ -1,0 +1,95 @@
+/* Header */
+
+.containerHeader {
+  display: grid;
+  align-content: center;
+  align-items: center;
+  background-color: white;
+  font-weight: bold;
+  width: 100%;
+  border: solid #dbdbdb 1px;
+  grid-template-columns: auto 1fr;
+  border-bottom: 0;
+}
+
+/* Functions */
+
+.functionsWrapper {
+  width: 100%;
+  background-color: white;
+  border: solid #dbdbdb 1px;
+  display: grid;
+  border-top: 0px;
+  grid-template-columns: auto auto;
+  justify-items: start;
+}
+
+.functionsWrapperInner {
+  background-color: white;
+  padding: 10px;
+  font-size: 1.7em;
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  grid-gap: 5px;
+  align-content: center;
+  height: 1.5em;
+}
+
+.likesCounter {
+  font-size: 1.1em;
+  justify-self: end;
+  justify-content: end;
+  grid-column: 3;
+  margin-right: 8;
+  align-self: center;
+}
+
+/* Comments */
+
+li {
+  margin-top: 0px;
+  margin-bottom: 10px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-gap: 5px;
+}
+
+.timeStamp {
+  font-size: 0.8em;
+  margin-top: 5px;
+  color: #8e8e8e;
+}
+
+.commentsWrap {
+  display: grid;
+  background-color: white;
+  padding: 0.6em;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding-bottom: 0px;
+}
+
+.commentArea {
+  border: solid #dbdbdb 1px;
+  width: 100%;
+}
+
+.commentAreaFullPage {
+  display: grid;
+  grid-template-rows: 1fr 3em;
+  overflow-y: scroll;
+}
+
+.listItems {
+  word-wrap: break-word;
+  width: 18em;
+}
+
+.userProfileImg {
+  border-radius: 50%;
+  height: 1.6em;
+  width: 1.6em;
+  grid-row: 1/3;
+  align-self: start;
+  margin-right: 10px;
+}

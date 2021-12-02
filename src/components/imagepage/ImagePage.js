@@ -1,9 +1,8 @@
-import Loader from "react-loader-spinner";
 import { useNavigate, useParams } from "react-router";
 import { useContext, useEffect } from "react/cjs/react.development";
 import { FirebaseContext } from "../firebase/FirebaseContext";
 import { ImageContext } from "../firebase/ImageContext";
-import ImageContainer from "../home/imageContainer/ImageContainer";
+import ImageContainer from "../imageContainer/ImageContainer";
 import DefaultLoader from "../loaders/DefaultLoader";
 
 const ImagePage = () => {

@@ -1,9 +1,11 @@
-import "../Home.css";
+import "../home/Home.css";
+import "./container_styles/ImagePage.css";
 import Comments from "./Comments";
 import ImageHeader from "./ImageHeader";
 import ImageFunctions from "./Functions";
-import { useEffect, useState } from "react/cjs/react.development";
-import DefaultLoader from "../../loaders/DefaultLoader";
+import { useState, useEffect } from "react";
+
+import DefaultLoader from "../loaders/DefaultLoader";
 
 const ImageContainer = (props) => {
   const { type, author, src, imageID, name, info } = props;
@@ -15,12 +17,14 @@ const ImageContainer = (props) => {
       image.src = props.src;
       image.id = imageID;
       image.onload = () => {
-        setTimeout(() => {
-          setImageLoaded(true);
-        }, 300);
+        setImageLoaded(true);
       };
     }
   }, [imageID, imageLoaded, props.src]);
+
+  const checkIfHomePage = () => {
+    return type === "HomePage";
+  };
 
   const getHomeContainer = () => {
     return (
@@ -38,7 +42,12 @@ const ImageContainer = (props) => {
           <DefaultLoader loaded={imageLoaded} />
         )}
 
-        <ImageFunctions id={imageID} type={type} author={author} />
+        <ImageFunctions
+          id={imageID}
+          type={type}
+          author={author}
+          checkIfHomePage={checkIfHomePage}
+        />
         <Comments imageID={imageID} type={type} />
       </div>
     );
@@ -59,7 +68,12 @@ const ImageContainer = (props) => {
             src={info.photoURL}
           />
           <Comments imageID={imageID} type={type} />
-          <ImageFunctions id={imageID} type={type} author={author} />
+          <ImageFunctions
+            id={imageID}
+            type={type}
+            author={author}
+            checkIfHomePage={checkIfHomePage}
+          />
         </div>
       </div>
     );

@@ -10,6 +10,7 @@ import { ImageContextProvider } from "../firebase/ImageContext";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Page from "../user/Page";
 import { FileContextProvider } from "../filepicker/FileContext";
+
 // https://www.npmjs.com/package/react-loader-spinner
 
 const App = () => {
@@ -21,7 +22,7 @@ const App = () => {
             <Header />
             <Routes>
               <Route path="/" element={<Login />} />
-              <Route path="/home" element={<Home />} />
+              <Route path="/home" element={<Home key={Date.now()} />} />
               <Route path="/p/:id" element={<ImagePage />} />
               <Route path="/user/:id" element={<Page />} />
             </Routes>

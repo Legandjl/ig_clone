@@ -21,10 +21,11 @@ import {
 import {
   getStorage,
   ref,
-  uploadBytes,
   getDownloadURL,
   uploadString,
 } from "firebase/storage";
+
+import { v4 as uuidv4 } from "uuid";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCRLLO5Ux_40PvV0-8LkX8S1RK2HIygY0Q",
@@ -119,6 +120,7 @@ const Firebase = () => {
           name: user.displayName,
           authprovider: "google",
           email: user.email,
+          profilePictureUrl: user.photoURL,
         });
       }
     } catch (e) {
@@ -130,8 +132,9 @@ const Firebase = () => {
     signOut(auth);
   };
 
-  publicMethods.uploadFile2 = async (user, file) => {
-    const storageRef = ref(storage, `images/${user.uid}"/"${"tester"}`);
+  publicMethods.uploadFile = async (user, file) => {
+    const uuid = uuidv4();
+    const storageRef = ref(storage, `images/${user.uid}"/"${uuid}`);
     await uploadString(storageRef, file, "data_url");
 
     const url = await getDownloadURL(storageRef);
@@ -139,22 +142,7 @@ const Firebase = () => {
       downloadUrl: url,
       likes: {},
       uploadedBy: user.uid,
-      name: "test",
-      timestamp: Timestamp.now(),
-      info: { username: user.displayName, photoURL: user.photoURL },
-    });
-  };
-
-  publicMethods.uploadFile = async (user, file) => {
-    return;
-    const storageRef = ref(storage, `images/${user.uid}"/"${file.name}`);
-    await uploadBytes(storageRef, file);
-    const url = await getDownloadURL(storageRef);
-    await addDoc(collection(db, "images"), {
-      downloadUrl: url,
-      likes: {},
-      uploadedBy: user.uid,
-      name: file.name,
+      name: uuid,
       timestamp: Timestamp.now(),
       info: { username: user.displayName, photoURL: user.photoURL },
     });
@@ -181,7 +169,8 @@ const Firebase = () => {
     const docSnap = await getDocs(q);
     const data = [];
     docSnap.forEach((doc) => {
-      data.push(doc.data());
+      const id = doc.id;
+      data.push({ ...doc.data(), id: id });
     });
     return data;
   };

@@ -1,9 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import CommentsError from "../../errors/CommentsError";
-import { FirebaseContext } from "../../firebase/FirebaseContext";
-import CommentsLoader from "../../loaders/CommentsLoader";
-import ImageContainerStyles from "./styles/ImageContainerStyles";
+import CommentsError from "../errors/CommentsError";
+import { FirebaseContext } from "../firebase/FirebaseContext";
+import CommentsLoader from "../loaders/CommentsLoader";
 import getDifference from "./utilities";
 
 const Comments = (props) => {
@@ -53,26 +52,26 @@ const Comments = (props) => {
     console.log(id);
   };
 
+  const checkIfHome = () => {
+    return props.type === "HomePage";
+  };
+
   const comments = commentData.map((comment, i) => {
     return (
-      <li
-        key={i}
-        style={{
-          marginTop: 10,
-          marginBottom: 10,
-          display: "grid",
-          gridTemplateColumns: "auto 1fr",
-          gridGap: 5,
-        }}
-      >
+      <li key={i}>
         <img
+          className={"userProfileImg"}
           src={comment.posterInfo.photoURL}
-          style={ImageContainerStyles[props.type].CommentUserImage}
+          style={{ display: checkIfHome() && "none" }}
           alt="userDisplayPhoto"
+          onError={(event) => {
+            event.target.src = user;
+            event.onerror = null;
+          }}
         />
 
         <p
-          style={ImageContainerStyles[props.type].ListItems}
+          className={"listItems"}
           onClick={() => {
             removeComment(comment.id);
           }}
@@ -87,11 +86,9 @@ const Comments = (props) => {
           {" " + comment.comment}
         </p>
         <p
+          className={"timeStamp"}
           style={{
-            fontSize: "0.8em",
-            marginTop: 5,
-            color: "#808088",
-            gridColumn: props.type === "HomePage" ? 1 : 2,
+            gridColumn: checkIfHome() ? 1 : 2,
           }}
         >
           {getDifference(comment.timestamp.toDate())}
@@ -101,16 +98,14 @@ const Comments = (props) => {
   });
 
   return (
-    <div style={ImageContainerStyles[props.type].CommentArea}>
+    <div
+      className={
+        checkIfHome() ? "commentArea" : "commentArea commentAreaFullPage"
+      }
+    >
       <div
-        className={"commentsOuter"}
-        style={
-          comments.length === 0
-            ? {
-                ...ImageContainerStyles[props.type].CommentsWrapper,
-              }
-            : { ...ImageContainerStyles[props.type].CommentsWrapper }
-        }
+        className={"commentsOuter commentsWrap"}
+        style={{ display: comments.length <= 0 && "none" }}
       >
         {errored ? (
           <CommentsError
@@ -119,19 +114,22 @@ const Comments = (props) => {
               setLoading(true);
             }}
           />
-        ) : isLoading && props.type === "ImagePage" && comments.length > 0 ? (
+        ) : isLoading && !checkIfHome() && comments.length > 0 ? (
           <CommentsLoader />
         ) : (
           <ul style={{ paddingLeft: "0.8em" }}>
-            {comments.length <= 2 && props.type === "HomePage" // or type ? show all on display page
+            {comments.length <= 2 && checkIfHome() // or type ? show all on display page
               ? comments
-              : props.type === "HomePage"
+              : checkIfHome()
               ? comments.slice(-2)
               : comments}
           </ul>
         )}
       </div>
-      <div className="submitWrap">
+      <div
+        className="submitWrap"
+        style={{ borderTop: checkIfHome() && comments.length <= 0 && "none" }}
+      >
         <input
           type="text"
           placeholder="Add a comment..."

@@ -1,23 +1,67 @@
 .loginWrap {
   background-color: #fafafa;
-
-  width: 40em;
-  height: 20em;
+  width: 30em;
   justify-self: center;
-  align-self: center;
   display: grid;
   grid-row: 2;
 }
 
 .loginForm {
   background-color: white;
-  border: solid 2px;
+
   display: grid;
-  justify-content: center;
-  align-content: center;
+
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  border-left: solid #dbdbdb 1px;
+  border-right: solid #dbdbdb 1px;
 }
 
-.loginForm button {
-  width: 60px;
-  height: 30px;
+.signupHeader {
+  align-self: center;
+  justify-self: center;
+  width: 60;
+  height: 60;
+  display: grid;
+  grid-gap: 0.8em;
+  margin-bottom: 10em;
+}
+
+.signupHeader p {
+  font-weight: bolder;
+  font-size: 1.5em;
+  justify-self: center;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.loginWrap button {
+  height: 2em;
+  outline: none;
+  border: none;
+  justify-self: center;
+  width: 100%;
+  background-color: #272528;
+  color: white;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: all 0.09s ease-in-out;
+}
+
+.loginWrap button:hover {
+  cursor: pointer;
+  background-color: white;
+  color: #272528;
+
+  outline: solid 2px #272528;
+}
+.loginWrap input[type="text"] {
+  border: none;
+  outline: none;
+  height: 1.5em;
+
+  padding-left: 10px;
+  border: solid #dbdbdb 1px;
+}
+
+input[type="text"]:active {
 }

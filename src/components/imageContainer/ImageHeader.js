@@ -1,20 +1,23 @@
 import { Link } from "react-router-dom";
-
-import ImageContainerStyles from "./styles/ImageContainerStyles";
+import user from "./user.png";
 
 const ImageHeader = (props) => {
   return (
-    <div style={ImageContainerStyles[props.type].Header}>
+    <div className="containerHeader">
       <img
         src={props.src}
         style={{
-          borderRadius: "50%",
+          borderRadius: 12,
           height: "1.6em",
           width: "1.6em",
           alignSelf: "center",
           marginLeft: "0.8em",
         }}
         alt="userDisplayPhoto"
+        onError={(event) => {
+          event.target.src = user;
+          event.onerror = null;
+        }}
       />
       <Link to={`/user/${props.author}`}>
         {" "}

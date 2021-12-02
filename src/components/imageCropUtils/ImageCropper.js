@@ -1,6 +1,7 @@
-import { useContext, useState } from "react/cjs/react.development";
-import { Firebase } from "../firebase/Firebase";
+import { useContext } from "react/cjs/react.development";
+
 import { FirebaseContext } from "../firebase/FirebaseContext";
+import { ImageContext } from "../firebase/ImageContext";
 
 const createImage = (url) =>
   new Promise((resolve, reject) => {
@@ -61,16 +62,15 @@ async function getCroppedImg(imageSrc, pixelCrop, rotation = 0) {
 }
 
 const CropImg = () => {
-  const [url, setUrl] = useState(null);
   const { user } = useContext(FirebaseContext);
-  const fb = Firebase();
+  const { uploadImage } = useContext(ImageContext);
 
-  const loadImage = async (pos1, pos2, src) => {
-    const test = await getCroppedImg(src, pos2);
-    await fb.uploadFile2(user, test);
+  const loadImage = async (croppedAreaValues, image) => {
+    const croppedImage = await getCroppedImg(image, croppedAreaValues);
+    await uploadImage(user, croppedImage);
   };
 
-  return [url, loadImage];
+  return [loadImage];
 };
 
 export default CropImg;

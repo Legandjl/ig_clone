@@ -19,7 +19,7 @@ const ImageContextProvider = (props) => {
       setTimeout(() => {
         setImagesLoading(false);
         setLoadingInProcess(false);
-      }, 500);
+      }, 1500);
     };
     if (imagesLoading && !loadingInProcess) {
       loadData();

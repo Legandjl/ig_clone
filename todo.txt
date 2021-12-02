@@ -1,4 +1,7 @@
-set up like function
-
-order comments by time
-
+set up user page (header showing profile, numberof uploads etc)
+sizing of container
+themes
+notifications styling and details
+nice image gallery
+responsive
+user page image loading spinners
