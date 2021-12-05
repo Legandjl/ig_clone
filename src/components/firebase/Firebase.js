@@ -16,6 +16,7 @@ import {
   orderBy,
   deleteDoc,
   doc,
+  limit,
 } from "firebase/firestore";
 
 import {
@@ -48,6 +49,7 @@ const Firebase = () => {
   const db = getFirestore();
   const storage = getStorage();
   const auth = getAuth();
+  const provider = new GoogleAuthProvider();
 
   const publicMethods = {};
   publicMethods.getAuth = () => {
@@ -103,28 +105,27 @@ const Firebase = () => {
     return data;
   };
 
-  publicMethods.signIn = async () => {
-    const provider = new GoogleAuthProvider();
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-      const q = query(collection(db, "users"), where("uid", "==", user.uid));
-      const docSnap = await getDocs(q);
-      const data = [];
-      docSnap.forEach((doc) => {
-        data.push(doc.data());
+  publicMethods.checkForUser = async (username) => {
+    const q = query(collection(db, "users"), where("username", "==", username));
+    const docSnap = await getDocs(q);
+    return docSnap.empty;
+  };
+
+  publicMethods.signIn = async (username) => {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+    const q = query(collection(db, "users"), where("uid", "==", user.uid));
+    const docSnap = await getDocs(q);
+    if (docSnap.empty) {
+      console.log("usernot found");
+      await addDoc(collection(db, "users"), {
+        uid: user.uid,
+        name: user.displayName,
+        authprovider: "google",
+        email: user.email,
+        profilePictureUrl: user.photoURL,
+        username: username === "" ? user.displayName : username,
       });
-      if (data.length === 0) {
-        await addDoc(collection(db, "users"), {
-          uid: user.uid,
-          name: user.displayName,
-          authprovider: "google",
-          email: user.email,
-          profilePictureUrl: user.photoURL,
-        });
-      }
-    } catch (e) {
-      throw new Error(e);
     }
   };
 
@@ -146,12 +147,34 @@ const Firebase = () => {
       timestamp: Timestamp.now(),
       info: { username: user.displayName, photoURL: user.photoURL },
     });
-  };
+  }; //convert
 
   publicMethods.getImages = async () => {
     console.log("getting");
-    const collectionRef = collection(db, "images");
-    const docSnap = await getDocs(collectionRef);
+    const q = query(
+      collection(db, "images"),
+      orderBy("timestamp", "desc"),
+      limit(2)
+    );
+    const docSnap = await getDocs(q);
+    const data = [];
+    docSnap.forEach((doc) => {
+      const id = doc.id;
+      data.push({ ...doc.data(), id: id }); //add img ids here
+    });
+    return data;
+  };
+
+  publicMethods.getNextImageBatch = async (timestamp) => {
+    console.log("called");
+    console.log(timestamp);
+    const q = query(
+      collection(db, "images"),
+      where("timestamp", "<", timestamp),
+      limit(2)
+    );
+
+    const docSnap = await getDocs(q);
     const data = [];
     docSnap.forEach((doc) => {
       const id = doc.id;

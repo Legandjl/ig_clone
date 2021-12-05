@@ -39,7 +39,7 @@ const ImageContainer = (props) => {
         {imageLoaded ? (
           <img alt={name} id={imageID} src={src} />
         ) : (
-          <DefaultLoader loaded={imageLoaded} />
+          <DefaultLoader />
         )}
 
         <ImageFunctions

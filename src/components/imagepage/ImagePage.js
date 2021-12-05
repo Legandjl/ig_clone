@@ -1,29 +1,18 @@
-import { useNavigate, useParams } from "react-router";
-import { useContext, useEffect } from "react/cjs/react.development";
-import { FirebaseContext } from "../firebase/FirebaseContext";
+import { useParams } from "react-router";
+import { useContext } from "react/cjs/react.development";
 import { ImageContext } from "../firebase/ImageContext";
 import ImageContainer from "../imageContainer/ImageContainer";
-import DefaultLoader from "../loaders/DefaultLoader";
 
 const ImagePage = () => {
-  const nav = useNavigate();
   const { id } = useParams();
-  const { user } = useContext(FirebaseContext);
-  const { allImageData, imagesLoading } = useContext(ImageContext);
-
-  useEffect(() => {
-    if (!user) {
-      nav("/", { replace: true });
-    }
-  }, [user, nav]);
-
+  const { allImageData } = useContext(ImageContext);
+  // get specific image
+  // image doesnt exist show page not found
   const img = allImageData.filter((item) => {
     return item.id === id;
   });
 
-  return imagesLoading ? (
-    <DefaultLoader />
-  ) : (
+  return (
     img[0] !== undefined && (
       <ImageContainer
         imageID={img[0].id}

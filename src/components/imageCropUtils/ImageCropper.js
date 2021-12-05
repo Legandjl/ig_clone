@@ -1,5 +1,4 @@
 import { useContext } from "react/cjs/react.development";
-
 import { FirebaseContext } from "../firebase/FirebaseContext";
 import { ImageContext } from "../firebase/ImageContext";
 
@@ -67,7 +66,7 @@ const CropImg = () => {
 
   const loadImage = async (croppedAreaValues, image) => {
     const croppedImage = await getCroppedImg(image, croppedAreaValues);
-    await uploadImage(user, croppedImage);
+    await uploadImage(user, croppedImage); // change so user is grabbed from fb
   };
 
   return [loadImage];

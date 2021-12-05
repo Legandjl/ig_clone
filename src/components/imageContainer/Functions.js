@@ -16,10 +16,6 @@ const ImageFunctions = (props) => {
 
   const mountedRef = useRef(true);
 
-  const isLiked = likes.find((element) => {
-    return element.uid === user.uid && element.pid === props.id;
-  });
-
   const fb = Firebase();
 
   useEffect(() => {
@@ -38,11 +34,17 @@ const ImageFunctions = (props) => {
   }, [fb, likesDataLoading, props.id]);
 
   useEffect(() => {
-    if (isLiked !== undefined) {
-      setPostIdentifier(isLiked.likeIdentifier);
-      setPostLiked(true);
+    if (user) {
+      const isLiked = likes.find((element) => {
+        return element.uid === user.uid && element.pid === props.id;
+      });
+
+      if (isLiked !== undefined) {
+        setPostIdentifier(isLiked.likeIdentifier);
+        setPostLiked(true);
+      }
     }
-  }, [isLiked]);
+  }, [likes, props.id, user]);
 
   const refreshLikes = () => {
     setLikesDataLoading(true);

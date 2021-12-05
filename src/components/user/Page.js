@@ -8,31 +8,29 @@ const Page = () => {
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const [loadingInProcess, setLoadingInProcess] = useState(false);
   const [imageData, setImageData] = useState([]);
-
   const params = useParams();
-  const fb = Firebase();
+  const { getUserImages } = Firebase();
+
   useEffect(() => {
-    const getUserImages = async () => {
+    const startImageLoad = async () => {
       setLoadingInProcess(true);
-      const images = await fb.getUserImages(params.id);
+      const images = await getUserImages(params.id);
       setImageData(images);
       setLoadingInProcess(false);
       setImagesLoaded(true);
     };
 
     if (!loadingInProcess && !imagesLoaded) {
-      getUserImages();
+      startImageLoad();
     }
-  }, [fb, imagesLoaded, loadingInProcess, params.id]);
-
-  // imgtag onload?
+  }, [getUserImages, imagesLoaded, loadingInProcess, params.id]);
 
   const userImageElements = imageData.map((element) => {
     return (
       <div className="imageFrame" style={{}}>
         <Link to={`/p/${element.id}`}>
           {" "}
-          <img src={element.downloadUrl}></img>{" "}
+          <img src={element.downloadUrl} alt={"userUpload"}></img>{" "}
         </Link>
       </div>
     );

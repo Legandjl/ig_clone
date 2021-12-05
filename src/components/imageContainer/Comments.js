@@ -23,9 +23,7 @@ const Comments = (props) => {
     if (isLoading === true) {
       updateComments()
         .then(() => {
-          setTimeout(() => {
-            setLoading(false);
-          }, 1000);
+          setLoading(false);
         })
         .catch((e) => {
           setLoading(false);
@@ -72,6 +70,7 @@ const Comments = (props) => {
 
         <p
           className={"listItems"}
+          style={{ width: checkIfHome() && "100%" }}
           onClick={() => {
             removeComment(comment.id);
           }}
@@ -82,8 +81,10 @@ const Comments = (props) => {
             to={`/user/${comment.uid}`}
           >
             {comment.posterInfo.poster}
-          </Link>
-          {" " + comment.comment}
+          </Link>{" "}
+          {checkIfHome() && comment.comment.length > 25
+            ? comment.comment.substring(0, 24) + "..."
+            : comment.comment}
         </p>
         <p
           className={"timeStamp"}

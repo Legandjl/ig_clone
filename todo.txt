@@ -1,7 +1,18 @@
 set up user page (header showing profile, numberof uploads etc)
-sizing of container
+infinite scrolling (comments too?)
+
 themes
 notifications styling and details
 nice image gallery
 responsive
 user page image loading spinners
+
+
+sign in page -- 
+
+already signed up? sign in - 
+
+check database for user, if it doesnt exist, throw new error
+catch error - no user found, please sign up
+
+switch out user in context for custom user from firebase (maybe need to recreate it)

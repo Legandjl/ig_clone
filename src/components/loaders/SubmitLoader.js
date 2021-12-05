@@ -1,6 +1,6 @@
 import Loader from "react-loader-spinner";
 
-const SubmitLoader = () => {
+const SubmitLoader = (props) => {
   return (
     <div
       style={{
@@ -8,7 +8,7 @@ const SubmitLoader = () => {
         justifySelf: "center",
       }}
     >
-      <Loader type="ThreeDots" color="grey" height={30} width={30} />
+      <Loader type="ThreeDots" color={"gray"} height={30} width={30} />
     </div>
   );
 };

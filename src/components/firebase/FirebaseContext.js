@@ -9,6 +9,7 @@ const FirebaseContextProvider = (props) => {
     const user = fb.getAuth().currentUser;
     return user;
   });
+
   const [loadingUser, setLoadingUser] = useState(true);
   const [notificationsLoading, setNotificationsLoading] = useState(true);
   const [notificationData, setNotificationsData] = useState([]);
@@ -36,7 +37,6 @@ const FirebaseContextProvider = (props) => {
     <FirebaseContext.Provider
       value={{
         user,
-        signIn: fb.signIn,
         signOut: fb.signOut,
         loadingUser,
         getComments: fb.getImageComments,

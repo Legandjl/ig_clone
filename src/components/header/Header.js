@@ -9,7 +9,7 @@ import logo from "./logo.png";
 import Notifications from "./Notifications";
 import { useLocation, useNavigate } from "react-router";
 
-const Header = (props) => {
+const Header = () => {
   const [menuToggle, setMenuToggle] = useState(false);
   const { notificationData, user } = useContext(FirebaseContext);
   const { isCropping, imageSrc } = useContext(FileContext);
@@ -17,7 +17,7 @@ const Header = (props) => {
   const nav = useNavigate();
 
   const location = useLocation();
-  console.log(location);
+
   useEffect(() => {}, [notificationData]);
 
   const showNotifications = () => {

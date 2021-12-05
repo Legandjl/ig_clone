@@ -3,28 +3,55 @@ import React, { useState, useEffect } from "react";
 const ImageContext = React.createContext();
 
 const ImageContextProvider = (props) => {
-  const { getImages, uploadFile } = Firebase();
+  const { getImages, uploadFile, getNextImageBatch } = Firebase();
 
   const [allImageData, setAllImages] = useState([]);
   const [imagesLoading, setImagesLoading] = useState(true);
   const [loadingInProcess, setLoadingInProcess] = useState(false);
+  const [lastImageId, setLastImageId] = useState(null);
+  const [reachedEnd, setReachedEnd] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
       setLoadingInProcess(true);
-      const imageData = await getImages();
-      setAllImages(() => {
-        return imageData;
+
+      let imageData;
+      if (lastImageId === null) {
+        imageData = await getImages();
+      } else {
+        imageData = await getNextImageBatch(lastImageId);
+      }
+      setAllImages((prev) => {
+        return [...prev, ...imageData];
       });
-      setTimeout(() => {
-        setImagesLoading(false);
-        setLoadingInProcess(false);
-      }, 1500);
+
+      setReachedEnd(() => {
+        return imageData.length < 2;
+      });
+
+      setImagesLoading(false);
+      setLoadingInProcess(false);
     };
-    if (imagesLoading && !loadingInProcess) {
+    if (imagesLoading && !loadingInProcess && !reachedEnd) {
       loadData();
     }
-  }, [getImages, imagesLoading, loadingInProcess]);
+  }, [
+    allImageData,
+    getImages,
+    getNextImageBatch,
+    imagesLoading,
+    lastImageId,
+    loadingInProcess,
+    reachedEnd,
+  ]);
+
+  useEffect(() => {
+    if (!reachedEnd && allImageData.length !== 0) {
+      setLastImageId(() => {
+        return allImageData[allImageData.length - 1].timestamp;
+      });
+    }
+  }, [allImageData, reachedEnd]);
 
   const refreshImages = () => {
     setImagesLoading(true);
@@ -36,7 +63,15 @@ const ImageContextProvider = (props) => {
   };
 
   return (
-    <ImageContext.Provider value={{ allImageData, imagesLoading, uploadImage }}>
+    <ImageContext.Provider
+      value={{
+        allImageData,
+        imagesLoading,
+        uploadImage,
+        refreshImages,
+        loadingInProcess,
+      }}
+    >
       {props.children}
     </ImageContext.Provider>
   );
