@@ -1,5 +1,5 @@
 import { Firebase } from "./Firebase";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 const ImageContext = React.createContext();
 
 const ImageContextProvider = (props) => {
@@ -11,30 +11,38 @@ const ImageContextProvider = (props) => {
   const [lastImageId, setLastImageId] = useState(null);
   const [reachedEnd, setReachedEnd] = useState(false);
 
-  useEffect(() => {
-    const loadData = async () => {
-      setLoadingInProcess(true);
+  const isMounted = useRef(null);
 
+  useEffect(() => {
+    isMounted.current = true;
+    const loadData = async () => {
+      if (isMounted.current) {
+        setLoadingInProcess(true);
+      }
       let imageData;
       if (lastImageId === null) {
         imageData = await getImages();
       } else {
         imageData = await getNextImageBatch(lastImageId);
       }
-      setAllImages((prev) => {
-        return [...prev, ...imageData];
-      });
-
-      setReachedEnd(() => {
-        return imageData.length < 2;
-      });
-
-      setImagesLoading(false);
-      setLoadingInProcess(false);
+      if (isMounted.current) {
+        setAllImages((prev) => {
+          return [...prev, ...imageData];
+        });
+        setReachedEnd(() => {
+          return imageData.length < 2;
+        });
+        setImagesLoading(false);
+        setLoadingInProcess(false);
+      }
     };
     if (imagesLoading && !loadingInProcess && !reachedEnd) {
       loadData();
     }
+
+    return () => {
+      isMounted.current = false;
+    };
   }, [
     allImageData,
     getImages,
@@ -70,6 +78,7 @@ const ImageContextProvider = (props) => {
         uploadImage,
         refreshImages,
         loadingInProcess,
+        reachedEnd,
       }}
     >
       {props.children}
