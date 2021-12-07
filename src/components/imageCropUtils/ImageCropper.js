@@ -2,6 +2,10 @@ import { useContext } from "react/cjs/react.development";
 import { FirebaseContext } from "../firebase/FirebaseContext";
 import { ImageContext } from "../firebase/ImageContext";
 
+/*code pulled from 
+https://github.com/CodingWith-Adam/react-easy-crop-tutorial/blob/main/src/cropImage.js
+*/
+
 const createImage = (url) =>
   new Promise((resolve, reject) => {
     const image = new Image();
@@ -66,7 +70,7 @@ const CropImg = () => {
 
   const loadImage = async (croppedAreaValues, image) => {
     const croppedImage = await getCroppedImg(image, croppedAreaValues);
-    await uploadImage(user, croppedImage); // change so user is grabbed from fb
+    await uploadImage(user, croppedImage);
   };
 
   return [loadImage];

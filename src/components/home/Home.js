@@ -1,49 +1,34 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { FileContext } from "../filepicker/FileContext";
 import { FirebaseContext } from "../firebase/FirebaseContext";
-import { ImageContext } from "../firebase/ImageContext";
+import ImageContainer from "../imageContainer/containerTypes/ImageContainer";
 import CropTool from "../imageCropUtils/Cropper";
-import ImageContainer from "../imageContainer/ImageContainer";
 import ImageRefreshLoader from "../loaders/ImageRefreshLoader";
 import "./Home.css";
+import useImages from "./useImages";
+import useScroll from "./useScroll";
 
 const Home = () => {
-  const { user } = useContext(FirebaseContext);
-  const { allImageData, refreshImages, loadingInProcess } =
-    useContext(ImageContext);
   const { isCropping, imageSrc } = useContext(FileContext);
-  const [bottom, setBottom] = useState(false);
+  const { user } = useContext(FirebaseContext);
+  const { allImageData, refreshImages, loadingInProcess, reachedEnd } =
+    useImages();
+  const { bottom } = useScroll();
 
   useEffect(() => {
-    const handleScroll = () => {
-      const bottom =
-        Math.ceil(window.innerHeight + window.scrollY) >=
-        document.documentElement.scrollHeight * 0.75;
-      setBottom(bottom);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [refreshImages]);
-
-  useEffect(() => {
-    if (bottom) {
+    if (bottom && !reachedEnd) {
       refreshImages();
     }
-  }, [bottom, refreshImages]);
+  }, [bottom, reachedEnd, refreshImages]);
 
-  const images = allImageData.map((dataItem, i) => {
+  const images = allImageData.map((imageData, i) => {
     return (
       <ImageContainer
         key={i}
-        imageID={dataItem.id}
-        src={dataItem.downloadUrl}
-        author={dataItem.uploadedBy}
+        imageID={imageData.id}
+        src={imageData.downloadUrl}
+        author={imageData.uploadedBy}
         type={"HomePage"}
-        headerImg={dataItem.info.photoURL}
-        headerName={dataItem.info.username}
-        info={dataItem.info}
       />
     );
   });

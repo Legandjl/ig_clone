@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useContext, useEffect, useState } from "react/cjs/react.development";
+import { useContext, useState } from "react/cjs/react.development";
 import { FileContext } from "../filepicker/FileContext";
 import { FirebaseContext } from "../firebase/FirebaseContext";
 import CropTool from "../imageCropUtils/Cropper";
@@ -17,8 +17,6 @@ const Header = () => {
   const nav = useNavigate();
 
   const location = useLocation();
-
-  useEffect(() => {}, [notificationData]);
 
   const showNotifications = () => {
     setMenuToggle((prev) => {
@@ -38,9 +36,9 @@ const Header = () => {
     }
   };
 
-  const notifications = notificationData.map((item) => {
+  const notifications = notificationData.map((item, i) => {
     return (
-      <div className="notification">
+      <div className="notification" key={i}>
         <img
           alt={"user icon"}
           style={{ width: 35, height: 35, borderRadius: 50, marginRight: 5 }}

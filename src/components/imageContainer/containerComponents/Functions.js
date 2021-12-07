@@ -1,10 +1,10 @@
 import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { useContext, useEffect, useState } from "react/cjs/react.development";
-import { Firebase } from "../firebase/Firebase";
-import { FirebaseContext } from "../firebase/FirebaseContext";
-import LikeButton from "../likes/LikeButton";
-import LikeCounter from "../likes/LikeCounter";
+import { Firebase } from "../../firebase/Firebase";
+import { FirebaseContext } from "../../firebase/FirebaseContext";
+import LikeButton from "../../likes/LikeButton";
+import LikeCounter from "../../likes/LikeCounter";
 
 const ImageFunctions = (props) => {
   const { user } = useContext(FirebaseContext);
@@ -13,61 +13,59 @@ const ImageFunctions = (props) => {
   const [likes, setLikesData] = useState([]);
   const [likesDataLoading, setLikesDataLoading] = useState(true);
   const [likeCount, setLikeCount] = useState(0);
+  const { getLikes, likePost, unlikePost } = Firebase();
+  const isMounted = useRef(null);
 
-  const mountedRef = useRef(true);
-
-  const fb = Firebase();
+  //refactored 07/12
 
   useEffect(() => {
+    isMounted.current = true;
     const loadLikes = async () => {
-      if (likesDataLoading) {
-        const likesData = await fb.getLikes(props.id);
+      const likesData = await getLikes(props.id);
+      if (isMounted) {
         setLikesData(likesData);
         setLikeCount(likesData.length);
         setLikesDataLoading(false);
       }
     };
-    loadLikes();
+    if (likesDataLoading) {
+      loadLikes();
+    }
     return () => {
-      mountedRef.current = false;
+      isMounted.current = false;
     };
-  }, [fb, likesDataLoading, props.id]);
+  }, [getLikes, likesDataLoading, props.id]);
 
   useEffect(() => {
+    isMounted.current = true;
     if (user) {
       const isLiked = likes.find((element) => {
-        return element.uid === user.uid && element.pid === props.id;
+        return element.uid === user.uid;
       });
 
-      if (isLiked !== undefined) {
+      if (isLiked !== undefined && isMounted.current) {
         setPostIdentifier(isLiked.likeIdentifier);
         setPostLiked(true);
       }
     }
-  }, [likes, props.id, user]);
+    return () => {
+      isMounted.current = false;
+    };
+  }, [likes, user]);
 
   const refreshLikes = () => {
     setLikesDataLoading(true);
-  };
-
-  const likePost = async (uid, pid, author) => {
-    await fb.likePost(uid, pid, author);
-    refreshLikes();
-  };
-
-  const unlikePost = async (id) => {
-    await fb.unlikePost(id);
-    refreshLikes();
   };
 
   const handleLike = async () => {
     if (postLiked) {
       setPostLiked(false);
       await unlikePost(postIdentifier);
-      return;
+    } else {
+      setPostLiked(true);
+      await likePost(user, props.id, props.author);
     }
-    setPostLiked(true);
-    await likePost(user, props.id, props.author);
+    refreshLikes();
   };
 
   return (

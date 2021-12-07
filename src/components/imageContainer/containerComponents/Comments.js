@@ -1,9 +1,10 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import CommentsError from "../errors/CommentsError";
-import { FirebaseContext } from "../firebase/FirebaseContext";
-import CommentsLoader from "../loaders/CommentsLoader";
-import getDifference from "./utilities";
+import CommentsError from "../../errors/CommentsError";
+import { FirebaseContext } from "../../firebase/FirebaseContext";
+import CommentsLoader from "../../loaders/CommentsLoader";
+import getDifference from "../utilities";
+import userIcon from "./user.png";
 
 const Comments = (props) => {
   const [isLoading, setLoading] = useState(true);
@@ -11,27 +12,24 @@ const Comments = (props) => {
   const [commentText, setCommentText] = useState("");
   const [errored, setErrored] = useState(false);
   const { getComments, user, submitComment } = useContext(FirebaseContext);
+  const isMounted = useRef(null);
 
   useEffect(() => {
+    isMounted.current = true;
     const updateComments = async () => {
       const comments = await getComments(props.imageID);
-
-      setComments(() => {
-        return comments;
-      });
+      if (isMounted.current) {
+        setComments(() => {
+          return comments;
+        });
+        setLoading(false);
+      }
     };
     if (isLoading === true) {
-      updateComments()
-        .then(() => {
-          setLoading(false);
-        })
-        .catch((e) => {
-          setLoading(false);
-          setErrored(true);
-        });
+      updateComments();
     }
     return () => {
-      setLoading(false);
+      isMounted.current = false;
     };
   }, [getComments, isLoading, props.imageID]);
 
@@ -63,7 +61,7 @@ const Comments = (props) => {
           style={{ display: checkIfHome() && "none" }}
           alt="userDisplayPhoto"
           onError={(event) => {
-            event.target.src = user;
+            event.target.src = userIcon;
             event.onerror = null;
           }}
         />
@@ -119,7 +117,7 @@ const Comments = (props) => {
           <CommentsLoader />
         ) : (
           <ul style={{ paddingLeft: "0.8em" }}>
-            {comments.length <= 2 && checkIfHome() // or type ? show all on display page
+            {comments.length <= 2 && checkIfHome()
               ? comments
               : checkIfHome()
               ? comments.slice(-2)

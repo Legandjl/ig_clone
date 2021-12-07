@@ -1,27 +1,44 @@
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
-import { useContext } from "react/cjs/react.development";
-import { ImageContext } from "../firebase/ImageContext";
-import ImageContainer from "../imageContainer/ImageContainer";
+import { Firebase } from "../firebase/Firebase";
+import ImageContainer from "../imageContainer/containerTypes/ImageContainer";
+
+//refactored 05/12
 
 const ImagePage = () => {
+  const [loadingImage, setLoadingImage] = useState(true);
+  const [image, setImage] = useState(null);
   const { id } = useParams();
-  const { allImageData } = useContext(ImageContext);
-  // get specific image
-  // image doesnt exist show page not found
-  const img = allImageData.filter((item) => {
-    return item.id === id;
-  });
+  const { getImageById } = Firebase();
+
+  const isMounted = useRef(null);
+
+  useEffect(() => {
+    isMounted.current = true;
+    const startLoad = async () => {
+      const image = await getImageById(id);
+      if (isMounted.current) {
+        setImage(() => {
+          return image;
+        });
+        setLoadingImage(false);
+      }
+    };
+    if (loadingImage) {
+      startLoad();
+    }
+    return () => {
+      isMounted.current = false;
+    };
+  }, [getImageById, id, loadingImage]);
 
   return (
-    img[0] !== undefined && (
+    image && (
       <ImageContainer
-        imageID={img[0].id}
-        src={img[0].downloadUrl}
+        imageID={id}
+        src={image.downloadUrl}
         type={"ImagePage"}
-        author={img[0].uploadedBy}
-        info={img[0].info}
-        headerImg={img[0].info.photoURL}
-        headerName={img[0].info.username}
+        author={image.uploadedBy}
       />
     )
   );

@@ -5,6 +5,8 @@ import { FileContext } from "../filepicker/FileContext";
 import SubmitLoader from "../loaders/SubmitLoader";
 import "./Cropper.css";
 
+//css needs refactor
+
 import CropImg from "./ImageCropper";
 
 const CropTool = (props) => {

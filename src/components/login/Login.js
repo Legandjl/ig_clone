@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import logo from "./logo.png";
 import "./Login.css";
 import LoginLoader from "../loaders/LoginLoader";
 import LoginInput from "./LoginInput";
 import { Firebase } from "../firebase/Firebase";
 import { useNavigate } from "react-router";
+
+//refactored 05/12
 
 const Login = () => {
   const { signIn, checkForUser } = Firebase();
@@ -13,6 +15,7 @@ const Login = () => {
   const [isNameAvailable, setIsNameAvailable] = useState(true);
   const signupDisabled = username.length < 3 || !isNameAvailable;
   const nav = useNavigate();
+  const isMounted = useRef(null);
 
   const disabledButtonStyle = {
     backgroundColor: signupDisabled && "grey",
@@ -22,16 +25,16 @@ const Login = () => {
   };
 
   useEffect(() => {
-    let isMounted = true;
+    isMounted.current = true;
     const checker = async () => {
       const nameAvailable = await checkForUser(username);
-      if (isMounted) {
+      if (isMounted.current) {
         setIsNameAvailable(nameAvailable);
       }
     };
     checker();
     return () => {
-      isMounted = false;
+      isMounted.current = false;
     };
   }, [checkForUser, setIsNameAvailable, username]);
 

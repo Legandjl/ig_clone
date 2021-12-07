@@ -15,14 +15,14 @@ import { FirebaseContext } from "../firebase/FirebaseContext";
 // https://www.npmjs.com/package/react-loader-spinner
 
 const App = () => {
-  const { user, loadingUser } = useContext(FirebaseContext);
+  const { user } = useContext(FirebaseContext);
   const nav = useNavigate();
 
   useEffect(() => {
     if (!user) {
       nav("/", { replace: true });
     }
-  }, [user, nav]);
+  }, [nav, user]);
 
   return (
     <div className="App">

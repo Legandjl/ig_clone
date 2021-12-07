@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react/cjs/react.development";
@@ -11,18 +12,27 @@ const Page = () => {
   const params = useParams();
   const { getUserImages } = Firebase();
 
+  const isMounted = useRef(null);
+
   useEffect(() => {
+    isMounted.current = true;
     const startImageLoad = async () => {
       setLoadingInProcess(true);
       const images = await getUserImages(params.id);
-      setImageData(images);
-      setLoadingInProcess(false);
-      setImagesLoaded(true);
+      if (isMounted) {
+        setImageData(images);
+        setLoadingInProcess(false);
+        setImagesLoaded(true);
+      }
     };
 
     if (!loadingInProcess && !imagesLoaded) {
       startImageLoad();
     }
+
+    return () => {
+      isMounted.current = false;
+    };
   }, [getUserImages, imagesLoaded, loadingInProcess, params.id]);
 
   const userImageElements = imageData.map((element) => {

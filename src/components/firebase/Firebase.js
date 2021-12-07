@@ -17,6 +17,7 @@ import {
   deleteDoc,
   doc,
   limit,
+  getDoc,
 } from "firebase/firestore";
 
 import {
@@ -43,7 +44,7 @@ const firebaseConfig = {
 
   measurementId: "G-XS03CEBNFD",
 };
-
+console.log("this is the one");
 const Firebase = () => {
   initializeApp(firebaseConfig);
   const db = getFirestore();
@@ -111,6 +112,17 @@ const Firebase = () => {
     return docSnap.empty;
   };
 
+  publicMethods.getUserProfile = async (uid) => {
+    const q = query(collection(db, "users"), where("uid", "==", uid));
+    const docSnap = await getDocs(q);
+    console.log(docSnap.empty);
+    const data = [];
+    docSnap.forEach((doc) => {
+      data.push(doc.data());
+    });
+    return data[0];
+  };
+
   publicMethods.signIn = async (username) => {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
@@ -141,7 +153,6 @@ const Firebase = () => {
     const url = await getDownloadURL(storageRef);
     await addDoc(collection(db, "images"), {
       downloadUrl: url,
-      likes: {},
       uploadedBy: user.uid,
       name: uuid,
       timestamp: Timestamp.now(),
@@ -198,6 +209,11 @@ const Firebase = () => {
     return data;
   };
 
+  publicMethods.getImageById = async (id) => {
+    const docRef = doc(db, "images", id);
+    const docSnap = await getDoc(docRef);
+    return docSnap.data();
+  };
   publicMethods.addComment = async (text, imgId, user) => {
     await addDoc(collection(db, "comments"), {
       imageId: imgId,

@@ -2,11 +2,9 @@ import { useContext, useRef, useState } from "react";
 
 import { FileContext } from "./FileContext";
 
-const FilePicker = (props) => {
+const FilePicker = () => {
   const [icon, setIcon] = useState("ri-add-box-line");
-
   const { startCrop } = useContext(FileContext);
-
   const hiddenFileSelect = useRef(null);
 
   const handleFile = (e) => {
