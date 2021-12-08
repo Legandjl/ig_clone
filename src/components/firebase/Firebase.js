@@ -151,14 +151,15 @@ const Firebase = () => {
     await uploadString(storageRef, file, "data_url");
 
     const url = await getDownloadURL(storageRef);
-    await addDoc(collection(db, "images"), {
+    const docRef = await addDoc(collection(db, "images"), {
       downloadUrl: url,
       uploadedBy: user.uid,
       name: uuid,
       timestamp: Timestamp.now(),
       info: { username: user.displayName, photoURL: user.photoURL },
     });
-  }; //convert
+    return docRef.id;
+  };
 
   publicMethods.getImages = async () => {
     console.log("getting");
@@ -181,6 +182,7 @@ const Firebase = () => {
     console.log(timestamp);
     const q = query(
       collection(db, "images"),
+      orderBy("timestamp", "desc"),
       where("timestamp", "<", timestamp),
       limit(2)
     );

@@ -1,4 +1,4 @@
-import Comments from "../containerComponents/Comments";
+import CommentsTest from "../containerComponents/comments/CommentsTest";
 import ImageFunctions from "../containerComponents/Functions";
 import ImageHeader from "../containerComponents/ImageHeader";
 
@@ -23,7 +23,7 @@ const FullDisplayContainer = ({
           username={profileData.username}
           src={profileData.profilePictureUrl}
         />
-        <Comments imageID={imageID} type={type} />
+        <CommentsTest imageID={imageID} type={type} />
         <ImageFunctions
           id={imageID}
           type={type}

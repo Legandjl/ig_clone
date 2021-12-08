@@ -2,7 +2,7 @@ import { useContext, useEffect } from "react";
 import { FileContext } from "../filepicker/FileContext";
 import { FirebaseContext } from "../firebase/FirebaseContext";
 import ImageContainer from "../imageContainer/containerTypes/ImageContainer";
-import CropTool from "../imageCropUtils/Cropper";
+import CropTool from "../imageCropUtils/CropTool";
 import ImageRefreshLoader from "../loaders/ImageRefreshLoader";
 import "./Home.css";
 import useImages from "./useImages";
@@ -16,12 +16,13 @@ const Home = () => {
   const { bottom } = useScroll();
 
   useEffect(() => {
-    if (bottom && !reachedEnd) {
+    if (bottom && !reachedEnd && !loadingInProcess) {
       refreshImages();
     }
-  }, [bottom, reachedEnd, refreshImages]);
+  }, [bottom, loadingInProcess, reachedEnd, refreshImages]);
 
   const images = allImageData.map((imageData, i) => {
+    console.log("mapping");
     return (
       <ImageContainer
         key={i}
@@ -38,7 +39,9 @@ const Home = () => {
       className="homeWrap"
       style={{ paddingBottom: !loadingInProcess ? "3em" : 0 }}
     >
-      {isCropping && <CropTool image={imageSrc} />}{" "}
+      {isCropping && (
+        <CropTool image={imageSrc} refreshImages={refreshImages} />
+      )}{" "}
       {user && <div className="homeImages">{images}</div>}
       {loadingInProcess && <ImageRefreshLoader />}
     </div>

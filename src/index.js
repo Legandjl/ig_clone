@@ -5,17 +5,14 @@ import App from "./components/app/App";
 import { BrowserRouter } from "react-router-dom";
 import { FileContextProvider } from "./components/filepicker/FileContext";
 import { FirebaseContextProvider } from "./components/firebase/FirebaseContext";
-import { ImageContextProvider } from "./components/firebase/ImageContext";
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <FirebaseContextProvider>
-        <ImageContextProvider>
-          <FileContextProvider>
-            <App />
-          </FileContextProvider>
-        </ImageContextProvider>
+        <FileContextProvider>
+          <App />
+        </FileContextProvider>
       </FirebaseContextProvider>
     </BrowserRouter>
   </React.StrictMode>,

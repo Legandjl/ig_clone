@@ -1,5 +1,6 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import Cropper from "react-easy-crop";
+import { useNavigate } from "react-router";
 import { useContext, useState } from "react/cjs/react.development";
 import { FileContext } from "../filepicker/FileContext";
 import SubmitLoader from "../loaders/SubmitLoader";
@@ -7,7 +8,7 @@ import "./Cropper.css";
 
 //css needs refactor
 
-import CropImg from "./ImageCropper";
+import CropImg from "./useImageCrop";
 
 const CropTool = (props) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -19,12 +20,19 @@ const CropTool = (props) => {
   const CONTAINER_MARGIN = "2.2em";
 
   const [loadImage] = CropImg();
+  const nav = useNavigate();
 
   useEffect(() => {
     const uploadFile = async () => {
       setAttemptingUpload(true);
-      await loadImage(currentCrop, props.image);
+      const ref = await loadImage(
+        currentCrop,
+        props.image,
+        props.refreshImages
+      );
+      props.refreshImages();
       toggleCrop();
+      nav(`/p/${ref}`, { replace: true });
     };
     if (cropFinal && !attemptingUpload) {
       uploadFile();
@@ -34,7 +42,8 @@ const CropTool = (props) => {
     cropFinal,
     currentCrop,
     loadImage,
-    props.image,
+    nav,
+    props,
     toggleCrop,
   ]);
 
@@ -43,75 +52,12 @@ const CropTool = (props) => {
   }, []);
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        backgroundColor: "black",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        background: "rgb(0,0,0, 0.6)",
-      }}
-    >
-      <div
-        style={{
-          width: 500,
-          minHeight: 500,
-          position: "fixed",
-          left: "50%",
-          transform: "translate(-50%, 0)",
-          top: "15%",
-          display: "grid",
-          gridTemplateRows: "auto 1fr auto",
-          backgroundColor: "#FAFAFA",
-          borderLeft: "none",
-          borderRight: "none",
-          boxShadow: "box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px",
-        }}
-      >
-        <div
-          style={{
-            height: CONTAINER_MARGIN,
-            gridRow: 1,
-            textAlign: "center",
-            marginBottom: 5,
-            display: "grid",
-            alignItems: "center",
-            backgroundColor: "#D2D2CF",
-            gridTemplateColumns: "1fr auto 1fr",
-          }}
-        >
-          <p
-            style={{
-              fontWeight: "bold",
-              fontSize: "1.4em",
-              gridColumn: 2,
-              justifySelf: "center",
-              color: " #0095f6",
-            }}
-          ></p>
-          <i
-            style={{
-              alignSelf: "start",
-              fontSize: "1.6em",
-              marginRight: 4,
-              marginTop: 4,
-              gridColumn: 3,
-              justifySelf: "end",
-            }}
-            className="ri-close-line"
-            onClick={toggleCrop}
-          ></i>
+    <div className={"backgroundCover"}>
+      <div className={"cropContainer"}>
+        <div className={"cropContainerHeader"}>
+          <i className="ri-close-line" onClick={toggleCrop}></i>
         </div>{" "}
-        <div
-          style={{
-            position: "relative",
-            gridRow: 2,
-            width: "100%",
-            display: "grid",
-          }}
-        >
+        <div className={"cropContainerInner"}>
           {attemptingUpload ? (
             <SubmitLoader />
           ) : (
@@ -133,7 +79,6 @@ const CropTool = (props) => {
             height: CONTAINER_MARGIN,
             backgroundColor: "#D2D2CF",
             marginTop: 5,
-
             display: "grid",
           }}
         >

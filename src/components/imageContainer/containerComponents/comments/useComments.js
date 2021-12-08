@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { FirebaseContext } from "../firebase/FirebaseContext";
+import { FirebaseContext } from "../../../firebase/FirebaseContext";
 
 const useComments = (props) => {
   const [isLoading, setLoading] = useState(true);

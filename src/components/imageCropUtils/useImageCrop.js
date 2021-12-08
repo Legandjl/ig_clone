@@ -1,10 +1,6 @@
 import { useContext } from "react/cjs/react.development";
+import { Firebase } from "../firebase/Firebase";
 import { FirebaseContext } from "../firebase/FirebaseContext";
-import { ImageContext } from "../firebase/ImageContext";
-
-/*code pulled from 
-https://github.com/CodingWith-Adam/react-easy-crop-tutorial/blob/main/src/cropImage.js
-*/
 
 const createImage = (url) =>
   new Promise((resolve, reject) => {
@@ -66,11 +62,11 @@ async function getCroppedImg(imageSrc, pixelCrop, rotation = 0) {
 
 const CropImg = () => {
   const { user } = useContext(FirebaseContext);
-  const { uploadImage } = useContext(ImageContext);
-
-  const loadImage = async (croppedAreaValues, image) => {
+  const { uploadFile } = Firebase();
+  const loadImage = async (croppedAreaValues, image, refreshImages) => {
     const croppedImage = await getCroppedImg(image, croppedAreaValues);
-    await uploadImage(user, croppedImage);
+    const ref = await uploadFile(user, croppedImage);
+    return ref;
   };
 
   return [loadImage];

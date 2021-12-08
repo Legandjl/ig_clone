@@ -29,7 +29,7 @@ const ImageContainer = (props) => {
       }
     };
 
-    if (!isProfileLoaded) {
+    if (!isProfileLoaded && profileDataLoading) {
       fetchProfile();
     }
     return () => {

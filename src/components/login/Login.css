@@ -8,9 +8,7 @@
 
 .loginForm {
   background-color: white;
-
   display: grid;
-
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   border-left: solid #dbdbdb 1px;
   border-right: solid #dbdbdb 1px;
@@ -64,12 +62,8 @@
   border: none;
   outline: none;
   height: 1.5em;
-
   padding-left: 10px;
   border: solid #dbdbdb 1px;
-}
-
-input[type="text"]:active {
 }
 
 .loginButtonAndInfo {
@@ -84,7 +78,6 @@ input[type="text"]:active {
 
 .loginButtonAndInfo button {
   width: auto;
-
   margin-top: 8px;
   padding-left: 10px;
   padding-right: 10px;

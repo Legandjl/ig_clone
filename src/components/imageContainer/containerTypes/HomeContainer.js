@@ -1,5 +1,5 @@
 import DefaultLoader from "../../loaders/DefaultLoader";
-import Comments from "../containerComponents/Comments";
+import CommentsTest from "../containerComponents/comments/CommentsTest";
 import ImageFunctions from "../containerComponents/Functions";
 import ImageHeader from "../containerComponents/ImageHeader";
 
@@ -32,7 +32,7 @@ const HomeContainer = ({
         author={author}
         checkIfHomePage={checkIfHomePage}
       />
-      <Comments imageID={imageID} type={type} />
+      <CommentsTest imageID={imageID} type={type} />
     </div>
   );
 };

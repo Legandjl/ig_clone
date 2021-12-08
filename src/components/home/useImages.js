@@ -8,15 +8,12 @@ const useImages = () => {
   const [loadingInProcess, setLoadingInProcess] = useState(false);
   const [lastImageId, setLastImageId] = useState(null);
   const [reachedEnd, setReachedEnd] = useState(false);
-
   const isMounted = useRef(null);
 
   useEffect(() => {
     isMounted.current = true;
     const loadData = async () => {
-      if (isMounted.current) {
-        setLoadingInProcess(true);
-      }
+      setLoadingInProcess(true);
       let imageData;
       if (lastImageId === null) {
         imageData = await getImages();

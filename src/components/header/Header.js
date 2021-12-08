@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useContext, useState } from "react/cjs/react.development";
 import { FileContext } from "../filepicker/FileContext";
 import { FirebaseContext } from "../firebase/FirebaseContext";
-import CropTool from "../imageCropUtils/Cropper";
+import CropTool from "../imageCropUtils/CropTool";
 import "./Header.css";
 import HeaderIcons from "./HeaderIcons";
 import logo from "./logo.png";
