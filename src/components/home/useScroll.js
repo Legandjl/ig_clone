@@ -6,15 +6,17 @@ const useScroll = () => {
     const handleScroll = () => {
       const bottom =
         Math.ceil(window.innerHeight + window.scrollY) >=
-        document.documentElement.scrollHeight * 0.75;
+        document.documentElement.scrollHeight * 0.8;
       setBottom(bottom);
     };
-    window.addEventListener("scroll", handleScroll, { passive: true });
 
+    if (!bottom) {
+      window.addEventListener("scroll", handleScroll, { passive: true });
+    }
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [bottom]);
 
   return { bottom };
 };
