@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 
 const useCommentMapper = ({ checkIfHome, removeComment, commentData }) => {
   const getCommentElements = () => {
-    console.log(commentData);
     return commentData.map((comment, i) => {
       return (
         <li key={i}>

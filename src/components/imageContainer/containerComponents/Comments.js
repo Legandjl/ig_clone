@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+/*import { useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import CommentsError from "../../errors/CommentsError";
 import { FirebaseContext } from "../../firebase/FirebaseContext";
@@ -143,3 +143,4 @@ const Comments = (props) => {
   );
 };
 export default Comments;
+*/
