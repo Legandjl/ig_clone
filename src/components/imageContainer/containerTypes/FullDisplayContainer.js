@@ -1,3 +1,4 @@
+import DefaultLoader from "../../loaders/DefaultLoader";
 import CommentsTest from "../containerComponents/comments/CommentsTest";
 import ImageFunctions from "../containerComponents/Functions";
 import ImageHeader from "../containerComponents/ImageHeader";
@@ -13,7 +14,11 @@ const FullDisplayContainer = ({
   return (
     <div className="imageFullDisplay">
       <div className="imageContainer">
-        <img alt={name} id={imageID} src={src} />
+        {imageLoaded ? (
+          <img alt={name} id={imageID} src={src} />
+        ) : (
+          <DefaultLoader />
+        )}
       </div>
       <div className="socialArea">
         {" "}

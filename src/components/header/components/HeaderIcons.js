@@ -1,7 +1,7 @@
 import { useLocation } from "react-router";
 import { useContext, useEffect, useState } from "react/cjs/react.development";
-import FilePicker from "../filepicker/FilePicker";
-import { FirebaseContext } from "../firebase/FirebaseContext";
+import FilePicker from "../../filepicker/FilePicker";
+import { FirebaseContext } from "../../firebase/FirebaseContext";
 import { Link } from "react-router-dom";
 import { useRef } from "react";
 
@@ -9,6 +9,7 @@ const HeaderIcons = (props) => {
   const [heartIcon, setHeartIcon] = useState("ri-heart-line");
   const [logoutIcon, setLogoutIcon] = useState("ri-logout-box-r-line");
   const [homeIcon, setHomeIcon] = useState("ri-home-8-line");
+  const [menuOpen, setMenuOpen] = useState(false);
   const { signOut } = useContext(FirebaseContext);
   const location = useLocation().pathname;
 
@@ -20,7 +21,11 @@ const HeaderIcons = (props) => {
         props.showNotifications();
         return;
       }
-      props.hideNotifications();
+
+      if (!e.target.dataset.notifications) {
+        props.hideNotifications();
+        setMenuOpen(false);
+      }
     };
     document.addEventListener("mousedown", handleClick); // return function to be called when unmounted
     return () => {
@@ -50,9 +55,14 @@ const HeaderIcons = (props) => {
       )}
 
       <i
-        className={heartIcon}
+        className={menuOpen ? "ri-heart-fill" : heartIcon}
         onMouseOver={() => setHeartIcon("ri-heart-fill")}
         onMouseLeave={() => setHeartIcon("ri-heart-line")}
+        onClick={() => {
+          setMenuOpen((prev) => {
+            return !prev;
+          });
+        }}
         ref={node}
       ></i>
       <FilePicker />

@@ -5,7 +5,7 @@ const useComments = (props) => {
   const [isLoading, setLoading] = useState(true);
   const [commentData, setComments] = useState([]);
   const [commentText, setCommentText] = useState("");
-  const { getComments, user, submitComment } = useContext(FirebaseContext);
+  const { getComments, submitComment, appUser } = useContext(FirebaseContext);
   const isMounted = useRef(null);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ const useComments = (props) => {
   }, [getComments, isLoading, props.imageID]);
 
   const handleSubmit = async () => {
-    await submitComment(commentText, props.imageID, user);
+    await submitComment(commentText, props.imageID, appUser);
     setLoading(true);
     setCommentText("");
   };

@@ -44,7 +44,6 @@ const firebaseConfig = {
 
   measurementId: "G-XS03CEBNFD",
 };
-console.log("this is the one");
 const Firebase = () => {
   initializeApp(firebaseConfig);
   const db = getFirestore();
@@ -71,19 +70,21 @@ const Firebase = () => {
     return data;
   };
 
-  publicMethods.likePost = async (user, pid, author) => {
+  publicMethods.likePost = async (appUser, pid, author) => {
     const ref = await addDoc(collection(db, "likes"), {
-      uid: user.uid,
+      uid: appUser.uid,
       pid: pid,
     });
 
-    await addDoc(collection(db, "notifications"), {
-      sentBy: user.uid,
-      sentTo: author,
-      pid: pid,
-      id: ref.id,
-      photoURL: user.photoURL,
-    });
+    if (appUser.uid !== author) {
+      await addDoc(collection(db, "notifications"), {
+        sentBy: appUser.uid,
+        sentTo: author,
+        pid: pid,
+        id: ref.id,
+        photoURL: appUser.profilePictureUrl,
+      });
+    }
   };
 
   publicMethods.unlikePost = async (id) => {
@@ -129,7 +130,6 @@ const Firebase = () => {
     const q = query(collection(db, "users"), where("uid", "==", user.uid));
     const docSnap = await getDocs(q);
     if (docSnap.empty) {
-      console.log("usernot found");
       await addDoc(collection(db, "users"), {
         uid: user.uid,
         name: user.displayName,
@@ -216,16 +216,16 @@ const Firebase = () => {
     const docSnap = await getDoc(docRef);
     return docSnap.data();
   };
-  publicMethods.addComment = async (text, imgId, user) => {
+  publicMethods.addComment = async (text, imgId, appUser) => {
     await addDoc(collection(db, "comments"), {
       imageId: imgId,
       comment: text,
-      author: user.displayName,
+      author: appUser.username,
       timestamp: Timestamp.now(),
-      uid: user.uid,
+      uid: appUser.uid,
       posterInfo: {
-        poster: user.displayName,
-        photoURL: user.photoURL,
+        poster: appUser.username,
+        photoURL: appUser.profilePictureUrl,
       },
     });
   };

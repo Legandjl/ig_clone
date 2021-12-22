@@ -4,9 +4,8 @@ import "./Login.css";
 import LoginLoader from "../loaders/LoginLoader";
 import LoginInput from "./LoginInput";
 import { Firebase } from "../firebase/Firebase";
-import { useNavigate } from "react-router";
 
-//refactored 05/12
+//refactored 21/12
 
 const Login = () => {
   const { signIn, checkForUser } = Firebase();
@@ -14,7 +13,6 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [isNameAvailable, setIsNameAvailable] = useState(true);
   const signupDisabled = username.length < 3 || !isNameAvailable;
-  const nav = useNavigate();
   const isMounted = useRef(null);
 
   const disabledButtonStyle = {
@@ -27,8 +25,8 @@ const Login = () => {
   useEffect(() => {
     isMounted.current = true;
     const checker = async () => {
-      const nameAvailable = await checkForUser(username);
       if (isMounted.current) {
+        const nameAvailable = await checkForUser(username);
         setIsNameAvailable(nameAvailable);
       }
     };
@@ -42,7 +40,6 @@ const Login = () => {
     setIsLoggingIn(true);
     await signIn(username);
     setIsLoggingIn(false);
-    nav("/home", { replace: true });
   };
 
   const handleChange = async (e) => {

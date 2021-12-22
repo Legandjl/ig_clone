@@ -43,14 +43,18 @@ i:hover {
   grid-template-rows: 4em auto auto auto;
   grid-template-columns: 1fr;
   min-width: 40em;
-  transition: all ease-in-out 10s;
+
   min-height: 40em;
   background-color: #d4d4d4;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 .imageContainerHome img {
   height: 40em;
-  width: auto;
+  width: 100%;
+  border-top: solid #dbdbdb 1px;
+  border-bottom: solid #dbdbdb 1px;
+  border-left: solid #dbdbdb 1px;
 }
 
 .submitWrap {
@@ -96,17 +100,21 @@ i:hover {
   align-self: center;
   grid-template-columns: auto 25em;
   background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 .imageContainer {
   display: grid;
   align-content: center;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  background-color: #d4d4d4;
 }
 
 .imageContainer img {
-  height: 40em;
-  width: auto;
+  height: auto;
+  max-height: 40em;
+
+  width: 40em;
 }
 
 .socialArea {

@@ -2,8 +2,8 @@ import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import { useNavigate } from "react-router";
 import Login from "../login/Login";
-import Home from "../home/Home";
-import Header from "../header/Header";
+import Home from "../home/components/Home";
+import Header from "../header/components/Header";
 import Footer from "../footer/Footer";
 import ImagePage from "../imagepage/ImagePage";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
@@ -15,14 +15,16 @@ import { FirebaseContext } from "../firebase/FirebaseContext";
 // https://www.npmjs.com/package/react-loader-spinner
 
 const App = () => {
-  const { user } = useContext(FirebaseContext);
+  const { user, appUser } = useContext(FirebaseContext);
   const nav = useNavigate();
 
   useEffect(() => {
-    if (!user) {
+    if (!appUser || !user) {
       nav("/", { replace: true });
+    } else if (appUser && user) {
+      nav("/home", { replace: true });
     }
-  }, [nav, user]);
+  }, [appUser, nav, user]);
 
   return (
     <div className="App">

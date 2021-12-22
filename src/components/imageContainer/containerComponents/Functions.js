@@ -7,7 +7,7 @@ import LikeButton from "../../likes/LikeButton";
 import LikeCounter from "../../likes/LikeCounter";
 
 const ImageFunctions = (props) => {
-  const { user } = useContext(FirebaseContext);
+  const { appUser } = useContext(FirebaseContext);
   const [postLiked, setPostLiked] = useState(false);
   const [postIdentifier, setPostIdentifier] = useState("");
   const [likes, setLikesData] = useState([]);
@@ -22,7 +22,7 @@ const ImageFunctions = (props) => {
     isMounted.current = true;
     const loadLikes = async () => {
       const likesData = await getLikes(props.id);
-      if (isMounted) {
+      if (isMounted.current) {
         setLikesData(likesData);
         setLikeCount(likesData.length);
         setLikesDataLoading(false);
@@ -38,9 +38,9 @@ const ImageFunctions = (props) => {
 
   useEffect(() => {
     isMounted.current = true;
-    if (user) {
+    if (appUser) {
       const isLiked = likes.find((element) => {
-        return element.uid === user.uid;
+        return element.uid === appUser.uid;
       });
 
       if (isLiked !== undefined && isMounted.current) {
@@ -51,7 +51,7 @@ const ImageFunctions = (props) => {
     return () => {
       isMounted.current = false;
     };
-  }, [likes, user]);
+  }, [appUser, likes]);
 
   const refreshLikes = () => {
     setLikesDataLoading(true);
@@ -63,7 +63,7 @@ const ImageFunctions = (props) => {
       await unlikePost(postIdentifier);
     } else {
       setPostLiked(true);
-      await likePost(user, props.id, props.author);
+      await likePost(appUser, props.id, props.author);
     }
     refreshLikes();
   };

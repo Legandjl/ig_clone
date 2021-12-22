@@ -9,6 +9,7 @@ const LoginInput = ({ handleChange, username, isNameAvailable }) => {
           placeholder="@Username"
           onChange={handleChange}
           value={username}
+          maxLength={10}
         />
       </div>
       <div

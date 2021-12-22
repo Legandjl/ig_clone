@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import { useContext, useState } from "react/cjs/react.development";
-import { FileContext } from "../filepicker/FileContext";
-import { FirebaseContext } from "../firebase/FirebaseContext";
-import CropTool from "../imageCropUtils/CropTool";
-import "./Header.css";
+import { FileContext } from "../../filepicker/FileContext";
+import { FirebaseContext } from "../../firebase/FirebaseContext";
+import CropTool from "../../imageCropUtils/CropTool";
+import "../styles/Header.css";
 import HeaderIcons from "./HeaderIcons";
-import logo from "./logo.png";
+import logo from "../logo.png";
 import Notifications from "./Notifications";
 import { useLocation, useNavigate } from "react-router";
 
@@ -15,7 +15,6 @@ const Header = () => {
   const { isCropping, imageSrc } = useContext(FileContext);
 
   const nav = useNavigate();
-
   const location = useLocation();
 
   const showNotifications = () => {
@@ -36,19 +35,24 @@ const Header = () => {
     }
   };
 
+  // link needs to be onclick use nav redirect
   const notifications = notificationData.map((item, i) => {
     return (
-      <div className="notification" key={i}>
-        <img
-          alt={"user icon"}
-          style={{ width: 35, height: 35, borderRadius: 50, marginRight: 5 }}
-          src={item.photoURL}
-        />{" "}
-        <p>
-          <Link to={`user/${item.sentBy}`}> {item.senderName}</Link> likes your{" "}
-          <Link to={`/p/${item.pid}`}>post</Link>
-        </p>
-        <i className="ri-close-circle-line"></i>
+      <div className="notification" key={i} data-notifications={true}>
+        <Link to={`user/${item.sentBy}`} data-notifications={true}>
+          {" "}
+          <img
+            alt={"user icon"}
+            style={{ width: 35, height: 35, borderRadius: 50, marginRight: 5 }}
+            src={item.photoURL}
+            data-notifications={true}
+          />{" "}
+        </Link>{" "}
+        {"likes your "}
+        <Link to={`/p/${item.pid}`} data-notifications={true}>
+          {" post"}
+        </Link>
+        <i className="ri-close-circle-line" data-notifications={true}></i>
       </div>
     );
   });

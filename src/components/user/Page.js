@@ -1,9 +1,11 @@
 import { useRef } from "react";
 import { useParams } from "react-router";
-import { Link } from "react-router-dom";
+
 import { useEffect, useState } from "react/cjs/react.development";
 import { Firebase } from "../firebase/Firebase";
+import UserImage from "./UserImage";
 import "./Page.css";
+import ProfileDisplay from "./ProfileDisplay/ProfileDisplay";
 
 const Page = () => {
   const [imagesLoaded, setImagesLoaded] = useState(false);
@@ -19,7 +21,7 @@ const Page = () => {
     const startImageLoad = async () => {
       setLoadingInProcess(true);
       const images = await getUserImages(params.id);
-      if (isMounted) {
+      if (isMounted.current) {
         setImageData(images);
         setLoadingInProcess(false);
         setImagesLoaded(true);
@@ -36,18 +38,12 @@ const Page = () => {
   }, [getUserImages, imagesLoaded, loadingInProcess, params.id]);
 
   const userImageElements = imageData.map((element) => {
-    return (
-      <div className="imageFrame" style={{}}>
-        <Link to={`/p/${element.id}`}>
-          {" "}
-          <img src={element.downloadUrl} alt={"userUpload"}></img>{" "}
-        </Link>
-      </div>
-    );
+    return <UserImage element={element} />;
   });
 
   return (
     <div className="pageWrap" style={{ gridRow: 2 }}>
+      <ProfileDisplay profile={params.id} postCount={imageData.length} />
       <div className="userpageImages">{userImageElements}</div>
     </div>
   );

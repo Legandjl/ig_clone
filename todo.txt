@@ -1,18 +1,23 @@
-set up user page (header showing profile, numberof uploads etc)
-infinite scrolling (comments too?)
+finalise all current features
 
-themes
-notifications styling and details
-nice image gallery
-responsive
-user page image loading spinners
+notifications menu
+make use of app user profile instead of auth
+comments, uploads
+
+user profile page needs work
+use scroll same as home pages - load 6 at a time?
+poassible caption on file uploads
+
+then
+
+comment deletion
+upload deletion
+
+stretch 
+
+search functionality
+follow functionality
+home screen populated by follows
 
 
-sign in page -- 
 
-already signed up? sign in - 
-
-check database for user, if it doesnt exist, throw new error
-catch error - no user found, please sign up
-
-switch out user in context for custom user from firebase (maybe need to recreate it)

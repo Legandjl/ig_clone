@@ -1,17 +1,20 @@
-import "../../home/Home.css";
+import "../../home/styles/Home.css";
 import "../container_styles/ImagePage.css";
 import { useState, useEffect, useRef } from "react";
 import { Firebase } from "../../firebase/Firebase";
 import HomeContainer from "./HomeContainer";
 import FullDisplayContainer from "./FullDisplayContainer";
+import useImageLoader from "../../zhooks/useImageLoader";
 
 const ImageContainer = (props) => {
-  const { type, author, imageID, name } = props;
-  const [imageLoaded, setImageLoaded] = useState(false);
+  const { type, author, name } = props;
+  // const [imageLoaded, setImageLoaded] = useState(false);
   const [profileData, setProfileData] = useState({});
   const [profileDataLoading, setProfileDataLoading] = useState(true);
   const [isProfileLoaded, setIsProfileLoaded] = useState(false);
+
   const { getUserProfile } = Firebase();
+  const [imageLoaded, loadImage] = useImageLoader();
 
   //refactored 06/12
   //Profile Info needs loader
@@ -45,6 +48,13 @@ const ImageContainer = (props) => {
   ]);
 
   useEffect(() => {
+    if (!imageLoaded) {
+      loadImage(props.src);
+    }
+  }, [imageLoaded, loadImage, props.src]);
+
+  /*
+  useEffect(() => {
     let isMounted = true;
     if (!imageLoaded) {
       const image = new Image();
@@ -55,11 +65,17 @@ const ImageContainer = (props) => {
           setImageLoaded(true);
         }
       };
+      image.onerror = () => {
+        console.error("Failed to load image");
+        setImageErrored(true);
+      };
     }
     return () => {
       isMounted = false;
     };
   }, [imageID, imageLoaded, props.src]);
+  */
+  // refactored 21/12/21 into useImageLoader hook
 
   const checkIfHomePage = () => {
     return type === "HomePage";

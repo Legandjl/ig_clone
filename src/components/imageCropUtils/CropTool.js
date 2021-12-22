@@ -21,22 +21,25 @@ const CropTool = (props) => {
 
   const [loadImage] = CropImg();
   const nav = useNavigate();
+  const isMounted = useRef(null);
 
   useEffect(() => {
+    isMounted.current = true;
     const uploadFile = async () => {
       setAttemptingUpload(true);
-      const ref = await loadImage(
-        currentCrop,
-        props.image,
-        props.refreshImages
-      );
-      props.refreshImages();
-      toggleCrop();
-      nav(`/p/${ref}`, { replace: true });
+      const ref = await loadImage(currentCrop, props.image);
+      if (isMounted.current) {
+        toggleCrop();
+        nav(`/p/${ref}`, { replace: true });
+      }
     };
     if (cropFinal && !attemptingUpload) {
       uploadFile();
     }
+
+    return () => {
+      isMounted.current = false;
+    };
   }, [
     attemptingUpload,
     cropFinal,

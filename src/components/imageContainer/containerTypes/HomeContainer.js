@@ -7,6 +7,7 @@ const HomeContainer = ({
   imageLoaded,
   checkIfHomePage,
   profileData,
+
   props,
 }) => {
   const { type, author, name, imageID, src } = props;
