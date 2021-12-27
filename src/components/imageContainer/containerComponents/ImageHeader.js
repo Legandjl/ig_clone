@@ -1,36 +1,24 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react/cjs/react.development";
-import user from "./user.png";
+import { useEffect } from "react/cjs/react.development";
+import useImageLoader from "../../../hooks/useImageLoader";
+import user from "../../../images/user.png";
 
-// refactored 06/12
+// refactored 27/12
+
+// todo - change user img to an img loader
 
 const ImageHeader = (props) => {
-  const [imageSrc, setImageSrc] = useState(user);
-  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageLoaded, loadImage] = useImageLoader();
 
   useEffect(() => {
-    let isMounted = true;
-    if (!imageLoaded && props.src !== undefined) {
-      const image = new Image();
-      image.src = props.src;
-      image.onload = () => {
-        if (isMounted) {
-          setImageSrc(props.src);
-          setImageLoaded(true);
-        }
-      };
-      image.onerror = () => {
-        setImageLoaded(true);
-      };
+    if (!imageLoaded) {
+      loadImage(props.src);
     }
-    return () => {
-      isMounted = false;
-    };
-  }, [imageLoaded, props.src]);
+  }, [imageLoaded, loadImage, props.src]);
 
   return (
     <div className="containerHeader">
-      {imageLoaded && <img src={imageSrc} alt="userDisplayPhoto" />}
+      {<img src={imageLoaded ? props.src : user} alt="userDisplayPhoto" />}
 
       <Link to={`/user/${props.author}`}>
         {" "}

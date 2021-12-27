@@ -7,9 +7,9 @@ const FirebaseContextProvider = (props) => {
   const fb = Firebase();
   const { getAuth } = fb;
   const [appUser, setAppUser] = useState(null);
-  const [user, setUser] = useState(() => {
-    const user = fb.getAuth().currentUser;
-    return user;
+  const [auth, setAuth] = useState(() => {
+    const isAuth = fb.getAuth().currentUser;
+    return isAuth;
   });
 
   // remove all useage of user & replace with appuser
@@ -32,23 +32,23 @@ const FirebaseContextProvider = (props) => {
       }
     };
 
-    if (notificationsLoading && user != null) {
-      loadNotifications(user.uid);
+    if (notificationsLoading && appUser != null) {
+      loadNotifications(appUser.uid);
     }
-  }, [fb, notificationsLoading, user]);
+  }, [appUser, fb, notificationsLoading]);
 
   useEffect(() => {
     getAuth().onAuthStateChanged((firebaseUser) => {
-      setUser(firebaseUser);
+      setAuth(firebaseUser);
       setLoadingUser(false);
     });
-  }, [appUser, fb, getAuth, user]);
+  }, [appUser, fb, getAuth, auth]);
 
   useEffect(() => {
     isMounted.current = true;
     const getUserProfile = async () => {
       setLoadingUserProfile(true);
-      const profile = await fb.getUserProfile(user.uid);
+      const profile = await fb.getUserProfile(auth.uid);
 
       if (isMounted.current) {
         setAppUser(() => {
@@ -57,18 +57,18 @@ const FirebaseContextProvider = (props) => {
         setLoadingUserProfile(false);
       }
     };
-    if (user && !loadingUserProfile && !appUser) {
+    if (auth && !loadingUserProfile && !appUser) {
       getUserProfile();
     }
-    if (!user) {
+    if (!auth) {
       setAppUser(null);
     }
-  }, [appUser, fb, loadingUserProfile, user]);
+  }, [appUser, fb, loadingUserProfile, auth]);
 
   return (
     <FirebaseContext.Provider
       value={{
-        user,
+        auth,
         signOut: fb.signOut,
         loadingUser,
         getComments: fb.getImageComments,

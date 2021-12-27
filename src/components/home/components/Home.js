@@ -6,12 +6,15 @@ import CropTool from "../../imageCropUtils/CropTool";
 import ImageRefreshLoader from "../../loaders/ImageRefreshLoader";
 import ImageLoadError from "../errors/ImageLoadError";
 
-import useImages from "../hooks/useImages";
-import useScroll from "../hooks/useScroll";
+import useImages from "../../../hooks/useImages";
+import useScroll from "../../../hooks/useScroll";
 import "../styles/Home.css";
 
 const Home = () => {
   const { isCropping, imageSrc } = useContext(FileContext);
+
+  // change all image data between followers and standard
+  // maybe like refreshImageData(followers) or (default/home)
 
   const {
     allImageData,

@@ -1,6 +1,8 @@
-import userIcon from "../user.png";
-import getDifference from "../../utilities.js";
+import userIcon from "../images/user.png";
+import getDifference from "../utils/utilities.js";
 import { Link } from "react-router-dom";
+
+//needs img loader
 
 const useCommentMapper = ({ checkIfHome, removeComment, commentData }) => {
   const getCommentElements = () => {

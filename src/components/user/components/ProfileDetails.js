@@ -1,5 +1,5 @@
 const ProfileDetails = (props) => {
-  const { profile, loadingProfile } = props;
+  const { profile } = props;
 
   return (
     <div className={"profileDisplayInformation"}>

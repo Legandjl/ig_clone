@@ -1,11 +1,10 @@
 import { useRef } from "react";
 import { useParams } from "react-router";
-
 import { useEffect, useState } from "react/cjs/react.development";
-import { Firebase } from "../firebase/Firebase";
+import { Firebase } from "../../firebase/Firebase";
 import UserImage from "./UserImage";
-import "./Page.css";
-import ProfileDisplay from "./ProfileDisplay/ProfileDisplay";
+import "../styles/Page.css";
+import ProfileDisplay from "./ProfileDisplay";
 
 const Page = () => {
   const [imagesLoaded, setImagesLoaded] = useState(false);
@@ -13,7 +12,6 @@ const Page = () => {
   const [imageData, setImageData] = useState([]);
   const params = useParams();
   const { getUserImages } = Firebase();
-
   const isMounted = useRef(null);
 
   useEffect(() => {
@@ -28,7 +26,7 @@ const Page = () => {
       }
     };
 
-    if (!loadingInProcess && !imagesLoaded) {
+    if (!loadingInProcess && !imagesLoaded && isMounted) {
       startImageLoad();
     }
 
@@ -40,6 +38,8 @@ const Page = () => {
   const userImageElements = imageData.map((element) => {
     return <UserImage element={element} />;
   });
+
+  // images > 0 ? return images || return no images found
 
   return (
     <div className="pageWrap" style={{ gridRow: 2 }}>

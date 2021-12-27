@@ -1,9 +1,11 @@
-import { useState, useEffect, useRef } from "react";
-import logo from "./logo.png";
+import { useState, useEffect, useRef, useContext } from "react";
+import logo from "../../images/logo.png";
 import "./Login.css";
 import LoginLoader from "../loaders/LoginLoader";
 import LoginInput from "./LoginInput";
 import { Firebase } from "../firebase/Firebase";
+import { FirebaseContext } from "../firebase/FirebaseContext";
+import { useNavigate } from "react-router";
 
 //refactored 21/12
 
@@ -15,6 +17,10 @@ const Login = () => {
   const signupDisabled = username.length < 3 || !isNameAvailable;
   const isMounted = useRef(null);
 
+  const { auth, appUser } = useContext(FirebaseContext);
+
+  const nav = useNavigate();
+
   const disabledButtonStyle = {
     backgroundColor: signupDisabled && "grey",
     color: signupDisabled && "white",
@@ -24,9 +30,22 @@ const Login = () => {
 
   useEffect(() => {
     isMounted.current = true;
+    if (appUser && auth) {
+      if (isMounted) {
+        setIsLoggingIn(false);
+      }
+      nav("/home", { replace: true });
+    }
+    return () => {
+      isMounted.current = false;
+    };
+  }, [appUser, nav, auth]);
+
+  useEffect(() => {
+    isMounted.current = true;
     const checker = async () => {
+      const nameAvailable = await checkForUser(username);
       if (isMounted.current) {
-        const nameAvailable = await checkForUser(username);
         setIsNameAvailable(nameAvailable);
       }
     };
@@ -39,7 +58,6 @@ const Login = () => {
   const handleSignIn = async () => {
     setIsLoggingIn(true);
     await signIn(username);
-    setIsLoggingIn(false);
   };
 
   const handleChange = async (e) => {

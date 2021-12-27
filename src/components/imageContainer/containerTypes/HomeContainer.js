@@ -1,5 +1,5 @@
 import DefaultLoader from "../../loaders/DefaultLoader";
-import CommentsTest from "../containerComponents/comments/CommentsTest";
+import Comments from "../containerComponents/Comments";
 import ImageFunctions from "../containerComponents/Functions";
 import ImageHeader from "../containerComponents/ImageHeader";
 
@@ -7,7 +7,6 @@ const HomeContainer = ({
   imageLoaded,
   checkIfHomePage,
   profileData,
-
   props,
 }) => {
   const { type, author, name, imageID, src } = props;
@@ -33,7 +32,7 @@ const HomeContainer = ({
         author={author}
         checkIfHomePage={checkIfHomePage}
       />
-      <CommentsTest imageID={imageID} type={type} />
+      <Comments imageID={imageID} type={type} />
     </div>
   );
 };

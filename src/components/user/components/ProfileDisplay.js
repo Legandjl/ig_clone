@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react/cjs/react.development";
 import { Firebase } from "../../firebase/Firebase";
-import useImageLoader from "../../zhooks/useImageLoader";
+import useImageLoader from "../../../hooks/useImageLoader";
 import ProfileDetails from "./ProfileDetails";
-import user from "./user.png";
+import user from "../../../images/user.png";
 
 const ProfileDisplay = (props) => {
   const [profile, setProfile] = useState(null);
@@ -40,20 +40,18 @@ const ProfileDisplay = (props) => {
   return (
     <div className={"profileDisplay"}>
       <div className={"profileDisplayImage"}>
-        {imageLoaded && (
-          <img
-            src={profile && profile.profilePictureUrl}
-            style={{
-              width: 120,
-              height: 120,
-              borderRadius: "50%",
-            }}
-            onError={(event) => {
-              event.target.src = user;
-            }}
-            alt={"userprofile"}
-          ></img>
-        )}
+        <img
+          src={profile && imageLoaded ? profile.profilePictureUrl : user}
+          style={{
+            width: 120,
+            height: 120,
+            borderRadius: "50%",
+          }}
+          onError={(event) => {
+            event.target.src = user;
+          }}
+          alt={"userprofile"}
+        ></img>
       </div>
       {profile && loadingComplete && (
         <ProfileDetails

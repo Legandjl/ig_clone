@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Firebase } from "../../firebase/Firebase";
+import { Firebase } from "../components/firebase/Firebase";
 
 const useImages = () => {
   const { getImages, getNextImageBatch } = Firebase();
@@ -41,7 +41,12 @@ const useImages = () => {
         setImageLoadError(true);
       }
     };
-    if (imagesLoading && !loadingInProcess && !reachedEnd) {
+    if (
+      imagesLoading &&
+      !loadingInProcess &&
+      !reachedEnd &&
+      isMounted.current
+    ) {
       loadData();
     }
     return () => {

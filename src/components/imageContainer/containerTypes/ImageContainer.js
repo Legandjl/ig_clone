@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { Firebase } from "../../firebase/Firebase";
 import HomeContainer from "./HomeContainer";
 import FullDisplayContainer from "./FullDisplayContainer";
-import useImageLoader from "../../zhooks/useImageLoader";
+import useImageLoader from "../../../hooks/useImageLoader";
 
 const ImageContainer = (props) => {
   const { type, author, name } = props;
@@ -12,7 +12,6 @@ const ImageContainer = (props) => {
   const [profileData, setProfileData] = useState({});
   const [profileDataLoading, setProfileDataLoading] = useState(true);
   const [isProfileLoaded, setIsProfileLoaded] = useState(false);
-
   const { getUserProfile } = Firebase();
   const [imageLoaded, loadImage] = useImageLoader();
 
@@ -23,6 +22,12 @@ const ImageContainer = (props) => {
 
   useEffect(() => {
     isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
+  useEffect(() => {
     const fetchProfile = async () => {
       const profile = await getUserProfile(author);
       if (isMounted.current) {
@@ -31,13 +36,9 @@ const ImageContainer = (props) => {
         setIsProfileLoaded(false);
       }
     };
-
     if (!isProfileLoaded && profileDataLoading) {
       fetchProfile();
     }
-    return () => {
-      isMounted.current = false;
-    };
   }, [
     author,
     getUserProfile,
@@ -48,7 +49,7 @@ const ImageContainer = (props) => {
   ]);
 
   useEffect(() => {
-    if (!imageLoaded) {
+    if (!imageLoaded && isMounted.current) {
       loadImage(props.src);
     }
   }, [imageLoaded, loadImage, props.src]);
@@ -75,7 +76,6 @@ const ImageContainer = (props) => {
     };
   }, [imageID, imageLoaded, props.src]);
   */
-  // refactored 21/12/21 into useImageLoader hook
 
   const checkIfHomePage = () => {
     return type === "HomePage";

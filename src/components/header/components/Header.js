@@ -5,13 +5,13 @@ import { FirebaseContext } from "../../firebase/FirebaseContext";
 import CropTool from "../../imageCropUtils/CropTool";
 import "../styles/Header.css";
 import HeaderIcons from "./HeaderIcons";
-import logo from "../logo.png";
+import logo from "../../../images/logo.png";
 import Notifications from "./Notifications";
 import { useLocation, useNavigate } from "react-router";
 
 const Header = () => {
   const [menuToggle, setMenuToggle] = useState(false);
-  const { notificationData, user } = useContext(FirebaseContext);
+  const { notificationData, auth } = useContext(FirebaseContext);
   const { isCropping, imageSrc } = useContext(FileContext);
 
   const nav = useNavigate();
@@ -36,6 +36,7 @@ const Header = () => {
   };
 
   // link needs to be onclick use nav redirect
+  // as it doesnt work if not on home page
   const notifications = notificationData.map((item, i) => {
     return (
       <div className="notification" key={i} data-notifications={true}>
@@ -67,7 +68,7 @@ const Header = () => {
           style={{ cursor: "pointer" }}
         />
       </div>
-      {user && (
+      {auth && (
         <HeaderIcons
           showNotifications={showNotifications}
           hideNotifications={hideNotifications}

@@ -61,11 +61,11 @@ async function getCroppedImg(imageSrc, pixelCrop, rotation = 0) {
 }
 
 const CropImg = () => {
-  const { user } = useContext(FirebaseContext);
+  const { auth } = useContext(FirebaseContext);
   const { uploadFile } = Firebase();
   const loadImage = async (croppedAreaValues, image) => {
     const croppedImage = await getCroppedImg(image, croppedAreaValues);
-    const ref = await uploadFile(user, croppedImage);
+    const ref = await uploadFile(auth, croppedImage);
     return ref;
   };
 
