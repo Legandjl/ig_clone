@@ -1,8 +1,8 @@
 finalise all current features
 
 notifications menu
-make use of app user profile instead of auth
-comments, uploads
+make use of app user profile instead of auth  --- x
+
 
 user profile page needs work
 use scroll same as home pages - load 6 at a time?
