@@ -14,7 +14,7 @@ const Home = () => {
   const { isCropping, imageSrc } = useContext(FileContext);
 
   // change all image data between followers and standard
-  // maybe like refreshImageData(followers) or (default/home)
+  // maybe like refreshImageData(followers) or
 
   const {
     allImageData,

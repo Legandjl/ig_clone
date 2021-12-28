@@ -1,6 +1,8 @@
 finalise all current features
 
-notifications menu
+
+
+notifications menu needs to refrsh on open
 make use of app user profile instead of auth  --- x
 
 
