@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { useContext, useState } from "react/cjs/react.development";
 import { FileContext } from "../../filepicker/FileContext";
 import { FirebaseContext } from "../../firebase/FirebaseContext";
@@ -8,6 +7,9 @@ import HeaderIcons from "./HeaderIcons";
 import logo from "../../../images/logo.png";
 import Notifications from "./Notifications";
 import { useLocation, useNavigate } from "react-router";
+import NotificationElement from "./NotificationElement";
+
+// notifications need to be refreshed when opening and closing
 
 const Header = () => {
   const [menuToggle, setMenuToggle] = useState(false);
@@ -35,26 +37,14 @@ const Header = () => {
     }
   };
 
-  // link needs to be onclick use nav redirect
-  // as it doesnt work if not on home page
   const notifications = notificationData.map((item, i) => {
     return (
-      <div className="notification" key={i} data-notifications={true}>
-        <Link to={`user/${item.sentBy}`} data-notifications={true}>
-          {" "}
-          <img
-            alt={"user icon"}
-            style={{ width: 35, height: 35, borderRadius: 50, marginRight: 5 }}
-            src={item.photoURL}
-            data-notifications={true}
-          />{" "}
-        </Link>{" "}
-        {"likes your "}
-        <Link to={`/p/${item.pid}`} data-notifications={true}>
-          {" post"}
-        </Link>
-        <i className="ri-close-circle-line" data-notifications={true}></i>
-      </div>
+      <NotificationElement
+        sentBy={item.sentBy}
+        elementID={i}
+        photoURL={item.photoURL}
+        pid={item.pid}
+      />
     );
   });
 

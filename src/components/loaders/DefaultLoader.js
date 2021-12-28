@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from "react/cjs/react.development";
+import { useEffect, useState } from "react/cjs/react.development";
+import useMountCheck from "../../hooks/useMountCheck";
 
 const DefaultLoader = (props) => {
   const [backgroundColor, setbackgroundColor] = useState("#D4D4D4");
   const [colorIndex, setColorIndex] = useState(0);
 
-  const isMounted = useRef(null);
+  const [isMounted] = useMountCheck();
 
   //ched=cked for leak
 
@@ -21,10 +22,7 @@ const DefaultLoader = (props) => {
         });
       }
     }, 900);
-    return () => {
-      isMounted.current = false;
-    };
-  }, [colorIndex]);
+  }, [colorIndex, isMounted]);
 
   return (
     <div

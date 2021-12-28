@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Firebase } from "../components/firebase/Firebase";
+import useMountCheck from "./useMountCheck";
 
 const useImages = () => {
   const { getImages, getNextImageBatch } = Firebase();
@@ -9,14 +10,14 @@ const useImages = () => {
   const [lastImageId, setLastImageId] = useState(null);
   const [reachedEnd, setReachedEnd] = useState(false);
   const [imageLoadError, setImageLoadError] = useState(false);
-  const isMounted = useRef(null);
+
+  const [isMounted] = useMountCheck();
 
   useEffect(() => {
     setReachedEnd(false);
   }, []);
 
   useEffect(() => {
-    isMounted.current = true;
     const loadData = async () => {
       setLoadingInProcess(true);
       let imageData;
@@ -49,14 +50,12 @@ const useImages = () => {
     ) {
       loadData();
     }
-    return () => {
-      isMounted.current = false;
-    };
   }, [
     allImageData,
     getImages,
     getNextImageBatch,
     imagesLoading,
+    isMounted,
     lastImageId,
     loadingInProcess,
     reachedEnd,

@@ -1,19 +1,20 @@
-import { useEffect, useRef, useState } from "react/cjs/react.development";
+import { useEffect, useState } from "react/cjs/react.development";
 import { Firebase } from "../../firebase/Firebase";
 import useImageLoader from "../../../hooks/useImageLoader";
 import ProfileDetails from "./ProfileDetails";
 import user from "../../../images/user.png";
+import useMountCheck from "../../../hooks/useMountCheck";
 
 const ProfileDisplay = (props) => {
   const [profile, setProfile] = useState(null);
   const [loadingProfile, setloadingProfile] = useState(false);
   const [loadingComplete, setLoadingComplete] = useState(false);
   const { getUserProfile } = Firebase();
-  const isMounted = useRef(null);
+
+  const [isMounted] = useMountCheck();
   const [imageLoaded, loadImage] = useImageLoader();
 
   useEffect(() => {
-    isMounted.current = true;
     const getProfile = async () => {
       setLoadingComplete(false);
       setloadingProfile(true);
@@ -26,10 +27,14 @@ const ProfileDisplay = (props) => {
     if (!profile && !loadingProfile) {
       getProfile();
     }
-    return () => {
-      isMounted.current = false;
-    };
-  }, [getUserProfile, loadImage, loadingProfile, profile, props.profile]);
+  }, [
+    getUserProfile,
+    isMounted,
+    loadImage,
+    loadingProfile,
+    profile,
+    props.profile,
+  ]);
 
   useEffect(() => {
     if (profile && !imageLoaded) {

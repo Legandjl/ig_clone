@@ -1,6 +1,6 @@
-import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { useContext, useEffect, useState } from "react/cjs/react.development";
+import useMountCheck from "../../../hooks/useMountCheck";
 import { Firebase } from "../../firebase/Firebase";
 import { FirebaseContext } from "../../firebase/FirebaseContext";
 import LikeButton from "../../likes/LikeButton";
@@ -14,12 +14,11 @@ const ImageFunctions = (props) => {
   const [likesDataLoading, setLikesDataLoading] = useState(true);
   const [likeCount, setLikeCount] = useState(0);
   const { getLikes, likePost, unlikePost } = Firebase();
-  const isMounted = useRef(null);
+  const [isMounted] = useMountCheck();
 
   //refactored 07/12
 
   useEffect(() => {
-    isMounted.current = true;
     const loadLikes = async () => {
       const likesData = await getLikes(props.id);
       if (isMounted.current) {
@@ -31,26 +30,19 @@ const ImageFunctions = (props) => {
     if (likesDataLoading) {
       loadLikes();
     }
-    return () => {
-      isMounted.current = false;
-    };
-  }, [getLikes, likesDataLoading, props.id]);
+  }, [getLikes, isMounted, likesDataLoading, props.id]);
 
   useEffect(() => {
-    isMounted.current = true;
     if (appUser) {
       const isLiked = likes.find((element) => {
         return element.uid === appUser.uid;
       });
 
-      if (isLiked !== undefined && isMounted.current) {
+      if (isLiked !== undefined) {
         setPostIdentifier(isLiked.likeIdentifier);
         setPostLiked(true);
       }
     }
-    return () => {
-      isMounted.current = false;
-    };
   }, [appUser, likes]);
 
   const refreshLikes = () => {

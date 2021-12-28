@@ -5,8 +5,6 @@ import user from "../../../images/user.png";
 
 // refactored 27/12
 
-// todo - change user img to an img loader
-
 const ImageHeader = (props) => {
   const [imageLoaded, loadImage] = useImageLoader();
 

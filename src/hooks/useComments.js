@@ -1,15 +1,16 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { FirebaseContext } from "../components/firebase/FirebaseContext";
+import useMountCheck from "./useMountCheck";
 
 const useComments = (props) => {
   const [isLoading, setLoading] = useState(true);
   const [commentData, setComments] = useState([]);
   const [commentText, setCommentText] = useState("");
   const { getComments, submitComment, appUser } = useContext(FirebaseContext);
-  const isMounted = useRef(null);
+
+  const [isMounted] = useMountCheck();
 
   useEffect(() => {
-    isMounted.current = true;
     const updateComments = async () => {
       const comments = await getComments(props.imageID);
       if (isMounted.current) {
@@ -22,15 +23,14 @@ const useComments = (props) => {
     if (isLoading === true) {
       updateComments();
     }
-    return () => {
-      isMounted.current = false;
-    };
-  }, [getComments, isLoading, props.imageID]);
+  }, [getComments, isLoading, isMounted, props.imageID]);
 
   const handleSubmit = async () => {
     await submitComment(commentText, props.imageID, appUser);
-    setLoading(true);
-    setCommentText("");
+    if (isMounted.current) {
+      setLoading(true);
+      setCommentText("");
+    }
   };
 
   const handleChange = (e) => {

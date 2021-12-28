@@ -1,6 +1,7 @@
 import { Firebase } from "./Firebase";
 import React, { useState, useEffect } from "react";
 import { useRef } from "react/cjs/react.development";
+import useMountCheck from "../../hooks/useMountCheck";
 const FirebaseContext = React.createContext();
 
 const FirebaseContextProvider = (props) => {
@@ -20,10 +21,9 @@ const FirebaseContextProvider = (props) => {
   const [notificationsLoading, setNotificationsLoading] = useState(true);
   const [notificationData, setNotificationsData] = useState([]);
 
-  const isMounted = useRef(null);
+  const [isMounted] = useMountCheck();
 
   useEffect(() => {
-    isMounted.current = true;
     const loadNotifications = async (uid) => {
       const notificationData = await fb.getNotifications(uid);
       if (isMounted.current) {
@@ -35,7 +35,7 @@ const FirebaseContextProvider = (props) => {
     if (notificationsLoading && appUser != null) {
       loadNotifications(appUser.uid);
     }
-  }, [appUser, fb, notificationsLoading]);
+  }, [appUser, fb, isMounted, notificationsLoading]);
 
   useEffect(() => {
     getAuth().onAuthStateChanged((firebaseUser) => {
@@ -45,7 +45,6 @@ const FirebaseContextProvider = (props) => {
   }, [appUser, fb, getAuth, auth]);
 
   useEffect(() => {
-    isMounted.current = true;
     const getUserProfile = async () => {
       setLoadingUserProfile(true);
       const profile = await fb.getUserProfile(auth.uid);
@@ -63,7 +62,7 @@ const FirebaseContextProvider = (props) => {
     if (!auth) {
       setAppUser(null);
     }
-  }, [appUser, fb, loadingUserProfile, auth]);
+  }, [appUser, fb, loadingUserProfile, auth, isMounted]);
 
   return (
     <FirebaseContext.Provider

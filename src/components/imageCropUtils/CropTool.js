@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef } from "react";
 import Cropper from "react-easy-crop";
 import { useNavigate } from "react-router";
 import { useContext, useState } from "react/cjs/react.development";
+import useMountCheck from "../../hooks/useMountCheck";
 import { FileContext } from "../filepicker/FileContext";
 import SubmitLoader from "../loaders/SubmitLoader";
 import "./Cropper.css";
@@ -21,10 +22,10 @@ const CropTool = (props) => {
 
   const [loadImage] = CropImg();
   const nav = useNavigate();
-  const isMounted = useRef(null);
+
+  const [isMounted] = useMountCheck();
 
   useEffect(() => {
-    isMounted.current = true;
     const uploadFile = async () => {
       setAttemptingUpload(true);
       const ref = await loadImage(currentCrop, props.image);
@@ -36,14 +37,11 @@ const CropTool = (props) => {
     if (cropFinal && !attemptingUpload) {
       uploadFile();
     }
-
-    return () => {
-      isMounted.current = false;
-    };
   }, [
     attemptingUpload,
     cropFinal,
     currentCrop,
+    isMounted,
     loadImage,
     nav,
     props,

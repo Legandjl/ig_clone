@@ -1,10 +1,11 @@
 import "../../home/styles/Home.css";
 import "../container_styles/ImagePage.css";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Firebase } from "../../firebase/Firebase";
 import HomeContainer from "./HomeContainer";
 import FullDisplayContainer from "./FullDisplayContainer";
 import useImageLoader from "../../../hooks/useImageLoader";
+import useMountCheck from "../../../hooks/useMountCheck";
 
 const ImageContainer = (props) => {
   const { type, author, name } = props;
@@ -18,14 +19,7 @@ const ImageContainer = (props) => {
   //refactored 06/12
   //Profile Info needs loader
 
-  let isMounted = useRef(null);
-
-  useEffect(() => {
-    isMounted.current = true;
-    return () => {
-      isMounted.current = false;
-    };
-  }, []);
+  let [isMounted] = useMountCheck();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -42,6 +36,7 @@ const ImageContainer = (props) => {
   }, [
     author,
     getUserProfile,
+    isMounted,
     isProfileLoaded,
     name,
     profileData,
@@ -52,7 +47,7 @@ const ImageContainer = (props) => {
     if (!imageLoaded && isMounted.current) {
       loadImage(props.src);
     }
-  }, [imageLoaded, loadImage, props.src]);
+  }, [imageLoaded, isMounted, loadImage, props.src]);
 
   /*
   useEffect(() => {

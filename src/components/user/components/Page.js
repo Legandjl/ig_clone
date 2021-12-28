@@ -5,6 +5,7 @@ import { Firebase } from "../../firebase/Firebase";
 import UserImage from "./UserImage";
 import "../styles/Page.css";
 import ProfileDisplay from "./ProfileDisplay";
+import useMountCheck from "../../../hooks/useMountCheck";
 
 const Page = () => {
   const [imagesLoaded, setImagesLoaded] = useState(false);
@@ -12,10 +13,10 @@ const Page = () => {
   const [imageData, setImageData] = useState([]);
   const params = useParams();
   const { getUserImages } = Firebase();
-  const isMounted = useRef(null);
+
+  const [isMounted] = useMountCheck();
 
   useEffect(() => {
-    isMounted.current = true;
     const startImageLoad = async () => {
       setLoadingInProcess(true);
       const images = await getUserImages(params.id);
@@ -26,14 +27,10 @@ const Page = () => {
       }
     };
 
-    if (!loadingInProcess && !imagesLoaded && isMounted) {
+    if (!loadingInProcess && !imagesLoaded && isMounted.current) {
       startImageLoad();
     }
-
-    return () => {
-      isMounted.current = false;
-    };
-  }, [getUserImages, imagesLoaded, loadingInProcess, params.id]);
+  }, [getUserImages, imagesLoaded, isMounted, loadingInProcess, params.id]);
 
   const userImageElements = imageData.map((element) => {
     return <UserImage element={element} />;

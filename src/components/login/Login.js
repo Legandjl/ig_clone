@@ -6,6 +6,7 @@ import LoginInput from "./LoginInput";
 import { Firebase } from "../firebase/Firebase";
 import { FirebaseContext } from "../firebase/FirebaseContext";
 import { useNavigate } from "react-router";
+import useMountCheck from "../../hooks/useMountCheck";
 
 //refactored 21/12
 
@@ -15,7 +16,7 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [isNameAvailable, setIsNameAvailable] = useState(true);
   const signupDisabled = username.length < 3 || !isNameAvailable;
-  const isMounted = useRef(null);
+  const [isMounted] = useMountCheck();
 
   const { auth, appUser } = useContext(FirebaseContext);
 
@@ -29,20 +30,15 @@ const Login = () => {
   };
 
   useEffect(() => {
-    isMounted.current = true;
     if (appUser && auth) {
-      if (isMounted) {
+      if (isMounted.current) {
         setIsLoggingIn(false);
       }
       nav("/home", { replace: true });
     }
-    return () => {
-      isMounted.current = false;
-    };
-  }, [appUser, nav, auth]);
+  }, [appUser, nav, auth, isMounted]);
 
   useEffect(() => {
-    isMounted.current = true;
     const checker = async () => {
       const nameAvailable = await checkForUser(username);
       if (isMounted.current) {
@@ -50,10 +46,7 @@ const Login = () => {
       }
     };
     checker();
-    return () => {
-      isMounted.current = false;
-    };
-  }, [checkForUser, setIsNameAvailable, username]);
+  }, [checkForUser, isMounted, setIsNameAvailable, username]);
 
   const handleSignIn = async () => {
     setIsLoggingIn(true);

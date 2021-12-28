@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import useMountCheck from "../../hooks/useMountCheck";
 import { Firebase } from "../firebase/Firebase";
 import ImageContainer from "../imageContainer/containerTypes/ImageContainer";
 
@@ -11,10 +12,9 @@ const ImagePage = () => {
   const { id } = useParams();
   const { getImageById } = Firebase();
 
-  const isMounted = useRef(null);
+  const [isMounted] = useMountCheck();
 
   useEffect(() => {
-    isMounted.current = true;
     const startLoad = async () => {
       const image = await getImageById(id);
       if (isMounted.current) {
@@ -27,10 +27,7 @@ const ImagePage = () => {
     if (loadingImage) {
       startLoad();
     }
-    return () => {
-      isMounted.current = false;
-    };
-  }, [getImageById, id, loadingImage]);
+  }, [getImageById, id, isMounted, loadingImage]);
 
   return (
     image && (
