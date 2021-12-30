@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react/cjs/react.development";
 import { Firebase } from "../../firebase/Firebase";
@@ -15,6 +14,8 @@ const Page = () => {
   const { getUserImages } = Firebase();
 
   const [isMounted] = useMountCheck();
+
+  console.log(params.id);
 
   useEffect(() => {
     const startImageLoad = async () => {

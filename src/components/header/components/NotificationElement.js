@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react/cjs/react.development";
 import useImageLoader from "../../../hooks/useImageLoader";
 import user from "../../../images/user.png";
+import { Firebase } from "../../firebase/Firebase";
 
 // link needs to be onclick use nav redirect
 // as it doesnt work if not on home page
@@ -9,6 +10,7 @@ import user from "../../../images/user.png";
 
 const NotificationElement = (props) => {
   const [imageLoaded, loadImage, imageError] = useImageLoader();
+  const { removeNotification } = Firebase();
 
   useEffect(() => {
     if (!imageLoaded) {
@@ -16,7 +18,9 @@ const NotificationElement = (props) => {
     }
   }, [imageLoaded, loadImage, props.photoURL]);
 
-  const deleteNotification = () => {
+  const deleteNotification = async () => {
+    await removeNotification(props.id);
+    props.refreshNotifications();
     setShow(false);
   };
   const [show, setShow] = useState(true);

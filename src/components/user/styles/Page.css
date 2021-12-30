@@ -74,3 +74,23 @@
   align-content: center;
   grid-gap: 5px;
 }
+
+button {
+  height: 1.8em;
+  outline: none;
+  border: none;
+  justify-self: start;
+  width: 5em;
+  background-color: #272528;
+  color: white;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: all 0.09s ease-in-out;
+}
+
+button:hover {
+  cursor: pointer;
+  background-color: white;
+  color: #272528;
+  outline: solid 2px #272528;
+}

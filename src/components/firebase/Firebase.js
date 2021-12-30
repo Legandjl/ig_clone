@@ -18,6 +18,9 @@ import {
   doc,
   limit,
   getDoc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
 } from "firebase/firestore";
 
 import {
@@ -70,7 +73,65 @@ const Firebase = () => {
     return data;
   };
 
+  publicMethods.handleFollow = async (uid, userUid) => {
+    await updateFollowing(uid, userUid);
+    await updateFollowers(uid, userUid);
+  };
+
+  const updateFollowers = async (uid, userUid) => {
+    const q = query(collection(db, "users"), where("uid", "==", uid), limit(1));
+    const docSnap = await getDocs(q);
+    docSnap.forEach((item) => {
+      item.data().followers.includes(userUid)
+        ? updateDoc(item.ref, {
+            followers: arrayRemove(userUid),
+          })
+        : updateDoc(item.ref, {
+            followers: arrayUnion(userUid),
+          });
+    });
+  };
+
+  const updateFollowing = async (uid, userUid) => {
+    const q = query(
+      collection(db, "users"),
+      where("uid", "==", userUid),
+      limit(1)
+    );
+    const docSnap = await getDocs(q);
+    docSnap.forEach((item) => {
+      item.data().following.includes(uid)
+        ? updateDoc(item.ref, {
+            following: arrayRemove(uid),
+          })
+        : updateDoc(item.ref, {
+            following: arrayUnion(uid),
+          });
+    });
+  };
+
+  publicMethods.getFollowers = async (uid) => {
+    const q = query(collection(db, "users"), where("uid", "==", uid), limit(1));
+    const docSnap = await getDocs(q);
+    let data = [];
+    docSnap.forEach((item) => {
+      data = [...item.data().followers];
+    });
+    return data;
+  };
+
+  publicMethods.getFollowing = async (uid) => {
+    const q = query(collection(db, "users"), where("uid", "==", uid), limit(1));
+    const docSnap = await getDocs(q);
+    let data = [];
+    docSnap.forEach((item) => {
+      data = [...item.data().following];
+    });
+    return data;
+  };
+
   publicMethods.likePost = async (appUser, pid, author) => {
+    console.log("liking");
     const ref = await addDoc(collection(db, "likes"), {
       uid: appUser.uid,
       pid: pid,
@@ -87,13 +148,23 @@ const Firebase = () => {
     }
   };
 
-  publicMethods.unlikePost = async (id) => {
-    await deleteDoc(doc(db, "likes", id));
+  publicMethods.removeNotification = async (id) => {
     const q = query(collection(db, "notifications"), where("id", "==", id));
     const docSnap = await getDocs(q);
     docSnap.forEach((item) => {
       deleteDoc(doc(db, "notifications", item.id));
     });
+  };
+
+  publicMethods.unlikePost = async (id) => {
+    await deleteDoc(doc(db, "likes", id));
+    await publicMethods.removeNotification(id);
+    /*
+    const q = query(collection(db, "notifications"), where("id", "==", id));
+    const docSnap = await getDocs(q);
+    docSnap.forEach((item) => {
+      deleteDoc(doc(db, "notifications", item.id));
+    });*/
   };
 
   publicMethods.getLikes = async (pid) => {
@@ -137,6 +208,8 @@ const Firebase = () => {
         email: user.email,
         profilePictureUrl: user.photoURL,
         username: username === "" ? user.displayName : username,
+        followers: [],
+        following: [],
       });
     }
   };

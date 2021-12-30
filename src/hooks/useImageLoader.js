@@ -4,7 +4,6 @@ import useMountCheck from "./useMountCheck";
 const useImageLoader = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
-
   const [isMounted] = useMountCheck();
 
   // need an error
