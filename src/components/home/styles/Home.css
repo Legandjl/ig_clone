@@ -141,3 +141,18 @@ i:hover {
   align-self: end;
   margin-right: 10px;
 }
+
+.imagesToggle {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: start;
+  margin-bottom: 10px;
+  position: fixed;
+  top: 5em;
+  left: 1em;
+}
+
+.imagesToggle p {
+  font-weight: bold;
+  cursor: pointer;
+}

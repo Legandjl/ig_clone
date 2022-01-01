@@ -22,8 +22,11 @@ const Home = () => {
     loadingInProcess,
     reachedEnd,
     imageLoadError,
+    reload,
+    followToggled,
+    setFollowToggled,
   } = useImages();
-  const { bottom } = useScroll();
+  const { bottom, reset } = useScroll();
 
   useEffect(() => {
     if (bottom && !reachedEnd && !loadingInProcess) {
@@ -51,6 +54,36 @@ const Home = () => {
       style={{ paddingBottom: !loadingInProcess ? "3em" : 0 }}
     >
       {isCropping && <CropTool image={imageSrc} />}{" "}
+      {allImageData.length > 0 && (
+        <div className={"imagesToggle"}>
+          <p
+            onClick={() => {
+              window.scrollTo(0, 0);
+              reset();
+              reload();
+              setFollowToggled(false);
+            }}
+            style={{ paddingRight: 6, color: followToggled ? "gray" : "black" }}
+          >
+            All
+          </p>{" "}
+          <p
+            onClick={() => {
+              window.scrollTo(0, 0);
+              reset();
+              reload();
+              setFollowToggled(true);
+            }}
+            style={{
+              borderLeft: "solid 1px",
+              paddingLeft: 6,
+              color: !followToggled ? "grey" : "black",
+            }}
+          >
+            Following
+          </p>
+        </div>
+      )}
       <div className="homeImages">{images}</div>
       {loadingInProcess && <ImageRefreshLoader />}
     </div>

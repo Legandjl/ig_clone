@@ -1,5 +1,7 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
+import { useContext } from "react/cjs/react.development";
 import { Firebase } from "../components/firebase/Firebase";
+import { FirebaseContext } from "../components/firebase/FirebaseContext";
 import useMountCheck from "./useMountCheck";
 
 const useImages = () => {
@@ -10,8 +12,9 @@ const useImages = () => {
   const [lastImageId, setLastImageId] = useState(null);
   const [reachedEnd, setReachedEnd] = useState(false);
   const [imageLoadError, setImageLoadError] = useState(false);
-
   const [isMounted] = useMountCheck();
+  const [followToggled, setFollowToggled] = useState(false);
+  const { appUser } = useContext(FirebaseContext);
 
   useEffect(() => {
     setReachedEnd(false);
@@ -23,9 +26,13 @@ const useImages = () => {
       let imageData;
       try {
         if (lastImageId === null) {
-          imageData = await getImages();
+          imageData = await getImages(followToggled, appUser.following);
         } else {
-          imageData = await getNextImageBatch(lastImageId);
+          imageData = await getNextImageBatch(
+            lastImageId,
+            followToggled,
+            appUser.following
+          );
         }
         if (isMounted.current) {
           setAllImages((prev) => {
@@ -38,8 +45,7 @@ const useImages = () => {
           setLoadingInProcess(false);
         }
       } catch (e) {
-        setLoadingInProcess(false);
-        setImageLoadError(true);
+        console.log(e);
       }
     };
     if (
@@ -52,6 +58,8 @@ const useImages = () => {
     }
   }, [
     allImageData,
+    appUser,
+    followToggled,
     getImages,
     getNextImageBatch,
     imagesLoading,
@@ -73,6 +81,14 @@ const useImages = () => {
     setImagesLoading(true);
   };
 
+  const reload = () => {
+    setAllImages([]);
+    setImagesLoading(true);
+    setReachedEnd(false);
+    setLastImageId(null);
+    refreshImages();
+  };
+
   return {
     allImageData,
     imagesLoading,
@@ -80,6 +96,9 @@ const useImages = () => {
     loadingInProcess,
     reachedEnd,
     imageLoadError,
+    reload,
+    setFollowToggled,
+    followToggled,
   };
 };
 

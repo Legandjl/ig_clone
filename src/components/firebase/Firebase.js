@@ -234,13 +234,22 @@ const Firebase = () => {
     return docRef.id;
   };
 
-  publicMethods.getImages = async () => {
-    console.log("getting");
-    const q = query(
-      collection(db, "images"),
-      orderBy("timestamp", "desc"),
-      limit(2)
-    );
+  publicMethods.getImages = async (followToggle, following) => {
+    let q;
+    if (followToggle) {
+      q = query(
+        collection(db, "images"),
+        orderBy("timestamp", "desc"),
+        limit(2),
+        where("uploadedBy", "in", following)
+      );
+    } else {
+      q = query(
+        collection(db, "images"),
+        orderBy("timestamp", "desc"),
+        limit(2)
+      );
+    }
     const docSnap = await getDocs(q);
     const data = [];
     docSnap.forEach((doc) => {
@@ -250,16 +259,28 @@ const Firebase = () => {
     return data;
   };
 
-  publicMethods.getNextImageBatch = async (timestamp) => {
-    console.log("called");
-    console.log(timestamp);
-    const q = query(
-      collection(db, "images"),
-      orderBy("timestamp", "desc"),
-      where("timestamp", "<", timestamp),
-      limit(2)
-    );
-
+  publicMethods.getNextImageBatch = async (
+    timestamp,
+    followToggle,
+    following
+  ) => {
+    let q;
+    if (followToggle) {
+      q = query(
+        collection(db, "images"),
+        orderBy("timestamp", "desc"),
+        where("timestamp", "<", timestamp),
+        limit(2),
+        where("uploadedBy", "in", following)
+      );
+    } else {
+      q = query(
+        collection(db, "images"),
+        orderBy("timestamp", "desc"),
+        where("timestamp", "<", timestamp),
+        limit(2)
+      );
+    }
     const docSnap = await getDocs(q);
     const data = [];
     docSnap.forEach((doc) => {

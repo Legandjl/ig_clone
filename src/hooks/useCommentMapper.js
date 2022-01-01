@@ -3,6 +3,7 @@ import getDifference from "../utils/utilities.js";
 import { Link } from "react-router-dom";
 
 //needs img loader
+//should be a component
 
 const useCommentMapper = ({ checkIfHome, removeComment, commentData }) => {
   const getCommentElements = () => {

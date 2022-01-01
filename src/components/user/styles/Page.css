@@ -75,7 +75,7 @@
   grid-gap: 5px;
 }
 
-button {
+.followButton {
   height: 1.8em;
   outline: none;
   border: none;
@@ -88,7 +88,7 @@ button {
   transition: all 0.09s ease-in-out;
 }
 
-button:hover {
+.followButton:hover {
   cursor: pointer;
   background-color: white;
   color: #272528;

@@ -2,6 +2,10 @@ import { useEffect, useState } from "react/cjs/react.development";
 
 const useScroll = () => {
   const [bottom, setBottom] = useState(false);
+
+  const reset = () => {
+    setBottom(false);
+  };
   useEffect(() => {
     const handleScroll = () => {
       const bottom =
@@ -18,7 +22,7 @@ const useScroll = () => {
     };
   }, [bottom]);
 
-  return { bottom };
+  return { bottom, reset };
 };
 
 export default useScroll;

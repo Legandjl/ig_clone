@@ -12,10 +12,7 @@ const Page = () => {
   const [imageData, setImageData] = useState([]);
   const params = useParams();
   const { getUserImages } = Firebase();
-
   const [isMounted] = useMountCheck();
-
-  console.log(params.id);
 
   useEffect(() => {
     const startImageLoad = async () => {
