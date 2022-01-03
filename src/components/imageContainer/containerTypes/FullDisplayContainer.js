@@ -8,6 +8,8 @@ const FullDisplayContainer = ({
   checkIfHomePage,
   profileData,
   props,
+  identifier,
+  refresh,
 }) => {
   const { type, author, name, imageID, src } = props;
 
@@ -27,6 +29,8 @@ const FullDisplayContainer = ({
           type={type}
           username={profileData.username}
           src={profileData.profilePictureUrl}
+          identifier={identifier}
+          refresh={refresh}
         />
         <Comments imageID={imageID} type={type} />
         <ImageFunctions

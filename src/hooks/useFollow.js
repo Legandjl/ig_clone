@@ -23,7 +23,7 @@ const useFollow = (uid) => {
         setLoadingInProcess(false);
       }
     };
-    if (loadingFollowing && !loadingInProcess) {
+    if (loadingFollowing && !loadingInProcess && uid) {
       loadData();
     }
   }, [

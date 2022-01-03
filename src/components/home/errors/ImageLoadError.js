@@ -14,6 +14,7 @@ const ImageLoadError = () => {
     >
       <img
         src={oops}
+        alt={"failed to load"}
         style={{
           height: 60,
           width: 60,

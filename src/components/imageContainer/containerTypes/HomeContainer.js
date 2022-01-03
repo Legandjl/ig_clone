@@ -8,6 +8,8 @@ const HomeContainer = ({
   checkIfHomePage,
   profileData,
   props,
+  identifier,
+  refresh,
 }) => {
   const { type, author, name, imageID, src } = props;
 
@@ -18,6 +20,8 @@ const HomeContainer = ({
         src={profileData.profilePictureUrl}
         username={profileData.username}
         author={author}
+        identifier={identifier}
+        refresh={refresh}
       />
 
       {imageLoaded ? (

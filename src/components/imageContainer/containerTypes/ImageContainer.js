@@ -8,7 +8,7 @@ import useImageLoader from "../../../hooks/useImageLoader";
 import useMountCheck from "../../../hooks/useMountCheck";
 
 const ImageContainer = (props) => {
-  const { type, author, name } = props;
+  const { type, author, name, imageID } = props;
   // const [imageLoaded, setImageLoaded] = useState(false);
   const [profileData, setProfileData] = useState({});
   const [profileDataLoading, setProfileDataLoading] = useState(true);
@@ -49,29 +49,6 @@ const ImageContainer = (props) => {
     }
   }, [imageLoaded, isMounted, loadImage, props.src]);
 
-  /*
-  useEffect(() => {
-    let isMounted = true;
-    if (!imageLoaded) {
-      const image = new Image();
-      image.src = props.src;
-      image.id = imageID;
-      image.onload = () => {
-        if (isMounted) {
-          setImageLoaded(true);
-        }
-      };
-      image.onerror = () => {
-        console.error("Failed to load image");
-        setImageErrored(true);
-      };
-    }
-    return () => {
-      isMounted = false;
-    };
-  }, [imageID, imageLoaded, props.src]);
-  */
-
   const checkIfHomePage = () => {
     return type === "HomePage";
   };
@@ -83,6 +60,8 @@ const ImageContainer = (props) => {
       checkIfHomePage={checkIfHomePage}
       profileData={profileData}
       profileIsLoading={profileDataLoading}
+      identifier={imageID}
+      refresh={props.refresh}
     />
   ) : (
     <FullDisplayContainer
@@ -91,6 +70,8 @@ const ImageContainer = (props) => {
       checkIfHomePage={checkIfHomePage}
       profileData={profileData}
       profileIsLoading={profileDataLoading}
+      identifier={imageID}
+      refresh={props.refresh}
     />
   );
 };

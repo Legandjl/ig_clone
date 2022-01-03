@@ -1,20 +1,15 @@
 import { useContext, useEffect } from "react";
 import { FileContext } from "../../filepicker/FileContext";
-
 import ImageContainer from "../../imageContainer/containerTypes/ImageContainer";
 import CropTool from "../../imageCropUtils/CropTool";
 import ImageRefreshLoader from "../../loaders/ImageRefreshLoader";
 import ImageLoadError from "../errors/ImageLoadError";
-
 import useImages from "../../../hooks/useImages";
 import useScroll from "../../../hooks/useScroll";
 import "../styles/Home.css";
 
 const Home = () => {
   const { isCropping, imageSrc } = useContext(FileContext);
-
-  // change all image data between followers and standard
-  // maybe like refreshImageData(followers) or
 
   const {
     allImageData,
@@ -31,8 +26,19 @@ const Home = () => {
   useEffect(() => {
     if (bottom && !reachedEnd && !loadingInProcess) {
       refreshImages();
+      reset();
     }
-  }, [bottom, loadingInProcess, reachedEnd, refreshImages]);
+  }, [bottom, loadingInProcess, reachedEnd, refreshImages, reset]);
+
+  const refreshSelection = (bool) => {
+    console.log(allImageData);
+    console.log("Refreshing");
+    setFollowToggled(bool);
+    window.scrollTo(0, 0);
+    reset();
+    reload();
+    console.log(allImageData);
+  };
 
   const images = allImageData.map((imageData, i) => {
     return (
@@ -42,9 +48,15 @@ const Home = () => {
         src={imageData.downloadUrl}
         author={imageData.uploadedBy}
         type={"HomePage"}
+        refresh={refreshSelection}
       />
     );
   });
+
+  console.log(images);
+
+  const emptyFollowers =
+    images.length === 0 && followToggled && !loadingInProcess;
 
   return imageLoadError ? (
     <ImageLoadError />
@@ -54,38 +66,33 @@ const Home = () => {
       style={{ paddingBottom: !loadingInProcess ? "3em" : 0 }}
     >
       {isCropping && <CropTool image={imageSrc} />}{" "}
-      {allImageData.length > 0 && (
-        <div className={"imagesToggle"}>
-          <p
-            onClick={() => {
-              window.scrollTo(0, 0);
-              reset();
-              reload();
-              setFollowToggled(false);
-            }}
-            style={{ paddingRight: 6, color: followToggled ? "gray" : "black" }}
-          >
-            All
-          </p>{" "}
-          <p
-            onClick={() => {
-              window.scrollTo(0, 0);
-              reset();
-              reload();
-              setFollowToggled(true);
-            }}
-            style={{
-              borderLeft: "solid 1px",
-              paddingLeft: 6,
-              color: !followToggled ? "grey" : "black",
-            }}
-          >
-            Following
-          </p>
-        </div>
-      )}
+      <div className={"imagesToggle"}>
+        <p
+          onClick={() => {
+            refreshSelection(false);
+          }}
+          style={{ paddingRight: 6, color: followToggled ? "gray" : "black" }}
+        >
+          All
+        </p>{" "}
+        <p
+          onClick={() => {
+            refreshSelection(true);
+          }}
+          style={{
+            borderLeft: "solid 1px",
+            paddingLeft: 6,
+            color: !followToggled ? "grey" : "black",
+          }}
+        >
+          Following
+        </p>
+      </div>
       <div className="homeImages">{images}</div>
       {loadingInProcess && <ImageRefreshLoader />}
+      {emptyFollowers && (
+        <p style={{ alignSelf: "center" }}>You are not following anyone!</p>
+      )}
     </div>
   );
 };

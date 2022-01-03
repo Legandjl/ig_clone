@@ -59,19 +59,7 @@ const Firebase = () => {
     return auth;
   };
 
-  publicMethods.getNotifications = async (uid) => {
-    const q = query(
-      collection(db, "notifications"),
-      where("sentTo", "==", uid)
-    );
-    const docSnap = await getDocs(q);
-    const data = [];
-    docSnap.forEach((doc) => {
-      data.push(doc.data());
-    });
-
-    return data;
-  };
+  //follow
 
   publicMethods.handleFollow = async (uid, userUid) => {
     await updateFollowing(uid, userUid);
@@ -130,6 +118,8 @@ const Firebase = () => {
     return data;
   };
 
+  //likes
+
   publicMethods.likePost = async (appUser, pid, author) => {
     console.log("liking");
     const ref = await addDoc(collection(db, "likes"), {
@@ -146,14 +136,6 @@ const Firebase = () => {
         photoURL: appUser.profilePictureUrl,
       });
     }
-  };
-
-  publicMethods.removeNotification = async (id) => {
-    const q = query(collection(db, "notifications"), where("id", "==", id));
-    const docSnap = await getDocs(q);
-    docSnap.forEach((item) => {
-      deleteDoc(doc(db, "notifications", item.id));
-    });
   };
 
   publicMethods.unlikePost = async (id) => {
@@ -178,6 +160,32 @@ const Firebase = () => {
     return data;
   };
 
+  // notifications
+
+  publicMethods.removeNotification = async (id) => {
+    const q = query(collection(db, "notifications"), where("id", "==", id));
+    const docSnap = await getDocs(q);
+    docSnap.forEach((item) => {
+      deleteDoc(doc(db, "notifications", item.id));
+    });
+  };
+
+  publicMethods.getNotifications = async (uid) => {
+    const q = query(
+      collection(db, "notifications"),
+      where("sentTo", "==", uid)
+    );
+    const docSnap = await getDocs(q);
+    const data = [];
+    docSnap.forEach((doc) => {
+      data.push(doc.data());
+    });
+
+    return data;
+  };
+
+  // user profiles
+
   publicMethods.checkForUser = async (username) => {
     const q = query(collection(db, "users"), where("username", "==", username));
     const docSnap = await getDocs(q);
@@ -194,6 +202,8 @@ const Firebase = () => {
     });
     return data[0];
   };
+
+  // signin/out
 
   publicMethods.signIn = async (username) => {
     const result = await signInWithPopup(auth, provider);
@@ -218,6 +228,8 @@ const Firebase = () => {
     signOut(auth);
   };
 
+  //upload
+
   publicMethods.uploadFile = async (user, file) => {
     const uuid = uuidv4();
     const storageRef = ref(storage, `images/${user.uid}"/"${uuid}`);
@@ -234,9 +246,15 @@ const Firebase = () => {
     return docRef.id;
   };
 
-  publicMethods.getImages = async (followToggle, following) => {
+  //images
+
+  publicMethods.getImages = async (followToggle, uid) => {
     let q;
     if (followToggle) {
+      const following = await publicMethods.getFollowing(uid);
+      if (following.length === 0) {
+        return [];
+      }
       q = query(
         collection(db, "images"),
         orderBy("timestamp", "desc"),
@@ -259,13 +277,13 @@ const Firebase = () => {
     return data;
   };
 
-  publicMethods.getNextImageBatch = async (
-    timestamp,
-    followToggle,
-    following
-  ) => {
+  publicMethods.getNextImageBatch = async (timestamp, followToggle, uid) => {
     let q;
     if (followToggle) {
+      const following = await publicMethods.getFollowing(uid);
+      if (following.length === 0) {
+        return [];
+      }
       q = query(
         collection(db, "images"),
         orderBy("timestamp", "desc"),
@@ -310,6 +328,13 @@ const Firebase = () => {
     const docSnap = await getDoc(docRef);
     return docSnap.data();
   };
+
+  publicMethods.deleteImage = async (id) => {
+    await deleteDoc(doc(db, "images", id));
+  };
+
+  //comments
+
   publicMethods.addComment = async (text, imgId, appUser) => {
     await addDoc(collection(db, "comments"), {
       imageId: imgId,

@@ -22,16 +22,17 @@ const useImages = () => {
 
   useEffect(() => {
     const loadData = async () => {
+      console.log("getting data");
       setLoadingInProcess(true);
       let imageData;
       try {
         if (lastImageId === null) {
-          imageData = await getImages(followToggled, appUser.following);
+          imageData = await getImages(followToggled, appUser.uid);
         } else {
           imageData = await getNextImageBatch(
             lastImageId,
             followToggled,
-            appUser.following
+            appUser.uid
           );
         }
         if (isMounted.current) {
@@ -45,14 +46,16 @@ const useImages = () => {
           setLoadingInProcess(false);
         }
       } catch (e) {
-        console.log(e);
+        console.error(e);
+        setImageLoadError(true);
       }
     };
     if (
       imagesLoading &&
       !loadingInProcess &&
       !reachedEnd &&
-      isMounted.current
+      isMounted.current &&
+      appUser
     ) {
       loadData();
     }
