@@ -44,7 +44,6 @@ i:hover {
   grid-template-columns: 1fr;
   min-width: 40em;
 
-  min-height: 40em;
   background-color: #d4d4d4;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }

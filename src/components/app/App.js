@@ -11,6 +11,7 @@ import Page from "../user/components/Page";
 import { useEffect } from "react/cjs/react.development";
 import { useContext } from "react";
 import { FirebaseContext } from "../firebase/FirebaseContext";
+import ImageLoadError from "../home/errors/ImageLoadError";
 
 // https://www.npmjs.com/package/react-loader-spinner
 
@@ -32,6 +33,7 @@ const App = () => {
         <Route path="/home" element={<Home key={Date.now()} />} />
         <Route path="/p/:id" element={<ImagePage />} />
         <Route path="/user/:id" element={<Page />} />
+        <Route path="/error" element={<ImageLoadError />} />
       </Routes>
       <Footer />
     </div>

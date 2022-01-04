@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
-import { useContext, useEffect, useState } from "react/cjs/react.development";
+import { useContext, useEffect } from "react/cjs/react.development";
 import useImageLoader from "../../../hooks/useImageLoader";
+import useShowMenu from "../../../hooks/useMenuToggle";
 import user from "../../../images/user.png";
 import { FirebaseContext } from "../../firebase/FirebaseContext";
 import DeleteMenu from "./DeleteMenu";
@@ -10,27 +11,13 @@ import DeleteMenu from "./DeleteMenu";
 const ImageHeader = (props) => {
   const [imageLoaded, loadImage] = useImageLoader();
   const { appUser } = useContext(FirebaseContext);
-  const [showMenu, setShowMenu] = useState(false);
-
-  const handleClick = (e) => {
-    if (!e.target.dataset.menu) {
-      setShowMenu(false);
-    }
-  };
+  const [showMenu, toggleOn] = useShowMenu();
 
   useEffect(() => {
     if (!imageLoaded) {
       loadImage(props.src);
     }
   }, [imageLoaded, loadImage, props.src]);
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClick); // return
-
-    return () => {
-      document.removeEventListener("mousedown", handleClick);
-    };
-  });
 
   return (
     <div className="containerHeader">
@@ -55,7 +42,7 @@ const ImageHeader = (props) => {
           <i
             data-menu={true}
             onClick={() => {
-              setShowMenu(true);
+              toggleOn();
             }}
             style={{ color: showMenu ? "gray" : "black" }}
             class="ri-more-line"
