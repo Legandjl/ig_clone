@@ -3,23 +3,20 @@ import { useEffect, useState } from "react/cjs/react.development";
 import { Firebase } from "../../firebase/Firebase";
 import UserPageImageLoader from "../../loaders/UserPageImageLoader";
 import useImageLoader from "../../../hooks/useImageLoader";
+import useDataLoader from "../../../hooks/useDataLoader";
 
 const UserImage = ({ element }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [likeCount, setLikeCount] = useState(null);
   const [imageLoaded, loadImage] = useImageLoader();
+
+  // [loadingComplete, loadingData, data];
 
   const { getLikes } = Firebase();
 
-  useEffect(() => {
-    const getLikeCount = async () => {
-      const likes = await getLikes(element.id);
-      setLikeCount(likes.length);
-    };
-    if (likeCount === null) {
-      getLikeCount();
-    }
-  }, [element.id, getLikes, likeCount]);
+  const [loadingComplete, loadingLikes, likes, refreshLikes] = useDataLoader(
+    getLikes,
+    element.id
+  );
 
   useEffect(() => {
     if (!imageLoaded) {
@@ -64,7 +61,7 @@ const UserImage = ({ element }) => {
                   display: isHovered ? "inline" : "none",
                 }}
               ></i>
-              {likeCount > 0 && (
+              {loadingComplete && likes.length > 0 && (
                 <p
                   style={{
                     display: isHovered ? "inline" : "none",
@@ -73,7 +70,7 @@ const UserImage = ({ element }) => {
                     fontSize: "1.4em",
                   }}
                 >
-                  {likeCount}
+                  {loadingComplete && likes.length}
                 </p>
               )}
             </div>
