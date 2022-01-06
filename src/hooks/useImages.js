@@ -22,7 +22,6 @@ const useImages = () => {
 
   useEffect(() => {
     const loadData = async () => {
-      console.log("getting data");
       setLoadingInProcess(true);
       let imageData;
       try {

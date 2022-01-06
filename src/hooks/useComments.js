@@ -1,34 +1,21 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useState } from "react";
 import { FirebaseContext } from "../components/firebase/FirebaseContext";
+import useDataLoader from "./useDataLoader";
 import useMountCheck from "./useMountCheck";
 
 const useComments = (props) => {
-  const [isLoading, setLoading] = useState(true);
-  const [commentData, setComments] = useState([]);
   const [commentText, setCommentText] = useState("");
   const { getComments, submitComment, appUser } = useContext(FirebaseContext);
-
   const [isMounted] = useMountCheck();
 
-  useEffect(() => {
-    const updateComments = async () => {
-      const comments = await getComments(props.imageID);
-      if (isMounted.current) {
-        setComments(() => {
-          return comments;
-        });
-        setLoading(false);
-      }
-    };
-    if (isLoading === true) {
-      updateComments();
-    }
-  }, [getComments, isLoading, isMounted, props.imageID]);
+  //   return [loadingComplete, loadingData, data, reloadData];
+  const [loadingComplete, isLoading, commentData, refreshComments] =
+    useDataLoader(getComments, props.imageID);
 
   const handleSubmit = async () => {
     await submitComment(commentText, props.imageID, appUser);
     if (isMounted.current) {
-      setLoading(true);
+      refresh();
       setCommentText("");
     }
   };
@@ -46,6 +33,18 @@ const useComments = (props) => {
     return props.type === "HomePage";
   };
 
+  const refresh = () => {
+    refreshComments();
+  };
+
+  const getCommentData = () => {
+    if (commentData === null) {
+      return [];
+    }
+
+    return commentData;
+  };
+
   return {
     checkIfHome,
     removeComment,
@@ -54,6 +53,8 @@ const useComments = (props) => {
     commentData,
     commentText,
     isLoading,
+    refresh,
+    getCommentData,
   };
 };
 export default useComments;

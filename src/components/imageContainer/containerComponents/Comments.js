@@ -1,6 +1,5 @@
-import CommentsLoader from "../../loaders/DefaultLoader";
-import useCommentMapper from "../../../hooks/useCommentMapper";
 import useComments from "../../../hooks/useComments";
+import CommentElement from "./CommentElement";
 
 const Comments = (props) => {
   const {
@@ -11,15 +10,23 @@ const Comments = (props) => {
     isLoading,
     removeComment,
     commentData,
+    refresh,
+    getCommentData,
   } = useComments(props);
 
-  const { getCommentElements } = useCommentMapper({
-    checkIfHome,
-    removeComment,
-    commentData,
+  const comments = getCommentData().map((comment, i) => {
+    return (
+      <CommentElement
+        checkIfHome={checkIfHome}
+        removeComment={removeComment}
+        comment={comment}
+        index={i}
+        commentIdentifier={comment.id}
+        refresh={refresh}
+        key={i}
+      />
+    );
   });
-
-  const comments = getCommentElements();
 
   return (
     <div
@@ -31,17 +38,13 @@ const Comments = (props) => {
         className={"commentsOuter commentsWrap"}
         style={{ display: comments.length <= 0 && "none" }}
       >
-        {isLoading && !checkIfHome() && comments.length > 0 ? (
-          <CommentsLoader />
-        ) : (
-          <ul style={{ paddingLeft: "0.8em" }}>
-            {comments.length <= 2 && checkIfHome()
-              ? comments
-              : checkIfHome()
-              ? comments.slice(-2)
-              : comments}
-          </ul>
-        )}
+        <ul style={{ paddingLeft: "0.8em" }}>
+          {comments.length <= 2 && checkIfHome()
+            ? comments
+            : checkIfHome()
+            ? comments.slice(-2)
+            : comments}
+        </ul>
       </div>
       <div
         className="submitWrap"

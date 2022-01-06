@@ -17,11 +17,10 @@ const HomeContainer = ({
     <div className="imageContainerHome">
       <ImageHeader
         type={type}
-        src={profileData.profilePictureUrl}
-        username={profileData.username}
         author={author}
         identifier={identifier}
         refresh={refresh}
+        profile={profileData}
       />
 
       {imageLoaded ? (

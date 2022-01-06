@@ -68,7 +68,7 @@ li {
 
 .timeStamp {
   font-size: 0.8em;
-  margin-top: 5px;
+
   color: #8e8e8e;
 }
 
@@ -110,7 +110,10 @@ li {
   position: absolute;
   display: grid;
   height: 1.5em;
-  width: 3em;
+  width: 4em;
+  height: 2em;
+  font-weight: bold;
+
   background-color: white;
   bottom: 100%;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -120,6 +123,7 @@ li {
   transition: all ease-in-out 0.1s;
   background-color: #272528;
   color: white;
+  padding: 1px;
 }
 
 .deleteMenu:hover {

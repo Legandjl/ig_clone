@@ -27,10 +27,9 @@ const FullDisplayContainer = ({
         <ImageHeader
           author={author}
           type={type}
-          username={profileData.username}
-          src={profileData.profilePictureUrl}
           identifier={identifier}
           refresh={refresh}
+          profile={profileData}
         />
         <Comments imageID={imageID} type={type} />
         <ImageFunctions

@@ -31,13 +31,10 @@ const Home = () => {
   }, [bottom, loadingInProcess, reachedEnd, refreshImages, reset]);
 
   const refreshSelection = (bool) => {
-    console.log(allImageData);
-    console.log("Refreshing");
     setFollowToggled(bool);
     window.scrollTo(0, 0);
     reset();
     reload();
-    console.log(allImageData);
   };
 
   const images = allImageData.map((imageData, i) => {
@@ -52,8 +49,6 @@ const Home = () => {
       />
     );
   });
-
-  console.log(images);
 
   const emptyFollowers =
     images.length === 0 && followToggled && !loadingInProcess;

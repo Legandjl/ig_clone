@@ -12,6 +12,8 @@ const useNotifications = () => {
   const { getNotifications } = Firebase();
   const [isMounted] = useMountCheck();
 
+  //  return [loadingComplete, loadingData, data, reloadData];
+
   useEffect(() => {
     const loadNotifications = async (uid) => {
       const notificationData = await getNotifications(uid);

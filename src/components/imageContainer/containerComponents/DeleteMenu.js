@@ -3,13 +3,13 @@ import { useNavigate } from "react-router";
 import { Firebase } from "../../firebase/Firebase";
 
 const DeleteMenu = (props) => {
-  const { deleteImage } = Firebase();
+  const { deleteData } = Firebase();
 
   const nav = useNavigate();
   const handleDelete = async () => {
     try {
-      await deleteImage(props.identifier);
-      nav(`/home`, { replace: true });
+      await deleteData(props.identifier, props.type);
+      props.cb();
     } catch (e) {
       nav(`/error`, { replace: true });
     }
@@ -17,7 +17,7 @@ const DeleteMenu = (props) => {
 
   return (
     <div data-menu={true} className="deleteMenu">
-      <p onClick={handleDelete} data-menu={true} style={{ fontSize: "0.6em" }}>
+      <p onClick={handleDelete} data-menu={true}>
         Delete
       </p>
     </div>

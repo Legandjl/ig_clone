@@ -329,8 +329,8 @@ const Firebase = () => {
     return docSnap.data();
   };
 
-  publicMethods.deleteImage = async (id) => {
-    await deleteDoc(doc(db, "images", id));
+  publicMethods.deleteData = async (id, type) => {
+    await deleteDoc(doc(db, type, id));
   };
 
   //comments
