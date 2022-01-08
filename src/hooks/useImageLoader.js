@@ -6,8 +6,6 @@ const useImageLoader = () => {
   const [imageError, setImageError] = useState(false);
   const [isMounted] = useMountCheck();
 
-  // need an error
-
   const loadImage = (url) => {
     const image = new Image();
     image.src = url;
@@ -18,6 +16,7 @@ const useImageLoader = () => {
     };
     image.onerror = () => {
       if (isMounted.current) {
+        setImageLoaded(true);
         setImageError(true);
       }
     };

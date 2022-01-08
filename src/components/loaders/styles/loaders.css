@@ -1,0 +1,116 @@
+.loader {
+  background: linear-gradient(335deg, #f8f4f4, #e4e4e4);
+  background-size: 120% 120%;
+  animation: gradient-animation 2s ease infinite;
+}
+
+.headerLoaderWrap {
+  display: grid;
+  align-content: center;
+  align-items: center;
+  width: 100%;
+  grid-template-columns: auto 1fr 1fr;
+  border-bottom: 0;
+  background-color: white;
+  grid-gap: 10px;
+  border: solid #dbdbdb 1px;
+  border-bottom: none;
+}
+
+.headerLoaderImage {
+  border-radius: 50%;
+  height: 1.6em;
+  width: 1.6em;
+  align-self: center;
+  margin-left: 0.8em;
+}
+
+.headerLoaderUsername {
+  width: 4em;
+  height: 1em;
+  border-radius: 3px;
+}
+.imageLoader {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  margin-left: 5em;
+}
+
+.detailsLoader {
+  justify-self: start;
+  display: grid;
+  grid-template-rows: auto auto;
+  align-content: center;
+  grid-gap: 10px;
+  border-radius: 3px;
+}
+.usernameLoader {
+  width: 7em;
+  height: 1.5em;
+  border-radius: 3px;
+}
+.userDataLoader {
+  width: 13em;
+  height: 1.5em;
+  border-radius: 3px;
+}
+
+.commentLoaderWrap {
+  display: grid;
+  grid-template-columns: auto auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  grid-gap: 5px;
+  border-radius: 3px;
+}
+.commentLoaderPost {
+  height: 0.8em;
+  width: 6em;
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: start;
+  align-self: center;
+  margin-left: 10px;
+  border-radius: 3px;
+}
+.commentLoaderTimeStamp {
+  grid-row: 2;
+  grid-column: 2;
+  height: 0.5em;
+  width: 4em;
+  align-self: center;
+  margin-left: 10px;
+  border-radius: 3px;
+}
+
+.loaderFunctionWrap {
+  display: grid;
+  grid-template-columns: auto auto;
+  padding: 4px;
+  padding-left: 8px;
+  margin-top: 2px;
+  font-size: 1.7em;
+  grid-gap: 5px;
+  border-radius: 3px;
+}
+
+.loaderLike {
+  color: #edebeb;
+}
+
+.loaderHeart {
+  color: #edebeb;
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

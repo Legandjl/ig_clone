@@ -4,41 +4,34 @@ import { Firebase } from "../../firebase/Firebase";
 import UserImage from "./UserImage";
 import "../styles/Page.css";
 import ProfileDisplay from "./ProfileDisplay";
-import useMountCheck from "../../../hooks/useMountCheck";
+import useDataLoader from "../../../hooks/useDataLoader";
 
 const Page = () => {
-  const [imagesLoaded, setImagesLoaded] = useState(false);
-  const [loadingInProcess, setLoadingInProcess] = useState(false);
-  const [imageData, setImageData] = useState([]);
   const params = useParams();
   const { getUserImages } = Firebase();
-  const [isMounted] = useMountCheck();
+  const [imageData, setImageData] = useState([]);
+  const [imagesLoaded, loadingInProcess, data, reloadData] = useDataLoader(
+    getUserImages,
+    params.id
+  );
 
   useEffect(() => {
-    const startImageLoad = async () => {
-      setLoadingInProcess(true);
-      const images = await getUserImages(params.id);
-      if (isMounted.current) {
-        setImageData(images);
-        setLoadingInProcess(false);
-        setImagesLoaded(true);
-      }
-    };
-
-    if (!loadingInProcess && !imagesLoaded && isMounted.current) {
-      startImageLoad();
+    if (data != null) {
+      setImageData(data);
     }
-  }, [getUserImages, imagesLoaded, isMounted, loadingInProcess, params.id]);
+  }, [data]);
 
   const userImageElements = imageData.map((element) => {
     return <UserImage element={element} />;
   });
 
-  // images > 0 ? return images || return no images found
-
   return (
     <div className="pageWrap" style={{ gridRow: 2 }}>
-      <ProfileDisplay profile={params.id} postCount={imageData.length} />
+      <ProfileDisplay
+        profile={params.id}
+        postCount={imageData.length}
+        imageData={loadingInProcess}
+      />
       <div className="userpageImages">{userImageElements}</div>
     </div>
   );

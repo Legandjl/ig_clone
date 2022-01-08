@@ -5,8 +5,6 @@ const UserPageImageLoader = () => {
   const [backgroundColor, setbackgroundColor] = useState("#D4D4D4");
   const [colorIndex, setColorIndex] = useState(0);
 
-  //ched=cked for leak
-
   useEffect(() => {
     let isMounted = true;
     const colors = ["#D5D5D5", "#D7D7D7", "#D8D8D8"];
@@ -33,5 +31,3 @@ const UserPageImageLoader = () => {
   );
 };
 export default UserPageImageLoader;
-
-// use a cover image

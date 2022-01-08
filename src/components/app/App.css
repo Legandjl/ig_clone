@@ -8,3 +8,9 @@
   font-family: "Arimo", sans-serif;
   color: #333333;
 }
+
+@media screen and (min-width: 1600px) {
+  .App {
+    grid-template-rows: 5em 1fr auto;
+  }
+}

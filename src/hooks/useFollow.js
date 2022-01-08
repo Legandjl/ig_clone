@@ -8,12 +8,11 @@ const useFollow = (uid) => {
   const [following, setFollowing] = useState([]);
   const [followers, setFollowers] = useState([]);
   const [loadingFollowing, setLoadingFollowing] = useState(true);
-  const [loadingInProcess, setLoadingInProcess] = useState(false);
+  const [loadingInProcess, setLoadingInProcess] = useState(true);
   const [isMounted] = useMountCheck();
 
   useEffect(() => {
     const loadData = async () => {
-      setLoadingInProcess(true);
       const followingData = await getFollowing(uid);
       const followerData = await getFollowers(uid);
       if (isMounted.current) {
@@ -23,7 +22,7 @@ const useFollow = (uid) => {
         setLoadingInProcess(false);
       }
     };
-    if (loadingFollowing && !loadingInProcess && uid) {
+    if (loadingFollowing && loadingInProcess && uid) {
       loadData();
     }
   }, [
@@ -37,9 +36,16 @@ const useFollow = (uid) => {
 
   const refreshFollowing = async () => {
     setLoadingFollowing(true);
+    setLoadingInProcess(true);
   };
 
-  return [following, handleFollow, refreshFollowing, followers];
+  return [
+    following,
+    handleFollow,
+    refreshFollowing,
+    followers,
+    loadingInProcess,
+  ];
 };
 
 export default useFollow;

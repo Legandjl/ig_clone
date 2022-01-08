@@ -8,11 +8,7 @@ import useDataLoader from "../../../hooks/useDataLoader";
 const UserImage = ({ element }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [imageLoaded, loadImage] = useImageLoader();
-
-  // [loadingComplete, loadingData, data];
-
   const { getLikes } = Firebase();
-
   const [loadingComplete, loadingLikes, likes, refreshLikes] = useDataLoader(
     getLikes,
     element.id

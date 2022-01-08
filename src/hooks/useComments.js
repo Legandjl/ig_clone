@@ -25,10 +25,6 @@ const useComments = (props) => {
     setCommentText(updatedText);
   };
 
-  const removeComment = (id) => {
-    console.log(id);
-  };
-
   const checkIfHome = () => {
     return props.type === "HomePage";
   };
@@ -41,13 +37,11 @@ const useComments = (props) => {
     if (commentData === null) {
       return [];
     }
-
     return commentData;
   };
 
   return {
     checkIfHome,
-    removeComment,
     handleChange,
     handleSubmit,
     commentData,

@@ -5,26 +5,33 @@ import DeleteMenu from "./DeleteMenu";
 import useShowMenu from "../../../hooks/useMenuToggle";
 import { useContext, useState } from "react/cjs/react.development";
 import { FirebaseContext } from "../../firebase/FirebaseContext";
+import useDataLoader from "../../../hooks/useDataLoader";
+import { Firebase } from "../../firebase/Firebase";
+import CommentsLoader from "../../loaders/CommentsLoader";
 
 //needs img loader
 const CommentElement = ({
   checkIfHome,
-  removeComment,
   comment,
   index,
   commentIdentifier,
   refresh,
 }) => {
   const { appUser } = useContext(FirebaseContext);
-
-  const [showMenu, setShowMenu] = useShowMenu();
+  const [showMenu, setShowMenu, setCloseMenu] = useShowMenu();
   const [showDotMenu, setShowDotMenu] = useState(false);
-
+  const { getUserProfile } = Firebase();
+  const [loadingComplete, loadingProfile, profile, reloadProfile] =
+    useDataLoader(getUserProfile, comment.uid);
   const commentDeleteCallback = () => {
     refresh();
+    setCloseMenu();
   };
-  return (
+  return loadingProfile ? (
+    <CommentsLoader type={checkIfHome()} />
+  ) : (
     <li
+      style={{ marginTop: 10, paddingLeft: "0.6em" }}
       onMouseEnter={() => {
         setShowDotMenu(true);
       }}
@@ -34,7 +41,7 @@ const CommentElement = ({
     >
       <img
         className={"userProfileImg"}
-        src={comment.posterInfo.photoURL}
+        src={profile.profilePictureUrl}
         style={{ display: checkIfHome() && "none" }}
         alt="userDisplayPhoto"
         onError={(event) => {
@@ -42,19 +49,13 @@ const CommentElement = ({
         }}
       />
 
-      <p
-        className={"listItems"}
-        style={{ width: checkIfHome() && "100%" }}
-        onClick={() => {
-          removeComment(comment.id);
-        }}
-      >
+      <p className={"listItems"} style={{ width: checkIfHome() && "100%" }}>
         <Link
           style={{ display: "inline-block", fontWeight: "bold" }}
           className={"userLink"}
           to={`/user/${comment.uid}`}
         >
-          {comment.posterInfo.poster}
+          {profile.username}
         </Link>{" "}
         {checkIfHome() && comment.comment.length > 25
           ? comment.comment.substring(0, 24) + "..."

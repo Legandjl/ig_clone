@@ -12,9 +12,6 @@ const FirebaseContextProvider = (props) => {
     return isAuth;
   });
 
-  // remove all useage of user & replace with appuser
-  // change user to auth and ONLY use for auth
-
   const [loadingUser, setLoadingUser] = useState(true);
   const [loadingUserProfile, setLoadingUserProfile] = useState(false);
   const [isMounted] = useMountCheck();

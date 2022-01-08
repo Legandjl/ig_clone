@@ -4,12 +4,13 @@ import useImageLoader from "../../../hooks/useImageLoader";
 import useShowMenu from "../../../hooks/useMenuToggle";
 import user from "../../../images/user.png";
 import { FirebaseContext } from "../../firebase/FirebaseContext";
+import ImageHeaderLoader from "../../loaders/ImageHeaderLoader";
 import DeleteMenu from "./DeleteMenu";
 
 // refactored 27/12
 
 const ImageHeader = (props) => {
-  const [imageLoaded, loadImage] = useImageLoader();
+  const [imageLoaded, loadImage, imageError] = useImageLoader();
   const { appUser } = useContext(FirebaseContext);
   const [showMenu, toggleOn] = useShowMenu();
 
@@ -25,18 +26,14 @@ const ImageHeader = (props) => {
     nav(`/home`, { replace: true });
   };
 
-  return (
+  return props.isLoading || !imageLoaded ? (
+    <ImageHeaderLoader />
+  ) : (
     <div className="containerHeader">
-      {
-        <img
-          src={
-            imageLoaded && props.profile
-              ? props.profile.profilePictureUrl
-              : user
-          }
-          alt="userDisplayPhoto"
-        />
-      }
+      <img
+        src={!imageError ? props.profile.profilePictureUrl : user}
+        alt="userDisplayPhoto"
+      />
 
       <Link to={`/user/${props.author}`}>
         {" "}

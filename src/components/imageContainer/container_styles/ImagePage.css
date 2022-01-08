@@ -75,7 +75,7 @@ li {
 .commentsWrap {
   display: grid;
   background-color: white;
-  padding: 0.6em;
+
   overflow-y: scroll;
   overflow-x: hidden;
   padding-bottom: 0px;

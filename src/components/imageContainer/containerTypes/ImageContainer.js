@@ -9,18 +9,11 @@ import useMountCheck from "../../../hooks/useMountCheck";
 import useDataLoader from "../../../hooks/useDataLoader";
 
 const ImageContainer = (props) => {
-  const { type, author, imageID } = props;
-
   const { getUserProfile } = Firebase();
   const [imageLoaded, loadImage] = useImageLoader();
-
-  //refactored 06/12
-  //Profile Info needs loader
-
-  let [isMounted] = useMountCheck();
-
+  const [isMounted] = useMountCheck();
   const [isProfileLoaded, profileDataLoading, profileData, reloadData] =
-    useDataLoader(getUserProfile, author);
+    useDataLoader(getUserProfile, props.author);
 
   useEffect(() => {
     if (!imageLoaded && isMounted.current) {
@@ -29,28 +22,28 @@ const ImageContainer = (props) => {
   }, [imageLoaded, isMounted, loadImage, props.src]);
 
   const checkIfHomePage = () => {
-    return type === "HomePage";
+    return props.type === "HomePage";
   };
 
   return checkIfHomePage() ? (
     <HomeContainer
-      props={{ ...props }}
-      imageLoaded={imageLoaded}
-      checkIfHomePage={checkIfHomePage}
-      profileData={profileData}
-      profileIsLoading={profileDataLoading}
-      identifier={imageID}
-      refresh={props.refresh}
+      props={{
+        ...props,
+        checkIfHomePage: checkIfHomePage,
+        profileIsLoading: profileDataLoading,
+        imageLoaded: imageLoaded,
+        profileData: profileData,
+      }}
     />
   ) : (
     <FullDisplayContainer
-      props={{ ...props }}
-      imageLoaded={imageLoaded}
-      checkIfHomePage={checkIfHomePage}
-      profileData={profileData}
-      profileIsLoading={profileDataLoading}
-      identifier={imageID}
-      refresh={props.refresh}
+      props={{
+        ...props,
+        checkIfHomePage: checkIfHomePage,
+        profileIsLoading: profileDataLoading,
+        imageLoaded: imageLoaded,
+        profileData: profileData,
+      }}
     />
   );
 };

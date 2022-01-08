@@ -1,7 +1,7 @@
 import { useContext } from "react/cjs/react.development";
 import { FirebaseContext } from "../../firebase/FirebaseContext";
 
-const Follow = (props) => {
+const FollowButton = (props) => {
   const { appUser } = useContext(FirebaseContext);
 
   const handleClick = async () => {
@@ -16,4 +16,4 @@ const Follow = (props) => {
   );
 };
 
-export default Follow;
+export default FollowButton;

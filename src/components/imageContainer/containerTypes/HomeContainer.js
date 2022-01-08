@@ -3,27 +3,32 @@ import Comments from "../containerComponents/Comments";
 import ImageFunctions from "../containerComponents/Functions";
 import ImageHeader from "../containerComponents/ImageHeader";
 
-const HomeContainer = ({
-  imageLoaded,
-  checkIfHomePage,
-  profileData,
-  props,
-  identifier,
-  refresh,
-}) => {
-  const { type, author, name, imageID, src } = props;
+const HomeContainer = (props) => {
+  const {
+    type,
+    author,
+    name,
+    imageID,
+    src,
+    checkIfHomePage,
+    profileData,
+    profileIsLoading,
+    imageLoaded,
+    refresh,
+  } = props.props;
 
   return (
     <div className="imageContainerHome">
       <ImageHeader
         type={type}
         author={author}
-        identifier={identifier}
+        identifier={imageID}
         refresh={refresh}
         profile={profileData}
+        isLoading={profileIsLoading}
       />
 
-      {imageLoaded ? (
+      {imageLoaded && !profileIsLoading ? (
         <img alt={name} id={imageID} src={src} />
       ) : (
         <DefaultLoader />
@@ -34,8 +39,13 @@ const HomeContainer = ({
         type={type}
         author={author}
         checkIfHomePage={checkIfHomePage}
+        profileIsLoading={profileIsLoading}
       />
-      <Comments imageID={imageID} type={type} />
+      <Comments
+        imageID={imageID}
+        type={type}
+        profileIsLoading={profileIsLoading}
+      />
     </div>
   );
 };

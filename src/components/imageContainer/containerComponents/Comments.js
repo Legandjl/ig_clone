@@ -9,7 +9,7 @@ const Comments = (props) => {
     commentText,
     isLoading,
     removeComment,
-    commentData,
+    data,
     refresh,
     getCommentData,
   } = useComments(props);
@@ -24,6 +24,7 @@ const Comments = (props) => {
         commentIdentifier={comment.id}
         refresh={refresh}
         key={i}
+        type={checkIfHome()}
       />
     );
   });
@@ -52,11 +53,15 @@ const Comments = (props) => {
       >
         <input
           type="text"
-          placeholder="Add a comment..."
+          placeholder={!props.profileIsLoading && "Add a comment..."}
           value={commentText}
           onChange={handleChange}
         />
-        <button disabled={commentText.length === 0} onClick={handleSubmit}>
+        <button
+          style={{ color: props.profileIsLoading && " #edebeb" }}
+          disabled={commentText.length === 0 || props.profileIsLoading}
+          onClick={handleSubmit}
+        >
           Post
         </button>
       </div>

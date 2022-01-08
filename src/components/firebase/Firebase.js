@@ -241,7 +241,6 @@ const Firebase = () => {
       uploadedBy: user.uid,
       name: uuid,
       timestamp: Timestamp.now(),
-      info: { username: user.displayName, photoURL: user.photoURL },
     });
     return docRef.id;
   };

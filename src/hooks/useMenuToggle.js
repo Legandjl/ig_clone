@@ -5,8 +5,7 @@ const useShowMenu = () => {
   const menuRef = useRef(null);
 
   useEffect(() => {
-    document.addEventListener("mousedown", handleClick); // return
-
+    document.addEventListener("mousedown", handleClick);
     return () => {
       document.removeEventListener("mousedown", handleClick);
     };
@@ -23,7 +22,11 @@ const useShowMenu = () => {
     menuRef.current = e.target;
   };
 
-  return [showMenu, toggleOn];
+  const toggleOff = () => {
+    setShowMenu(false);
+  };
+
+  return [showMenu, toggleOn, toggleOff];
 };
 
 export default useShowMenu;

@@ -5,6 +5,7 @@ import { Firebase } from "../../firebase/Firebase";
 import { FirebaseContext } from "../../firebase/FirebaseContext";
 import LikeButton from "../../likes/LikeButton";
 import LikeCounter from "../../likes/LikeCounter";
+import FunctionLoader from "../../loaders/FunctionLoader";
 
 const ImageFunctions = (props) => {
   const { appUser } = useContext(FirebaseContext);
@@ -65,31 +66,35 @@ const ImageFunctions = (props) => {
       className="functionsWrapper"
       style={{ borderBottom: props.checkIfHomePage() && "none" }}
     >
-      <div className="functionsWrapperInner">
-        <LikeButton
-          id={props.id}
-          postLiked={postLiked}
-          handleLike={handleLike}
-        />
-        <Link to={`/p/${props.id}`}>
-          {" "}
-          <i
-            style={{ textDecoration: null, hover: null, active: null }}
-            className="ri-chat-3-line"
-          ></i>{" "}
-        </Link>
+      {props.profileIsLoading ? (
+        <FunctionLoader />
+      ) : (
+        <div className="functionsWrapperInner">
+          <LikeButton
+            id={props.id}
+            postLiked={postLiked}
+            handleLike={handleLike}
+          />
+          <Link to={`/p/${props.id}`}>
+            {" "}
+            <i
+              style={{ textDecoration: null, hover: null, active: null }}
+              className="ri-chat-3-line"
+            ></i>{" "}
+          </Link>
 
-        <div
-          className={"likesCounter"}
-          style={{
-            display:
-              likeCount === 0 && props.checkIfHomePage() ? "none" : "block",
-          }}
-        >
-          {" "}
-          <LikeCounter type={props.type} likeCount={likeCount} />
+          <div
+            className={"likesCounter"}
+            style={{
+              display:
+                likeCount === 0 && props.checkIfHomePage() ? "none" : "block",
+            }}
+          >
+            {" "}
+            <LikeCounter type={props.type} likeCount={likeCount} />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

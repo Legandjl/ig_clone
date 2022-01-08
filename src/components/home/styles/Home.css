@@ -43,8 +43,7 @@ i:hover {
   grid-template-rows: 4em auto auto auto;
   grid-template-columns: 1fr;
   min-width: 40em;
-
-  background-color: #d4d4d4;
+  background: linear-gradient(335deg, #f8f4f4, #e4e4e4);
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
@@ -154,4 +153,14 @@ i:hover {
 .imagesToggle p {
   font-weight: bold;
   cursor: pointer;
+}
+
+@media screen and (min-width: 1600px) {
+  .imageContainerHome img {
+    height: 60em;
+  }
+
+  .imagesToggle {
+    top: 6em;
+  }
 }
