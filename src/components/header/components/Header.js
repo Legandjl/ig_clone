@@ -40,12 +40,9 @@ const Header = () => {
   const notifications = notificationData.map((item, i) => {
     return (
       <NotificationElement
-        sentBy={item.sentBy}
         elementID={i}
-        photoURL={item.photoURL}
-        pid={item.pid}
-        id={item.id}
         refreshNotifications={refreshNotifications}
+        notification={item}
       />
     );
   });

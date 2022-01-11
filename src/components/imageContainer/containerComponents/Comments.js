@@ -53,9 +53,10 @@ const Comments = (props) => {
       >
         <input
           type="text"
-          placeholder={!props.profileIsLoading && "Add a comment..."}
+          placeholder={"Add a comment..."}
           value={commentText}
           onChange={handleChange}
+          style={{ color: props.profileIsLoading && " #edebeb" }}
         />
         <button
           style={{ color: props.profileIsLoading && " #edebeb" }}

@@ -40,7 +40,7 @@ const ImageFunctions = (props) => {
       });
 
       if (isLiked !== undefined) {
-        setPostIdentifier(isLiked.likeIdentifier);
+        setPostIdentifier(isLiked.id);
         setPostLiked(true);
       }
     }

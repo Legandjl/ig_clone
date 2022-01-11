@@ -20,7 +20,7 @@ const ProfileDisplay = (props) => {
     }
   }, [imageLoaded, loadImage, profile]);
 
-  return loadingProfile || props.imageData ? (
+  return loadingProfile || props.imageData || !imageLoaded ? (
     <ProfileDisplayLoader />
   ) : (
     <div className={"profileDisplay"}>

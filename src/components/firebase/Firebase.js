@@ -13,10 +13,8 @@ import {
   where,
   addDoc,
   Timestamp,
-  orderBy,
   deleteDoc,
   doc,
-  limit,
   getDoc,
   updateDoc,
   arrayUnion,
@@ -31,6 +29,15 @@ import {
 } from "firebase/storage";
 
 import { v4 as uuidv4 } from "uuid";
+import {
+  equalityQuery,
+  getFirstBatch,
+  getFirstFollowBatch,
+  getFollowBatch,
+  getNextBatch,
+  getUserImageBatch,
+  imageCommentQuery,
+} from "./Queries";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCRLLO5Ux_40PvV0-8LkX8S1RK2HIygY0Q",
@@ -50,6 +57,7 @@ const firebaseConfig = {
 const Firebase = () => {
   initializeApp(firebaseConfig);
   const db = getFirestore();
+
   const storage = getStorage();
   const auth = getAuth();
   const provider = new GoogleAuthProvider();
@@ -57,6 +65,10 @@ const Firebase = () => {
   const publicMethods = {};
   publicMethods.getAuth = () => {
     return auth;
+  };
+
+  publicMethods.getDatabase = () => {
+    return db;
   };
 
   //follow
@@ -67,40 +79,53 @@ const Firebase = () => {
   };
 
   const updateFollowers = async (uid, userUid) => {
-    const q = query(collection(db, "users"), where("uid", "==", uid), limit(1));
-    const docSnap = await getDocs(q);
+    const docSnap = await getDocs(equalityQuery(db, "users", "uid", uid));
     docSnap.forEach((item) => {
-      item.data().followers.includes(userUid)
-        ? updateDoc(item.ref, {
-            followers: arrayRemove(userUid),
-          })
-        : updateDoc(item.ref, {
-            followers: arrayUnion(userUid),
+      if (item.data().followers.includes(userUid)) {
+        updateDoc(item.ref, {
+          followers: arrayRemove(userUid),
+        });
+        const followQuery = query(
+          collection(db, "notifications"),
+          where("sentBy", "==", userUid),
+          where("type", "==", "follow")
+        );
+
+        getDocs(followQuery).then((res) => {
+          res.forEach((item) => {
+            deleteDoc(doc(db, "notifications", item.id));
           });
+        });
+      } else {
+        updateDoc(item.ref, {
+          followers: arrayUnion(userUid),
+        });
+        addDoc(collection(db, "notifications"), {
+          sentBy: userUid,
+          sentTo: uid,
+          type: "follow",
+        });
+      }
     });
   };
 
   const updateFollowing = async (uid, userUid) => {
-    const q = query(
-      collection(db, "users"),
-      where("uid", "==", userUid),
-      limit(1)
-    );
-    const docSnap = await getDocs(q);
+    const docSnap = await getDocs(equalityQuery(db, "users", "uid", userUid));
     docSnap.forEach((item) => {
-      item.data().following.includes(uid)
-        ? updateDoc(item.ref, {
-            following: arrayRemove(uid),
-          })
-        : updateDoc(item.ref, {
-            following: arrayUnion(uid),
-          });
+      if (!item.data().following.includes(uid)) {
+        updateDoc(item.ref, {
+          following: arrayUnion(uid),
+        });
+      } else {
+        updateDoc(item.ref, {
+          following: arrayRemove(uid),
+        });
+      }
     });
   };
 
   publicMethods.getFollowers = async (uid) => {
-    const q = query(collection(db, "users"), where("uid", "==", uid), limit(1));
-    const docSnap = await getDocs(q);
+    const docSnap = await getDocs(equalityQuery(db, "users", "uid", uid));
     let data = [];
     docSnap.forEach((item) => {
       data = [...item.data().followers];
@@ -109,8 +134,7 @@ const Firebase = () => {
   };
 
   publicMethods.getFollowing = async (uid) => {
-    const q = query(collection(db, "users"), where("uid", "==", uid), limit(1));
-    const docSnap = await getDocs(q);
+    const docSnap = await getDocs(equalityQuery(db, "users", "uid", uid));
     let data = [];
     docSnap.forEach((item) => {
       data = [...item.data().following];
@@ -121,7 +145,6 @@ const Firebase = () => {
   //likes
 
   publicMethods.likePost = async (appUser, pid, author) => {
-    console.log("liking");
     const ref = await addDoc(collection(db, "likes"), {
       uid: appUser.uid,
       pid: pid,
@@ -133,73 +156,49 @@ const Firebase = () => {
         sentTo: author,
         pid: pid,
         id: ref.id,
-        photoURL: appUser.profilePictureUrl,
+        type: "like",
       });
     }
   };
 
   publicMethods.unlikePost = async (id) => {
     await deleteDoc(doc(db, "likes", id));
-    await publicMethods.removeNotification(id);
-    /*
-    const q = query(collection(db, "notifications"), where("id", "==", id));
-    const docSnap = await getDocs(q);
+    const docSnap = await getDocs(equalityQuery(db, "notifications", "id", id));
     docSnap.forEach((item) => {
       deleteDoc(doc(db, "notifications", item.id));
-    });*/
+    });
   };
 
   publicMethods.getLikes = async (pid) => {
-    const q = query(collection(db, "likes"), where("pid", "==", pid));
-    const docSnap = await getDocs(q);
-    const data = [];
-    docSnap.forEach((doc) => {
-      const likeId = doc.id;
-      data.push({ ...doc.data(), likeIdentifier: likeId });
-    });
+    const data = await getData(equalityQuery(db, "likes", "pid", pid));
     return data;
   };
 
   // notifications
 
-  publicMethods.removeNotification = async (id) => {
-    const q = query(collection(db, "notifications"), where("id", "==", id));
-    const docSnap = await getDocs(q);
-    docSnap.forEach((item) => {
-      deleteDoc(doc(db, "notifications", item.id));
-    });
-  };
-
   publicMethods.getNotifications = async (uid) => {
-    const q = query(
-      collection(db, "notifications"),
-      where("sentTo", "==", uid)
+    const docSnap = await getDocs(
+      equalityQuery(db, "notifications", "sentTo", uid)
     );
-    const docSnap = await getDocs(q);
+
     const data = [];
     docSnap.forEach((doc) => {
-      data.push(doc.data());
+      data.push({ ...doc.data(), identifier: doc.id });
     });
-
     return data;
   };
 
   // user profiles
 
   publicMethods.checkForUser = async (username) => {
-    const q = query(collection(db, "users"), where("username", "==", username));
-    const docSnap = await getDocs(q);
+    const docSnap = await getDocs(
+      equalityQuery(db, "users", "username", username)
+    );
     return docSnap.empty;
   };
 
   publicMethods.getUserProfile = async (uid) => {
-    const q = query(collection(db, "users"), where("uid", "==", uid));
-    const docSnap = await getDocs(q);
-    console.log(docSnap.empty);
-    const data = [];
-    docSnap.forEach((doc) => {
-      data.push(doc.data());
-    });
+    const data = await getData(equalityQuery(db, "users", "uid", uid));
     return data[0];
   };
 
@@ -208,8 +207,7 @@ const Firebase = () => {
   publicMethods.signIn = async (username) => {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
-    const q = query(collection(db, "users"), where("uid", "==", user.uid));
-    const docSnap = await getDocs(q);
+    const docSnap = await getDocs(equalityQuery(db, "users", "uid", user.uid));
     if (docSnap.empty) {
       await addDoc(collection(db, "users"), {
         uid: user.uid,
@@ -254,25 +252,11 @@ const Firebase = () => {
       if (following.length === 0) {
         return [];
       }
-      q = query(
-        collection(db, "images"),
-        orderBy("timestamp", "desc"),
-        limit(2),
-        where("uploadedBy", "in", following)
-      );
+      q = getFirstFollowBatch(db, following);
     } else {
-      q = query(
-        collection(db, "images"),
-        orderBy("timestamp", "desc"),
-        limit(2)
-      );
+      q = getFirstBatch(db);
     }
-    const docSnap = await getDocs(q);
-    const data = [];
-    docSnap.forEach((doc) => {
-      const id = doc.id;
-      data.push({ ...doc.data(), id: id }); //add img ids here
-    });
+    const data = await getData(q);
     return data;
   };
 
@@ -283,42 +267,16 @@ const Firebase = () => {
       if (following.length === 0) {
         return [];
       }
-      q = query(
-        collection(db, "images"),
-        orderBy("timestamp", "desc"),
-        where("timestamp", "<", timestamp),
-        limit(2),
-        where("uploadedBy", "in", following)
-      );
+      q = getFollowBatch(db, timestamp, following);
     } else {
-      q = query(
-        collection(db, "images"),
-        orderBy("timestamp", "desc"),
-        where("timestamp", "<", timestamp),
-        limit(2)
-      );
+      q = getNextBatch(db, timestamp);
     }
-    const docSnap = await getDocs(q);
-    const data = [];
-    docSnap.forEach((doc) => {
-      const id = doc.id;
-      data.push({ ...doc.data(), id: id }); //add img ids here
-    });
+    const data = await getData(q);
     return data;
   };
 
   publicMethods.getUserImages = async (uid) => {
-    const q = query(
-      collection(db, "images"),
-      where("uploadedBy", "==", uid),
-      orderBy("timestamp", "asc")
-    );
-    const docSnap = await getDocs(q);
-    const data = [];
-    docSnap.forEach((doc) => {
-      const id = doc.id;
-      data.push({ ...doc.data(), id: id });
-    });
+    const data = await getData(getUserImageBatch(db, uid));
     return data;
   };
 
@@ -326,10 +284,6 @@ const Firebase = () => {
     const docRef = doc(db, "images", id);
     const docSnap = await getDoc(docRef);
     return docSnap.data();
-  };
-
-  publicMethods.deleteData = async (id, type) => {
-    await deleteDoc(doc(db, type, id));
   };
 
   //comments
@@ -349,11 +303,15 @@ const Firebase = () => {
   };
 
   publicMethods.getImageComments = async (imgId) => {
-    const q = query(
-      collection(db, "comments"),
-      where("imageId", "==", imgId),
-      orderBy("timestamp", "asc")
-    );
+    const data = await getData(imageCommentQuery(db, imgId));
+    return data;
+  };
+
+  publicMethods.deleteData = async (id, type) => {
+    await deleteDoc(doc(db, type, id));
+  };
+
+  const getData = async (q) => {
     const docSnap = await getDocs(q);
     const data = [];
     docSnap.forEach((doc) => {

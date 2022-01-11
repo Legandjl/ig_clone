@@ -3,23 +3,17 @@ finalise all current features
 
 
 notifications menu needs to refrsh on open
-make use of app user profile instead of auth  --- x
+send notification on follow
 
+profile display needs to load once all info is there instead of flickering
 
 user profile page needs work
 use scroll same as home pages - load 6 at a time?
-poassible caption on file uploads
 
-then
 
-comment deletion
-upload deletion
 
 stretch 
 
-search functionality
-follow functionality
-home screen populated by follows
 
 
 

@@ -8,7 +8,9 @@ const ProfileDetails = (props) => {
   const { appUser } = useContext(FirebaseContext);
   const [following, handleFollow, refreshFollowing, followers, loadingData] =
     useFollow(profile.uid);
-  const styling = { fontSize: "1.1em" };
+  const styling = { fontSize: "1.1em", fontWeight: "bold" };
+
+  // needs styling clean up 09/01
 
   return (
     <div className={"profileDisplayInformation"}>
@@ -22,9 +24,44 @@ const ProfileDetails = (props) => {
           gridGap: "6px",
         }}
       >
-        <p style={styling}>{props.postCount} Posts</p>
-        <p style={styling}>{following.length} Following</p>
-        <p style={styling}>{followers.length} Followers</p>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "auto auto",
+            gridGap: 5,
+            alignItems: "center",
+          }}
+        >
+          {" "}
+          <p style={styling}>{props.postCount}</p>
+          <p>Posts</p>
+        </div>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "auto auto",
+            gridGap: 5,
+            alignItems: "center",
+          }}
+        >
+          {" "}
+          <p style={styling}>{following.length}</p>
+          <p>Following</p>
+        </div>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "auto auto",
+            gridGap: 5,
+            alignItems: "center",
+          }}
+        >
+          {" "}
+          <p style={styling}>{followers.length}</p>
+          <p>Followers</p>
+        </div>
       </div>
       {appUser.uid !== profile.uid && (
         <FollowButton

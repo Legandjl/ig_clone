@@ -11,7 +11,6 @@ const useDataLoader = (cb, dataParam) => {
   const nav = useNavigate();
 
   useEffect(() => {
-    console.log("loading");
     const getData = async () => {
       setLoadingInProcess(true);
       setLoadingComplete(false);

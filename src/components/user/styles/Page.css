@@ -1,6 +1,5 @@
 .pageWrap {
   display: grid;
-
   grid-gap: 1em;
   grid-template-columns: auto 1fr auto;
   grid-auto-rows: min-content;
@@ -18,11 +17,13 @@
   justify-items: center;
   align-items: center;
   grid-gap: 5em;
-  margin-bottom: 3em;
   width: 100%;
   max-width: 75em;
   justify-self: center;
   min-height: 10em;
+  border-bottom: solid #dbdbdb 1px;
+  padding-bottom: 1.5em;
+  margin-bottom: 1.5em;
 }
 
 .profileDisplayImage {
@@ -76,14 +77,14 @@
 }
 
 .followButton {
-  height: 1.8em;
+  height: 2em;
   outline: none;
   border: none;
   justify-self: start;
-  width: 5em;
+  width: 5.5em;
   background-color: #272528;
   color: white;
-  border-radius: 6px;
+  border-radius: 3px;
   font-weight: bold;
   transition: all 0.09s ease-in-out;
 }

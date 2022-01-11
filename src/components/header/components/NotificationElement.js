@@ -1,56 +1,59 @@
-import { Link } from "react-router-dom";
 import { useEffect, useState } from "react/cjs/react.development";
+import useDataLoader from "../../../hooks/useDataLoader";
 import useImageLoader from "../../../hooks/useImageLoader";
-import user from "../../../images/user.png";
 import { Firebase } from "../../firebase/Firebase";
+import FollowNotification from "./FollowNotification";
+import LikeNotification from "./LikeNotification";
 
 // link needs to be onclick use nav redirect
 // as it doesnt work if not on home page
 // needs image loader for notification
 
 const NotificationElement = (props) => {
+  const [show, setShow] = useState(true);
   const [imageLoaded, loadImage, imageError] = useImageLoader();
-  const { removeNotification } = Firebase();
+  const { getUserProfile, deleteData } = Firebase();
+  const [loadingComplete, loadingData, data, reloadData] = useDataLoader(
+    getUserProfile,
+    props.notification.sentBy
+  );
 
   useEffect(() => {
-    if (!imageLoaded) {
-      loadImage(props.photoURL);
+    if (!imageLoaded && data) {
+      loadImage(data.profilePictureUrl);
     }
-  }, [imageLoaded, loadImage, props.photoURL]);
+  }, [data, imageLoaded, loadImage, loadingData]);
 
   const deleteNotification = async () => {
-    await removeNotification(props.id);
+    await deleteData(props.notification.identifier, "notifications");
     props.refreshNotifications();
     setShow(false);
   };
-  const [show, setShow] = useState(true);
-  return (
-    show && (
-      <div
-        className="notification"
-        key={props.elementID}
-        data-notifications={true}
-      >
-        <Link to={`user/${props.sentBy}`} data-notifications={true}>
-          {" "}
-          <img
-            alt={"user icon"}
-            style={{ width: 35, height: 35, borderRadius: 50, marginRight: 5 }}
-            src={imageLoaded ? props.photoURL : user}
-            data-notifications={true}
-          />{" "}
-        </Link>{" "}
-        {"likes your "}
-        <Link to={`/p/${props.pid}`} data-notifications={true}>
-          {" post"}
-        </Link>
-        <i
-          className="ri-close-circle-line"
-          data-notifications={true}
-          onClick={deleteNotification}
-        ></i>
-      </div>
+
+  // if type == "like" return <LikeNotification /> else return <FollowNotification />
+
+  return props.notification.type === "like" ? (
+    !loadingData && (
+      <LikeNotification
+        deleteNotification={deleteNotification}
+        imageError={imageError}
+        notification={props.notification}
+        elementID={props.elementID}
+        data={data}
+        show={show}
+        imageLoaded={imageLoaded}
+      />
     )
+  ) : (
+    <FollowNotification
+      deleteNotification={deleteNotification}
+      imageError={imageError}
+      notification={props.notification}
+      elementID={props.elementID}
+      data={data}
+      show={show}
+      imageLoaded={imageLoaded}
+    />
   );
 };
 

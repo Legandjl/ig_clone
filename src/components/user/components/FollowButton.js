@@ -11,7 +11,7 @@ const FollowButton = (props) => {
 
   return (
     <button className={"followButton"} onClick={handleClick}>
-      {!props.followers.includes(appUser.uid) ? "Follow" : "Unfollow"}{" "}
+      {props.followers.includes(appUser.uid) ? "Unfollow" : "Follow"}{" "}
     </button>
   );
 };

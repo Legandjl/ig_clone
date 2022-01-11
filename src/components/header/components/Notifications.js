@@ -2,7 +2,7 @@ const Notifications = (props) => {
   const open = { display: "block" };
   const closed = { display: "none" };
 
-  // needs to return a loader if notifications data loading
+  // needs to return a loader if notifications data
 
   return (
     <div
