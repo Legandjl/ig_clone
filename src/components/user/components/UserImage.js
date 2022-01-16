@@ -4,11 +4,13 @@ import { Firebase } from "../../firebase/Firebase";
 import UserPageImageLoader from "../../loaders/UserPageImageLoader";
 import useImageLoader from "../../../hooks/useImageLoader";
 import useDataLoader from "../../../hooks/useDataLoader";
+import userImg from "../../../images/user.png";
 
 const UserImage = (props) => {
   const { element, profileLoaded } = props;
   const [isHovered, setIsHovered] = useState(false);
   const [imageLoaded, loadImage] = useImageLoader();
+  const [userImageLoaded, loadUserImage] = useImageLoader();
   const { getLikes } = Firebase();
   const [loadingComplete, loadingLikes, likes, refreshLikes] = useDataLoader(
     getLikes,
@@ -19,7 +21,17 @@ const UserImage = (props) => {
     if (!imageLoaded) {
       loadImage(element.downloadUrl);
     }
-  }, [element.downloadUrl, imageLoaded, loadImage]);
+
+    if (!userImageLoaded) {
+      loadUserImage(userImg);
+    }
+  }, [
+    element.downloadUrl,
+    imageLoaded,
+    loadImage,
+    loadUserImage,
+    userImageLoaded,
+  ]);
 
   return (
     <div className="imageFrame">
@@ -28,7 +40,7 @@ const UserImage = (props) => {
         {imageLoaded && profileLoaded ? (
           <img src={element.downloadUrl} alt={"userUpload"}></img>
         ) : (
-          <UserPageImageLoader />
+          userImageLoaded && <UserPageImageLoader src={userImg} />
         )}
         {imageLoaded && (
           <div

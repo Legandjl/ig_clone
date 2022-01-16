@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import user from "./user.png";
 
-const UserPageImageLoader = () => {
+const UserPageImageLoader = (props) => {
   const [backgroundColor, setbackgroundColor] = useState("#D4D4D4");
   const [colorIndex, setColorIndex] = useState(0);
 
   useEffect(() => {
     let isMounted = true;
     const colors = ["#D5D5D5", "#D7D7D7", "#D8D8D8"];
+
     setTimeout(() => {
       if (isMounted.current) {
         setbackgroundColor(colors[colorIndex]);
@@ -25,8 +25,8 @@ const UserPageImageLoader = () => {
   }, [colorIndex]);
 
   return (
-    <div style={{ backgroundColor: backgroundColor }}>
-      <img src={user} style={{ opacity: "0" }} alt={"loader"} />
+    <div style={{ backgroundColor: backgroundColor, height: "100%" }}>
+      <img src={props.src} style={{ opacity: "0" }} alt={"loader"} />
     </div>
   );
 };
