@@ -40,7 +40,6 @@
   height: auto;
   min-height: 1em;
   max-height: 20em;
-  overflow-y: scroll;
   background-color: #ffffff;
   top: 101%;
   right: 22vw;
@@ -48,6 +47,14 @@
   border-radius: 4px;
   transition: all ease-in-out 0.08s;
   padding: 0.5em;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* for Internet Explorer, Edge */
+  scrollbar-width: none; /* for Firefox */
+}
+
+.notificationsMenu::-webkit-scrollbar {
+  display: none; /* Safari and Chrome browsers */
 }
 
 .notification {

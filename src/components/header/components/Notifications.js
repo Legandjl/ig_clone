@@ -2,8 +2,6 @@ const Notifications = (props) => {
   const open = { display: "block" };
   const closed = { display: "none" };
 
-  // needs to return a loader if notifications data
-
   return (
     <div
       className="notificationsMenu"
@@ -13,7 +11,14 @@ const Notifications = (props) => {
       {props.allNotifications.length > 0 ? (
         props.allNotifications
       ) : (
-        <p style={{ justifySelf: "center", textAlign: "center" }}>
+        <p
+          style={{
+            justifySelf: "center",
+            textAlign: "center",
+            marginTop: "0.8em",
+            marginBottom: "0.8em",
+          }}
+        >
           No notifications to show
         </p>
       )}

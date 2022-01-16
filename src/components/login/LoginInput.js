@@ -1,4 +1,9 @@
-const LoginInput = ({ handleChange, username, isNameAvailable }) => {
+const LoginInput = ({
+  handleChange,
+  username,
+  isNameAvailable,
+  isLoggingIn,
+}) => {
   return (
     <>
       <div>
@@ -29,7 +34,9 @@ const LoginInput = ({ handleChange, username, isNameAvailable }) => {
               username.length < 3 ? "grey" : isNameAvailable ? "green" : "Red",
           }}
         >
-          {username.length < 3
+          {isLoggingIn
+            ? "Logging in..."
+            : username.length < 3
             ? "3-10 characters"
             : !isNameAvailable
             ? "Username already in use"

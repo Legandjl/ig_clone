@@ -1,45 +1,58 @@
 import { collection, limit, orderBy, query, where } from "firebase/firestore";
 
 const getFollowBatch = (db, timestamp, following) => {
-  const q = query(
+  return query(
     collection(db, "images"),
     orderBy("timestamp", "desc"),
     where("timestamp", "<", timestamp),
     where("uploadedBy", "in", following),
     limit(2)
   );
-  return q;
+};
+
+const getUserBatch = (db, uid) => {
+  return query(
+    collection(db, "images"),
+    orderBy("timestamp", "desc"),
+    limit(3),
+    where("uploadedBy", "==", uid)
+  );
+};
+
+const getNextUserBatch = (db, timestamp, uid) => {
+  return query(
+    collection(db, "images"),
+    orderBy("timestamp", "desc"),
+    limit(3),
+    where("uploadedBy", "==", uid),
+    where("timestamp", "<", timestamp)
+  );
 };
 
 const getNextBatch = (db, timestamp) => {
-  const q = query(
+  return query(
     collection(db, "images"),
     orderBy("timestamp", "desc"),
     where("timestamp", "<", timestamp),
     limit(2)
   );
-  return q;
 };
 
 const getFirstFollowBatch = (db, following) => {
-  const q = query(
+  return query(
     collection(db, "images"),
     orderBy("timestamp", "desc"),
     limit(2),
     where("uploadedBy", "in", following)
   );
-
-  return q;
 };
 
 const getFirstBatch = (db) => {
-  const q = query(
+  return query(
     collection(db, "images"),
     orderBy("timestamp", "desc"),
     limit(2)
   );
-
-  return q;
 };
 
 const getUserImageBatch = (db, uid) => {
@@ -58,6 +71,14 @@ const imageCommentQuery = (db, id) => {
   );
 };
 
+const followQuery = (db, userUid) => {
+  return query(
+    collection(db, "notifications"),
+    where("sentBy", "==", userUid),
+    where("type", "==", "follow")
+  );
+};
+
 const equalityQuery = (db, collectionName, paramName, paramCheck) => {
   return query(
     collection(db, collectionName),
@@ -73,4 +94,7 @@ export {
   imageCommentQuery,
   getUserImageBatch,
   equalityQuery,
+  followQuery,
+  getUserBatch,
+  getNextUserBatch,
 };

@@ -73,6 +73,7 @@ const Login = () => {
             handleChange={handleChange}
             username={username}
             isNameAvailable={isNameAvailable}
+            isLoggingIn={isLoggingIn}
           />
           <button
             disabled={signupDisabled}

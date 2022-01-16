@@ -1,4 +1,4 @@
-import { useContext } from "react/cjs/react.development";
+import { useContext } from "react";
 import { FirebaseContext } from "../../firebase/FirebaseContext";
 
 const FollowButton = (props) => {
@@ -11,7 +11,11 @@ const FollowButton = (props) => {
 
   return (
     <button className={"followButton"} onClick={handleClick}>
-      {props.followers.includes(appUser.uid) ? "Unfollow" : "Follow"}{" "}
+      {!props.loadingData
+        ? props.followers.includes(appUser.uid)
+          ? "Unfollow"
+          : "Follow"
+        : "..."}{" "}
     </button>
   );
 };

@@ -8,8 +8,7 @@ import Footer from "../footer/Footer";
 import ImagePage from "../imagepage/ImagePage";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Page from "../user/components/Page";
-import { useEffect } from "react/cjs/react.development";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { FirebaseContext } from "../firebase/FirebaseContext";
 import ImageLoadError from "../home/errors/ImageLoadError";
 

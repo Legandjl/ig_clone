@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react/cjs/react.development";
+import { useEffect, useState } from "react";
 import { Firebase } from "../../firebase/Firebase";
 import UserPageImageLoader from "../../loaders/UserPageImageLoader";
 import useImageLoader from "../../../hooks/useImageLoader";
 import useDataLoader from "../../../hooks/useDataLoader";
 
-const UserImage = ({ element }) => {
+const UserImage = (props) => {
+  const { element, profileLoaded } = props;
   const [isHovered, setIsHovered] = useState(false);
   const [imageLoaded, loadImage] = useImageLoader();
   const { getLikes } = Firebase();
@@ -21,10 +22,10 @@ const UserImage = ({ element }) => {
   }, [element.downloadUrl, imageLoaded, loadImage]);
 
   return (
-    <div className="imageFrame" style={{}}>
+    <div className="imageFrame">
       <Link to={`/p/${element.id}`}>
         {" "}
-        {imageLoaded ? (
+        {imageLoaded && profileLoaded ? (
           <img src={element.downloadUrl} alt={"userUpload"}></img>
         ) : (
           <UserPageImageLoader />
@@ -40,15 +41,7 @@ const UserImage = ({ element }) => {
             }}
           >
             {" "}
-            <div
-              className="countWrap"
-              style={{
-                display: "grid",
-                gridTemplateColumns: "auto auto",
-                alignItems: "center",
-                gridGap: 3,
-              }}
-            >
+            <div className="countWrap">
               <i
                 className="ri-heart-fill"
                 style={{
@@ -57,7 +50,7 @@ const UserImage = ({ element }) => {
                   display: isHovered ? "inline" : "none",
                 }}
               ></i>
-              {loadingComplete && likes.length > 0 && (
+              {loadingComplete && (
                 <p
                   style={{
                     display: isHovered ? "inline" : "none",

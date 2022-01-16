@@ -1,7 +1,6 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useContext, useState } from "react";
 import Cropper from "react-easy-crop";
 import { useNavigate } from "react-router";
-import { useContext, useState } from "react/cjs/react.development";
 import useMountCheck from "../../hooks/useMountCheck";
 import { FileContext } from "../filepicker/FileContext";
 import SubmitLoader from "../loaders/SubmitLoader";

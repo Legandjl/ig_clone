@@ -1,5 +1,3 @@
-import Loader from "react-loader-spinner";
-
 const CommentsLoader = (props) => {
   return (
     <li style={{ marginBottom: 0, marginTop: 0 }}>

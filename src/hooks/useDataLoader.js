@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router";
-import { useEffect, useState } from "react/cjs/react.development";
+import { useEffect, useState } from "react";
 import useMountCheck from "./useMountCheck";
 
 const useDataLoader = (cb, dataParam) => {
   const [loadingComplete, setLoadingComplete] = useState(false);
   const [loadingInProcess, setLoadingInProcess] = useState(false);
+  const [initialLoad, setInitialLoad] = useState(true);
   const [data, setData] = useState(null);
   const [loadingData, setLoadingData] = useState(true);
   const [isMounted] = useMountCheck();
@@ -21,6 +22,7 @@ const useDataLoader = (cb, dataParam) => {
         setLoadingComplete(true);
         setLoadingData(false);
         setLoadingInProcess(false);
+        setInitialLoad(false);
       }
     };
     if (loadingData && !loadingInProcess) {
@@ -33,10 +35,11 @@ const useDataLoader = (cb, dataParam) => {
   }, [cb, data, dataParam, isMounted, loadingData, loadingInProcess, nav]);
 
   const reloadData = () => {
+    console.log("reloading");
     setLoadingData(true);
   };
 
-  return [loadingComplete, loadingData, data, reloadData];
+  return [loadingComplete, loadingData, data, reloadData, initialLoad];
 };
 
 export default useDataLoader;

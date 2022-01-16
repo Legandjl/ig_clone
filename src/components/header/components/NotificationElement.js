@@ -1,16 +1,10 @@
-import { useEffect, useState } from "react/cjs/react.development";
+import { useEffect } from "react";
 import useDataLoader from "../../../hooks/useDataLoader";
 import useImageLoader from "../../../hooks/useImageLoader";
 import { Firebase } from "../../firebase/Firebase";
-import FollowNotification from "./FollowNotification";
-import LikeNotification from "./LikeNotification";
-
-// link needs to be onclick use nav redirect
-// as it doesnt work if not on home page
-// needs image loader for notification
+import Notification from "./Notification";
 
 const NotificationElement = (props) => {
-  const [show, setShow] = useState(true);
   const [imageLoaded, loadImage, imageError] = useImageLoader();
   const { getUserProfile, deleteData } = Firebase();
   const [loadingComplete, loadingData, data, reloadData] = useDataLoader(
@@ -27,33 +21,20 @@ const NotificationElement = (props) => {
   const deleteNotification = async () => {
     await deleteData(props.notification.identifier, "notifications");
     props.refreshNotifications();
-    setShow(false);
   };
 
-  // if type == "like" return <LikeNotification /> else return <FollowNotification />
-
-  return props.notification.type === "like" ? (
+  return (
     !loadingData && (
-      <LikeNotification
+      <Notification
         deleteNotification={deleteNotification}
         imageError={imageError}
         notification={props.notification}
         elementID={props.elementID}
         data={data}
-        show={show}
         imageLoaded={imageLoaded}
+        redirect={props.redirect}
       />
     )
-  ) : (
-    <FollowNotification
-      deleteNotification={deleteNotification}
-      imageError={imageError}
-      notification={props.notification}
-      elementID={props.elementID}
-      data={data}
-      show={show}
-      imageLoaded={imageLoaded}
-    />
   );
 };
 

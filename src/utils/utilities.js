@@ -8,7 +8,9 @@ const getDifference = (date2) => {
 
   if (Difference_In_Minutes < 60) {
     const returnDiff = Math.abs(Math.round(Difference_In_Minutes));
-    return returnDiff <= 1
+    return returnDiff < 1
+      ? "< 1 minute ago"
+      : returnDiff === 1
       ? returnDiff + " minute ago"
       : returnDiff + " minutes ago";
   }
@@ -23,7 +25,11 @@ const getDifference = (date2) => {
 
   const returnDiff = Math.abs(Math.round(Difference_In_Days));
 
-  return returnDiff === 1 ? returnDiff + " day ago" : returnDiff + " days ago";
+  return returnDiff === 1
+    ? returnDiff + " day ago"
+    : returnDiff > 365
+    ? "Over a year ago"
+    : returnDiff + " days ago";
 };
 
 export default getDifference;

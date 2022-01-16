@@ -1,76 +1,58 @@
-import { useContext } from "react/cjs/react.development";
+import { useContext, useEffect } from "react";
 import useFollow from "../../../hooks/useFollow";
 import { FirebaseContext } from "../../firebase/FirebaseContext";
 import FollowButton from "./FollowButton";
+import user from "../../../images/user.png";
+import ProfileDisplayLoader from "../../loaders/ProfileDisplayLoader";
+import ProfileDetailsDisplay from "./ProfileDetailsDisplay";
 
 const ProfileDetails = (props) => {
   const { profile } = props;
   const { appUser } = useContext(FirebaseContext);
-  const [following, handleFollow, refreshFollowing, followers, loadingData] =
-    useFollow(profile.uid);
-  const styling = { fontSize: "1.1em", fontWeight: "bold" };
+  const [
+    following,
+    handleFollow,
+    refreshFollowing,
+    followers,
+    loadingData,
+    initialLoad,
+  ] = useFollow(profile.uid);
 
-  // needs styling clean up 09/01
+  useEffect(() => {
+    if (initialLoad === false) {
+      props.triggerImageLoad();
+    }
+  }, [initialLoad, props]);
 
-  return (
-    <div className={"profileDisplayInformation"}>
-      <p style={{ alignSelf: "start", fontSize: "2em" }}>{profile.username}</p>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "auto auto auto",
-          justifyItems: "start",
-          textAlign: "center",
-          gridGap: "6px",
-        }}
-      >
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "auto auto",
-            gridGap: 5,
-            alignItems: "center",
-          }}
-        >
-          {" "}
-          <p style={styling}>{props.postCount}</p>
-          <p>Posts</p>
-        </div>
-
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "auto auto",
-            gridGap: 5,
-            alignItems: "center",
-          }}
-        >
-          {" "}
-          <p style={styling}>{following.length}</p>
-          <p>Following</p>
-        </div>
-
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "auto auto",
-            gridGap: 5,
-            alignItems: "center",
-          }}
-        >
-          {" "}
-          <p style={styling}>{followers.length}</p>
-          <p>Followers</p>
-        </div>
+  return initialLoad ? (
+    <ProfileDisplayLoader />
+  ) : (
+    <div className="profileDisplay">
+      <div className={"profileDisplayImage"}>
+        <img
+          className={"userImg"}
+          src={!props.imageError ? profile.profilePictureUrl : user}
+          alt={"userprofile"}
+        ></img>
       </div>
-      {appUser.uid !== profile.uid && (
-        <FollowButton
+      <div className={"profileDisplayInformation"}>
+        <ProfileDetailsDisplay
           profile={profile}
-          handleFollow={handleFollow}
-          refreshFollowing={refreshFollowing}
+          postCount={props.postCount}
+          following={following}
           followers={followers}
         />
-      )}
+
+        {appUser.uid !== profile.uid && (
+          <FollowButton
+            profile={profile}
+            handleFollow={handleFollow}
+            refreshFollowing={refreshFollowing}
+            followers={followers}
+            loadingData={loadingData}
+          />
+        )}
+      </div>
     </div>
   );
 };

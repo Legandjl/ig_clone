@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react/cjs/react.development";
+import { useEffect, useState } from "react";
 
 const useScroll = () => {
   const [bottom, setBottom] = useState(false);
@@ -7,6 +7,7 @@ const useScroll = () => {
     setBottom(false);
   };
   useEffect(() => {
+    console.log("scrolling");
     const handleScroll = () => {
       const bottom =
         Math.ceil(window.innerHeight + window.scrollY) >=

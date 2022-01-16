@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react/cjs/react.development";
+import { useEffect, useRef } from "react";
 
 const useMountCheck = () => {
   const isMounted = useRef(false);

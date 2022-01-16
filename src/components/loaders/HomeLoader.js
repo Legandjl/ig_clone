@@ -1,6 +1,6 @@
 import Loader from "react-loader-spinner";
 
 const HomeLoader = (props) => {
-  return <Loader type="ThreeDots" color="#272528" height={40} width={40} />;
+  return <Loader type="ThreeDots" color="#272528" height={20} width={20} />;
 };
 export default HomeLoader;

@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useContext, useEffect } from "react/cjs/react.development";
+import { useContext, useEffect } from "react";
 import useImageLoader from "../../../hooks/useImageLoader";
 import useShowMenu from "../../../hooks/useMenuToggle";
 import user from "../../../images/user.png";

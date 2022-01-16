@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { useState } from "react/cjs/react.development";
+import { useEffect, useState } from "react";
+
 import { Firebase } from "../components/firebase/Firebase";
 import useMountCheck from "./useMountCheck";
 
@@ -7,6 +7,7 @@ const useFollow = (uid) => {
   const { handleFollow, getFollowing, getFollowers } = Firebase();
   const [following, setFollowing] = useState([]);
   const [followers, setFollowers] = useState([]);
+  const [initialLoad, setInitialLoad] = useState(true);
   const [loadingFollowing, setLoadingFollowing] = useState(true);
   const [loadingInProcess, setLoadingInProcess] = useState(true);
   const [isMounted] = useMountCheck();
@@ -20,6 +21,7 @@ const useFollow = (uid) => {
         setFollowers(followerData);
         setLoadingFollowing(false);
         setLoadingInProcess(false);
+        setInitialLoad(false);
       }
     };
     if (loadingFollowing && loadingInProcess && uid) {
@@ -45,6 +47,7 @@ const useFollow = (uid) => {
     refreshFollowing,
     followers,
     loadingInProcess,
+    initialLoad,
   ];
 };
 

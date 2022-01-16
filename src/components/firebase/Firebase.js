@@ -31,6 +31,7 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import {
   equalityQuery,
+  followQuery,
   getFirstBatch,
   getFirstFollowBatch,
   getFollowBatch,
@@ -57,18 +58,12 @@ const firebaseConfig = {
 const Firebase = () => {
   initializeApp(firebaseConfig);
   const db = getFirestore();
-
   const storage = getStorage();
   const auth = getAuth();
   const provider = new GoogleAuthProvider();
-
   const publicMethods = {};
   publicMethods.getAuth = () => {
     return auth;
-  };
-
-  publicMethods.getDatabase = () => {
-    return db;
   };
 
   //follow
@@ -85,13 +80,7 @@ const Firebase = () => {
         updateDoc(item.ref, {
           followers: arrayRemove(userUid),
         });
-        const followQuery = query(
-          collection(db, "notifications"),
-          where("sentBy", "==", userUid),
-          where("type", "==", "follow")
-        );
-
-        getDocs(followQuery).then((res) => {
+        getDocs(followQuery(db, userUid)).then((res) => {
           res.forEach((item) => {
             deleteDoc(doc(db, "notifications", item.id));
           });
@@ -104,6 +93,7 @@ const Firebase = () => {
           sentBy: userUid,
           sentTo: uid,
           type: "follow",
+          read: false,
         });
       }
     });
@@ -157,6 +147,7 @@ const Firebase = () => {
         pid: pid,
         id: ref.id,
         type: "like",
+        read: false,
       });
     }
   };

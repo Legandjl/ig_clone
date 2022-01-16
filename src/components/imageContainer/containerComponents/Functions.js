@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useContext, useEffect, useState } from "react/cjs/react.development";
+import { useContext, useEffect, useState } from "react";
 import useMountCheck from "../../../hooks/useMountCheck";
 import { Firebase } from "../../firebase/Firebase";
 import { FirebaseContext } from "../../firebase/FirebaseContext";
@@ -75,6 +75,7 @@ const ImageFunctions = (props) => {
             postLiked={postLiked}
             handleLike={handleLike}
           />
+
           <Link to={`/p/${props.id}`}>
             {" "}
             <i

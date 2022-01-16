@@ -127,8 +127,9 @@ i:hover {
 }
 
 .commentsOuter {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* mozilla */
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* for Internet Explorer, Edge */
+  scrollbar-width: none; /* for Firefox */
 }
 
 .displayImage {
@@ -157,10 +158,24 @@ i:hover {
 
 @media screen and (min-width: 1600px) {
   .imageContainerHome img {
-    height: 60em;
+    height: 50em;
+  }
+
+  .imageContainer img {
+    height: auto;
+    max-height: 50em;
+    width: 50em;
   }
 
   .imagesToggle {
     top: 6em;
+  }
+
+  .imageContainerHome {
+    min-width: 50em;
+  }
+
+  .socialArea {
+    height: 50em;
   }
 }

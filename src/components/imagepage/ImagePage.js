@@ -1,9 +1,9 @@
-import { useParams } from "react-router";
+import { useLocation, useParams } from "react-router";
+import { useEffect } from "react";
 import useDataLoader from "../../hooks/useDataLoader";
 import { Firebase } from "../firebase/Firebase";
 import ImageContainer from "../imageContainer/containerTypes/ImageContainer";
-
-//refactored 05/12
+import HomeLoader from "../loaders/HomeLoader";
 
 const ImagePage = () => {
   const { id } = useParams();
@@ -14,15 +14,24 @@ const ImagePage = () => {
     id
   );
 
-  return (
-    image && (
-      <ImageContainer
-        imageID={id}
-        src={image.downloadUrl}
-        type={"ImagePage"}
-        author={image.uploadedBy}
-      />
-    )
+  const location = useLocation();
+  useEffect(() => {
+    reloadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.key]);
+
+  return loadingImage ? (
+    <div style={{ justifySelf: "center", alignSelf: "center", gridRow: "2" }}>
+      <HomeLoader />
+    </div>
+  ) : (
+    <ImageContainer
+      imageID={id}
+      src={image.downloadUrl}
+      type={"ImagePage"}
+      author={image.uploadedBy}
+      key={location.key}
+    />
   );
 };
 
