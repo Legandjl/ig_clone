@@ -5,6 +5,8 @@ const Notification = (props) => {
     await props.deleteNotification();
   };
 
+  console.log(props.unread);
+
   return (
     props.imageLoaded && (
       <div

@@ -52,11 +52,26 @@ const HeaderIcons = (props) => {
       )}
 
       <i
+        style={{ position: "relative" }}
         className={props.menuToggle ? "ri-heart-fill" : heartIcon}
         onMouseOver={() => setHeartIcon("ri-heart-fill")}
         onMouseLeave={() => setHeartIcon("ri-heart-line")}
         ref={node}
-      ></i>
+      >
+        {props.unread > 0 && (
+          <p
+            style={{
+              position: "absolute",
+              top: 0,
+              fontSize: "0.6em",
+              fontWeight: "bold",
+              left: "100%",
+            }}
+          >
+            {props.unread <= 9 ? props.unread : "9+"}
+          </p>
+        )}
+      </i>
       <FilePicker />
       <i
         className={logoutIcon}

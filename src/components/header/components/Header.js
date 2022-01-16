@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FileContext } from "../../filepicker/FileContext";
 import { FirebaseContext } from "../../firebase/FirebaseContext";
 import CropTool from "../../imageCropUtils/CropTool";
@@ -15,6 +15,7 @@ import useNotifications from "../../../hooks/useNotifications";
 const Header = () => {
   const { auth } = useContext(FirebaseContext);
   const { isCropping, imageSrc } = useContext(FileContext);
+  const [unreadNotifications, setUnread] = useState(0);
 
   const nav = useNavigate();
   const location = useLocation();
@@ -35,11 +36,25 @@ const Header = () => {
     }
   };
 
+  useEffect(() => {
+    refreshNotifications();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.key]);
+  //refresh notifications on navigation
+
   const handleRedirect = (loc) => {
     console.log(loc);
     nav(loc, { replace: "true" });
     hideNotifications();
   };
+
+  useEffect(() => {
+    const unread = notificationData.filter((data) => {
+      return !data.read;
+    });
+
+    setUnread(unread);
+  }, [notificationData]);
 
   const notifications = notificationData.map((item, i) => {
     return (
@@ -68,7 +83,7 @@ const Header = () => {
           showNotifications={showNotifications}
           hideNotifications={hideNotifications}
           menuToggle={menuToggle}
-          unread={notificationData.length}
+          unread={unreadNotifications.length}
         />
       )}
       <Notifications menuToggle={menuToggle} allNotifications={notifications} />

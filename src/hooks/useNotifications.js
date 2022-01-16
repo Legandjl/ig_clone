@@ -9,7 +9,8 @@ const useNotifications = () => {
   const { appUser } = useContext(FirebaseContext);
   const [notificationsLoading, setNotificationsLoading] = useState(true);
   const [notificationData, setNotificationsData] = useState([]);
-  const { getNotifications } = Firebase();
+
+  const { getNotifications, readNotification } = Firebase();
   const [isMounted] = useMountCheck();
 
   useEffect(() => {
@@ -30,11 +31,20 @@ const useNotifications = () => {
     setNotificationsLoading(true);
   };
 
-  const showNotifications = () => {
+  const showNotifications = async () => {
+    await updateRead();
     refreshNotifications();
     setMenuToggle((prev) => {
       return !prev;
     });
+  };
+
+  const updateRead = async () => {
+    for (const item of notificationData) {
+      if (!item.read) {
+        await readNotification(item.identifier);
+      }
+    }
   };
 
   const hideNotifications = () => {

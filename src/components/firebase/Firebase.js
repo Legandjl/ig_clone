@@ -179,6 +179,13 @@ const Firebase = () => {
     return data;
   };
 
+  publicMethods.readNotification = async (id) => {
+    const ref = doc(db, "notifications", id);
+    await updateDoc(ref, {
+      read: true,
+    });
+  };
+
   // user profiles
 
   publicMethods.checkForUser = async (username) => {
