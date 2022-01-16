@@ -6,7 +6,8 @@ import { Link } from "react-router-dom";
 import { useRef } from "react";
 
 const HeaderIcons = (props) => {
-  const [heartIcon, setHeartIcon] = useState("ri-heart-line");
+  const [hovered, setHovered] = useState(false);
+
   const [logoutIcon, setLogoutIcon] = useState("ri-logout-box-r-line");
   const [homeIcon, setHomeIcon] = useState("ri-home-8-line");
   const { signOut } = useContext(FirebaseContext);
@@ -52,11 +53,19 @@ const HeaderIcons = (props) => {
       )}
 
       <i
-        style={{ position: "relative" }}
-        className={props.menuToggle ? "ri-heart-fill" : heartIcon}
-        onMouseOver={() => setHeartIcon("ri-heart-fill")}
-        onMouseLeave={() => setHeartIcon("ri-heart-line")}
+        style={{ position: "relative", color: props.unread > 0 && "#FFC90D" }}
+        className={
+          props.unread > 0 || props.menuToggle || hovered
+            ? "ri-lightbulb-fill"
+            : "ri-lightbulb-line"
+        }
         ref={node}
+        onMouseOver={() => {
+          setHovered(true);
+        }}
+        onMouseLeave={() => {
+          setHovered(false);
+        }}
       >
         {props.unread > 0 && (
           <p
