@@ -1,12 +1,12 @@
 .App {
   display: grid;
   min-height: 100vh;
-
   background-color: #fafafa;
   display: grid;
   grid-template-rows: 4em 1fr auto;
   font-family: "Arimo", sans-serif;
   color: #333333;
+  min-width: 550px;
 }
 
 @media screen and (min-width: 1600px) {

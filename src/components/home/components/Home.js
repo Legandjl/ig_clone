@@ -7,6 +7,7 @@ import ImageLoadError from "../errors/ImageLoadError";
 import useImages from "../../../hooks/useImages";
 import useScroll from "../../../hooks/useScroll";
 import "../styles/Home.css";
+import HomeImageToggle from "./HomeImageToggle";
 
 const Home = () => {
   const { isCropping, imageSrc } = useContext(FileContext);
@@ -61,28 +62,10 @@ const Home = () => {
       style={{ paddingBottom: !loadingInProcess ? "3em" : 0 }}
     >
       {isCropping && <CropTool image={imageSrc} />}{" "}
-      <div className={"imagesToggle"}>
-        <p
-          onClick={() => {
-            refreshSelection(false);
-          }}
-          style={{ paddingRight: 6, color: followToggled ? "gray" : "black" }}
-        >
-          All
-        </p>{" "}
-        <p
-          onClick={() => {
-            refreshSelection(true);
-          }}
-          style={{
-            borderLeft: "solid 1px",
-            paddingLeft: 6,
-            color: !followToggled ? "grey" : "black",
-          }}
-        >
-          Following
-        </p>
-      </div>
+      <HomeImageToggle
+        refreshSelection={refreshSelection}
+        followToggled={followToggled}
+      />
       <div className="homeImages">{images}</div>
       {loadingInProcess && <ImageRefreshLoader />}
       {emptyFollowers && (

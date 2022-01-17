@@ -158,13 +158,13 @@ i:hover {
 
 @media screen and (min-width: 1600px) {
   .imageContainerHome img {
-    height: 50em;
+    height: 45em;
   }
 
   .imageContainer img {
     height: auto;
-    max-height: 50em;
-    width: 50em;
+    max-height: 45em;
+    width: 45em;
   }
 
   .imagesToggle {
@@ -172,10 +172,21 @@ i:hover {
   }
 
   .imageContainerHome {
-    min-width: 50em;
+    min-width: 45em;
   }
 
   .socialArea {
-    height: 50em;
+    height: 45em;
+  }
+}
+
+@media screen and (max-width: 720px) {
+  .imagesToggle {
+    opacity: 0;
+    transition: all ease-in-out 0.2s;
+  }
+
+  .imagesToggle:hover {
+    opacity: 1;
   }
 }

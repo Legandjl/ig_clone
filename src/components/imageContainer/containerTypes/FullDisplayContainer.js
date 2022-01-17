@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import DefaultLoader from "../../loaders/DefaultLoader";
 import Comments from "../containerComponents/Comments";
 import ImageFunctions from "../containerComponents/Functions";
