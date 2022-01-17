@@ -1,3 +1,0 @@
-security rules
-align content in profile - chrome
-notifications for comments

@@ -180,7 +180,7 @@ i:hover {
   }
 }
 
-@media screen and (max-width: 720px) {
+@media screen and (max-width: 800px) {
   .imagesToggle {
     opacity: 0;
     transition: all ease-in-out 0.2s;

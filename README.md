@@ -1,70 +1,28 @@
-# Getting Started with Create React App
+# Simple Photo Sharing app modelled after Instagram
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Features
 
-## Available Scripts
+Users use Google to authenticate, and a user profile is generated from their Google account. If the users Google profile picture is changed, the user profile on the app should update to reflect that change upon login.
 
-In the project directory, you can run:
+Users can upload, like other user uploads, comment on uploads and follow other users.
 
-### `npm start`
+Users will receive notifications when followed, and if their upload is liked.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Notifications are removed if a user likes then unlikes a post, or follows then unfollows. Notifications can also be deleted by the receiver.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Users can choose to display either all uploads, or only uploads from users they are following, both sorted by timestamp.
 
-### `npm test`
+Users can delete any comments or uploads that they have made.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+# Notes
 
-### `npm run build`
+This was quite a complicated project and the first real one I have made in React, and there are definitely things I would change within the code if I were to start over. However I am happy overall with how it turned out, and feel I learnt a lot by really taking my time with this project.
+I decided against implementing any further features (ie search or message functionality) as I have already spent more time than anticipated on the project, and I'm eager to move onto the next challenge.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Disclaimer
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+A link to this project will be uploaded to a public facing website (The Odin Project) and so I am not responsible for what gets uploaded by other users. If there is anything offensive that you believe needs to be removed, please email me at dorianlegan@protonmail.com
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# Bugs
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+If you come across any obvious bugs, please contact me on the aforementioned email.

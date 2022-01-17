@@ -217,6 +217,14 @@ const Firebase = () => {
         followers: [],
         following: [],
       });
+    } else {
+      docSnap.forEach((doc) => {
+        if (doc.data().profilePictureUrl !== user.photoURL) {
+          updateDoc(doc.ref, {
+            profilePictureUrl: user.photoURL,
+          });
+        }
+      });
     }
   };
 
