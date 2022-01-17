@@ -16,8 +16,9 @@ Users can delete any comments or uploads that they have made.
 
 # Notes
 
-This was quite a complicated project and the first real one I have made in React, and there are definitely things I would change within the code if I were to start over. However I am happy overall with how it turned out, and feel I learnt a lot by really taking my time with this project.
-I decided against implementing any further features (ie search or message functionality) as I have already spent more time than anticipated on the project, and I'm eager to move onto the next challenge.
+This was quite a complicated project and the first real one I have made in React, and there are definitely things I would change within the code if I were to start over. However I am happy overall with how it turned out, and feel I learnt a lot by taking my time.
+
+I decided against implementing any further features (ie search or message functionality) as I have already spent more time than anticipated with this project, and I'm eager to move onto the next challenge.
 
 # Disclaimer
 
