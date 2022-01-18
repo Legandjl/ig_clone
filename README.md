@@ -1,4 +1,4 @@
-# Simple Photo Sharing app modelled after Instagram
+# Photo Sharing app modelled after Instagram
 
 # Features
 
