@@ -2,7 +2,7 @@
 
 # Features
 
-Users use Google to authenticate, and a user profile is generated from their Google account. If the users Google profile picture is changed, the user profile on the app should update to reflect that change upon login.
+Users authenticate with Google, and a user profile is generated from their Google account. If the users Google profile picture is changed, the user profile on the app should update to reflect that change upon login.
 
 Users can upload, like other user uploads, comment on uploads and follow other users.
 
