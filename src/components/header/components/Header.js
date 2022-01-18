@@ -10,8 +10,6 @@ import { useLocation, useNavigate } from "react-router";
 import NotificationElement from "./NotificationElement";
 import useNotifications from "../../../hooks/useNotifications";
 
-// notifications need to be refreshed when opening and closing
-
 const Header = () => {
   const { auth } = useContext(FirebaseContext);
   const { isCropping, imageSrc } = useContext(FileContext);

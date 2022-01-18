@@ -11,16 +11,7 @@ const Notifications = (props) => {
       {props.allNotifications.length > 0 ? (
         props.allNotifications
       ) : (
-        <p
-          style={{
-            justifySelf: "center",
-            textAlign: "center",
-            marginTop: "0.8em",
-            marginBottom: "0.8em",
-          }}
-        >
-          No notifications to show
-        </p>
+        <p className={"noNotifs"}>No notifications to show</p>
       )}
     </div>
   );

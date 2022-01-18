@@ -15,13 +15,7 @@ const Notification = (props) => {
         {" "}
         <img
           alt={"user icon"}
-          style={{
-            width: 35,
-            height: 35,
-            borderRadius: 50,
-            marginRight: 5,
-            cursor: "pointer",
-          }}
+          className={"notificationUserIcon"}
           src={!props.imageError ? props.data.profilePictureUrl : user}
           data-notifications={true}
           onClick={() => props.redirect(`/user/${props.notification.sentBy}`)}

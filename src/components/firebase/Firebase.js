@@ -9,8 +9,6 @@ import {
   getFirestore,
   collection,
   getDocs,
-  query,
-  where,
   addDoc,
   Timestamp,
   deleteDoc,

@@ -7,9 +7,7 @@ const Comments = (props) => {
     handleSubmit,
     checkIfHome,
     commentText,
-    isLoading,
     removeComment,
-    data,
     refresh,
     getCommentData,
   } = useComments(props);
