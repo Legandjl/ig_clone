@@ -35,7 +35,6 @@ const useDataLoader = (cb, dataParam) => {
   }, [cb, data, dataParam, isMounted, loadingData, loadingInProcess, nav]);
 
   const reloadData = () => {
-    console.log("reloading");
     setLoadingData(true);
   };
 

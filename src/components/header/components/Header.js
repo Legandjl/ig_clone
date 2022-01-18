@@ -43,7 +43,6 @@ const Header = () => {
   //refresh notifications on navigation
 
   const handleRedirect = (loc) => {
-    console.log(loc);
     nav(loc, { replace: "true" });
     hideNotifications();
   };

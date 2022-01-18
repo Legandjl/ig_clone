@@ -7,7 +7,6 @@ const useScroll = () => {
     setBottom(false);
   };
   useEffect(() => {
-    console.log("scrolling");
     const handleScroll = () => {
       const bottom =
         Math.ceil(window.innerHeight + window.scrollY) >=
