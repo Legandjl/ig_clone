@@ -26,7 +26,7 @@ const ImageHeader = (props) => {
     nav(`/home`, { replace: true });
   };
 
-  return props.isLoading || !imageLoaded ? (
+  return props.isLoading || !imageLoaded || !props.imageLoaded ? (
     <ImageHeaderLoader />
   ) : (
     <div className="containerHeader">

@@ -35,6 +35,7 @@ const FullDisplayContainer = (props) => {
           refresh={refresh}
           profile={profileData}
           isLoading={profileIsLoading}
+          imageLoaded={imageLoaded}
         />
         <Comments
           imageID={imageID}

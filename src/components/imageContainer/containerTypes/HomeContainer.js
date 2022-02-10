@@ -26,6 +26,7 @@ const HomeContainer = (props) => {
         refresh={refresh}
         profile={profileData}
         isLoading={profileIsLoading}
+        imageLoaded={imageLoaded}
       />
 
       {imageLoaded && !profileIsLoading ? (
