@@ -48,6 +48,7 @@ const FullDisplayContainer = (props) => {
           author={author}
           checkIfHomePage={checkIfHomePage}
           profileIsLoading={profileIsLoading}
+          imageLoaded={imageLoaded}
         />
       </div>
     </div>

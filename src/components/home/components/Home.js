@@ -22,6 +22,7 @@ const Home = () => {
     followToggled,
     setFollowToggled,
   } = useImages();
+
   const { bottom, reset } = useScroll();
 
   useEffect(() => {

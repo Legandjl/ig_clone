@@ -41,6 +41,7 @@ const HomeContainer = (props) => {
         author={author}
         checkIfHomePage={checkIfHomePage}
         profileIsLoading={profileIsLoading}
+        imageLoaded={imageLoaded}
       />
       <Comments
         imageID={imageID}

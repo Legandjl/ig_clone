@@ -66,7 +66,7 @@ const ImageFunctions = (props) => {
       className="functionsWrapper"
       style={{ borderBottom: props.checkIfHomePage() && "none" }}
     >
-      {props.profileIsLoading ? (
+      {props.profileIsLoading || !props.imageLoaded ? (
         <FunctionLoader />
       ) : (
         <div className="functionsWrapperInner">
