@@ -57,8 +57,14 @@ const Comments = (props) => {
           style={{ color: props.profileIsLoading && " #edebeb" }}
         />
         <button
-          style={{ color: props.profileIsLoading && " #edebeb" }}
-          disabled={commentText.length === 0 || props.profileIsLoading}
+          style={{
+            color: (props.profileIsLoading || !props.imageLoaded) && " #edebeb",
+          }}
+          disabled={
+            commentText.length === 0 ||
+            props.profileIsLoading ||
+            !props.imageLoaded
+          }
           onClick={handleSubmit}
         >
           Post

@@ -47,6 +47,7 @@ const HomeContainer = (props) => {
         imageID={imageID}
         type={type}
         profileIsLoading={profileIsLoading}
+        imageLoaded={imageLoaded}
       />
     </div>
   );

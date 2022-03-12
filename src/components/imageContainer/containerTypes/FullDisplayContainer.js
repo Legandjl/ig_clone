@@ -41,6 +41,7 @@ const FullDisplayContainer = (props) => {
           imageID={imageID}
           type={type}
           profileIsLoading={profileIsLoading}
+          imageLoaded={imageLoaded}
         />
         <ImageFunctions
           id={imageID}
